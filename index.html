@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HAProxy — Erreur</title>
+  <style>
+    body {
+      margin: 0;
+      background: #1f0d0d;
+      color: #ff4c4c;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 1.5rem;
+    }
+
+    .logo {
+      font-size: 3rem;
+      font-weight: bold;
+      letter-spacing: .1em;
+      text-shadow: 0 0 20px #ff4c4c;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: 1rem;
+      color: #e02020;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: #e02020;
+      border-radius: 50%;
+      animation: blink 1s ease-in-out infinite;
+    }
+
+    table {
+      border-collapse: collapse;
+      font-size: .9rem;
+      min-width: 320px;
+    }
+
+    td {
+      padding: .5rem 1.2rem;
+      border: 1px solid #3d1a1a;
+    }
+
+    td:first-child { color: #e02020; }
+    td:last-child  { color: #ffaaaa; text-align: right; }
+
+    .alert {
+      background: #2a0f0f;
+      border: 1px solid #5a1a1a;
+      color: #ffaaaa;
+      font-size: .85rem;
+      padding: .8rem 1.5rem;
+      max-width: 340px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .links {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: .5rem;
+    }
+
+    a {
+      color: #e02020;
+      text-decoration: none;
+      font-size: .85rem;
+      border-bottom: 1px solid #3d1a1a;
+      padding-bottom: 2px;
+    }
+
+    a:hover { color: #ff4c4c; border-color: #ff4c4c; }
+
+    footer {
+      font-size: .72rem;
+      color: #3d1a1a;
+      margin-top: 1rem;
+    }
+
+    @keyframes blink { 0%,100% { opacity:1; } 50% { opacity:.2; } }
+  </style>
+</head>
+<body>
+
+  <div class="logo">HAProxy</div>
+
+  <div class="status">
+    <div class="dot"></div>
+    Dégradé — Incident en cours
+  </div>
+
+  <div class="alert">
+    ⚠ Un ou plusieurs backends sont hors ligne.<br/>
+    Vérifiez les serveurs et les health checks.
+  </div>
+
+  <table>
+    <tr><td>Version</td>   <td>2.9.4</td></tr>
+    <tr><td>Uptime</td>    <td>12j 4h 37m</td></tr>
+    <tr><td>Backends</td>  <td>2 / 4 UP ⚠</td></tr>
+    <tr><td>Connexions</td><td>38 actives</td></tr>
+  </table>
+
+  <div class="links">
+    <a href="/stats">Statistiques</a>
+    <a href="/admin">Administration</a>
+    <a href="https://www.haproxy.org" target="_blank">Documentation</a>
+  </div>
+
+  <footer>node-01.internal · HAProxy 2.9.4</footer>
+
+</body>
+</html>
