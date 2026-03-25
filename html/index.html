@@ -167,6 +167,107 @@
       </div>
     </section>
 
+        <!-- ─── DOCUMENTS PDF ─── -->
+    <section id="documents">
+      <h2 class="section-title reveal">Documents</h2>
+
+      <!-- Onglets -->
+      <div class="pdf-tabs">
+        <button class="pdf-tab active" onclick="switchTab(event, 'tab-stage')">📄 Rapports de stage</button>
+        <button class="pdf-tab"        onclick="switchTab(event, 'tab-tp')">📋 Comptes-rendus de TP</button>
+      </div>
+
+      <!-- ── Rapports de stage ── -->
+      <div class="pdf-panel active" id="tab-stage">
+
+        <div class="pdf-card reveal">
+          <div class="pdf-card-header">
+            <div class="pdf-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <div class="pdf-meta">
+              <p class="pdf-title">Rapport de stage — 2ème année</p>
+              <p class="pdf-date">EPSM LM · 2026</p>
+            </div>
+          </div>
+          <p class="pdf-desc">Stage en administration systèmes & réseaux. Active Directory, GPO, DHCP, Wi-Fi Aruba.</p>
+          <div class="pdf-actions">
+            <a href="/pdf/rapport-stage-2a.pdf" target="_blank" class="pdf-btn pdf-btn-view">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              Consulter
+            </a>
+            <a href="/pdf/rapport-stage-2a.pdf" download class="pdf-btn pdf-btn-dl">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Télécharger
+            </a>
+          </div>
+        </div>
+
+        <div class="pdf-card reveal">
+          <div class="pdf-card-header">
+            <div class="pdf-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <div class="pdf-meta">
+              <p class="pdf-title">Rapport de stage — 1ère année</p>
+              <p class="pdf-date">EPSM LM · 2025</p>
+            </div>
+          </div>
+          <p class="pdf-desc">Stage support : déploiement de postes, tickets GLPI.</p>
+          <div class="pdf-actions">
+            <a href="/pdf/rapport-stage-1a.pdf" target="_blank" class="pdf-btn pdf-btn-view">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              Consulter
+            </a>
+            <a href="/pdf/rapport-stage-1a.pdf" download class="pdf-btn pdf-btn-dl">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Télécharger
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Comptes-rendus de TP ── -->
+      <div class="pdf-panel" id="tab-tp">
+
+        <!-- Ajoute ici un bloc .pdf-card par TP, en changeant le titre, la date et le chemin /pdf/tp-NOM.pdf -->
+
+        <div class="pdf-card-empty reveal">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Comptes-rendus à venir
+        </div>
+
+      </div>
+    </section>
+
     <!-- ─── STAGES ─── -->
     <section id="stages">
       <h2 class="section-title reveal">Expériences en entreprise</h2>
