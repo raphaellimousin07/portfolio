@@ -1,3 +1,8 @@
+// ─── FORCE REVEAL ───
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+});
+
 // ─── ACCORDION ───
 document.querySelectorAll('.acc-trigger').forEach(trigger => {
   trigger.addEventListener('click', () => {
@@ -5,17 +10,14 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
     const body = item.querySelector('.acc-body');
     const isOpen = item.classList.contains('open');
 
-    // Ferme tous les autres
     document.querySelectorAll('.acc-item.open').forEach(openItem => {
       openItem.classList.remove('open');
       openItem.querySelector('.acc-body').style.maxHeight = null;
     });
 
-    // Ouvre celui cliqué (si pas déjà ouvert)
     if (!isOpen) {
       item.classList.add('open');
       body.style.maxHeight = '9999px';
-      // Charge les PDF viewers dans cet onglet
       item.querySelectorAll('.pdf-viewer-container[data-src]').forEach(container => {
         if (!container.dataset.loaded) {
           loadPDF(container, container.dataset.src);
@@ -27,16 +29,17 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
 });
 
 // Ouvre le premier par défaut
-const first = document.querySelector('.acc-item');
-if (first) {
-  first.classList.add('open');
-  first.querySelector('.acc-body').style.maxHeight = '9999px';
-  // Charge les PDF du premier onglet
-  first.querySelectorAll('.pdf-viewer-container[data-src]').forEach(container => {
-    loadPDF(container, container.dataset.src);
-    container.dataset.loaded = 'true';
-  });
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const first = document.querySelector('.acc-item');
+  if (first) {
+    first.classList.add('open');
+    first.querySelector('.acc-body').style.maxHeight = '9999px';
+    first.querySelectorAll('.pdf-viewer-container[data-src]').forEach(container => {
+      loadPDF(container, container.dataset.src);
+      container.dataset.loaded = 'true';
+    });
+  }
+});
 
 // ─── PDF.JS VIEWER ───
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
@@ -54,7 +57,6 @@ function loadPDFJS(callback) {
 }
 
 function loadPDF(container, pdfUrl) {
-  // Affiche un loader
   container.innerHTML = `
     <div class="pdf-loading">
       <div class="pdf-spinner"></div>
@@ -66,7 +68,6 @@ function loadPDF(container, pdfUrl) {
       container.innerHTML = '';
       const totalPages = pdfDoc.numPages;
 
-      // Barre de navigation
       const nav = document.createElement('div');
       nav.className = 'pdf-nav';
       nav.innerHTML = `
@@ -83,7 +84,6 @@ function loadPDF(container, pdfUrl) {
         </a>`;
       container.appendChild(nav);
 
-      // Canvas
       const canvas = document.createElement('canvas');
       canvas.className = 'pdf-canvas';
       container.appendChild(canvas);
@@ -99,7 +99,6 @@ function loadPDF(container, pdfUrl) {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           page.render({ canvasContext: ctx, viewport });
           document.getElementById(`page-num-${container.id}`).textContent = num;
-          // Boutons
           document.getElementById(`prev-${container.id}`).disabled = num <= 1;
           document.getElementById(`next-${container.id}`).disabled = num >= totalPages;
         });
@@ -119,8 +118,3 @@ function loadPDF(container, pdfUrl) {
     });
   });
 }
-
-// ─── SCROLL REVEAL ───
-const reveals = document.querySelectorAll('.reveal');
-// Force visible directement sans observer
-reveals.forEach(el => el.classList.add('visible'));
