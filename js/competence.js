@@ -14,8 +14,7 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
     // Ouvre celui cliqué (si pas déjà ouvert)
     if (!isOpen) {
       item.classList.add('open');
-      body.style.maxHeight = body.scrollHeight + 'px';
-    }
+      body.style.maxHeight = '9999px';    }
   });
 });
 
@@ -23,8 +22,7 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
 const first = document.querySelector('.acc-item');
 if (first) {
   first.classList.add('open');
-  first.querySelector('.acc-body').style.maxHeight =
-    first.querySelector('.acc-body').scrollHeight + 'px';
+  first.querySelector('.acc-body').style.maxHeight = '9999px';
 }
 
 // ─── SCROLL REVEAL ───
