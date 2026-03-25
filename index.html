@@ -1,1 +1,691 @@
-<p>index a faire</p>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Raphaël Limousin — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0b0d11;
+      --surface:  #111318;
+      --border:   #1e2230;
+      --blue:     #3b82f6;
+      --blue-dim: #1e3a5f;
+      --blue-glow:rgba(59,130,246,.18);
+      --text:     #e8eaf0;
+      --muted:    #636880;
+      --accent:   #60a5fa;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: .5;
+    }
+
+    /* ─── GLOW BG ─── */
+    .glow-bg {
+      position: fixed; top: -20vh; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse at center, rgba(59,130,246,.12) 0%, transparent 70%);
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(11,13,17,.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: .02em;
+    }
+
+    .nav-logo span { color: var(--blue); }
+
+    nav ul {
+      list-style: none;
+      display: flex; gap: 2.2rem;
+    }
+
+    nav ul a {
+      font-family: 'DM Mono', monospace;
+      font-size: .78rem;
+      font-weight: 400;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: color .25s;
+    }
+
+    nav ul a:hover { color: var(--accent); }
+
+    /* ─── HERO ─── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 0 clamp(2rem, 8vw, 10rem);
+      overflow: hidden;
+    }
+
+    .hero-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: .75rem;
+      color: var(--blue);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 1.4rem;
+      opacity: 0;
+      animation: fadeUp .6s .2s forwards;
+    }
+
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3.5rem, 8vw, 7rem);
+      line-height: 1;
+      letter-spacing: -.02em;
+      margin-bottom: .6rem;
+      opacity: 0;
+      animation: fadeUp .7s .35s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1rem, 2.2vw, 1.35rem);
+      color: var(--muted);
+      font-weight: 400;
+      margin-bottom: 2.8rem;
+      opacity: 0;
+      animation: fadeUp .7s .5s forwards;
+    }
+
+    .hero-ctas {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp .7s .65s forwards;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      padding: .75rem 1.8rem;
+      border-radius: 3px;
+      font-family: 'DM Mono', monospace;
+      font-size: .8rem;
+      letter-spacing: .06em;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background .2s, box-shadow .2s;
+      box-shadow: 0 0 0 0 var(--blue);
+    }
+    .btn-primary:hover {
+      background: var(--accent);
+      box-shadow: 0 0 24px var(--blue-glow);
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: .75rem 1.8rem;
+      border-radius: 3px;
+      font-family: 'DM Mono', monospace;
+      font-size: .8rem;
+      letter-spacing: .06em;
+      text-decoration: none;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-ghost:hover { border-color: var(--blue); color: var(--accent); }
+
+    /* Horizontal line decoration */
+    .hero-line {
+      position: absolute; right: 0; top: 50%;
+      width: 35vw; height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      opacity: .5;
+    }
+
+    /* scroll indicator */
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      opacity: 0; animation: fadeIn 1s 1.2s forwards;
+    }
+    .scroll-hint span {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem; color: var(--muted);
+      letter-spacing: .12em; text-transform: uppercase;
+    }
+    .scroll-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--blue);
+      animation: bounce 1.6s infinite;
+    }
+
+    /* ─── SECTION BASE ─── */
+    section {
+      position: relative; z-index: 1;
+      padding: 6rem clamp(2rem, 8vw, 10rem);
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      color: var(--blue);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+      margin-bottom: 3rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, var(--border), transparent);
+      margin-bottom: 4rem;
+    }
+
+    /* ─── SKILLS ─── */
+    #competences { background: var(--surface); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .skill-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.6rem;
+      background: var(--bg);
+      transition: border-color .25s, transform .25s, box-shadow .25s;
+      position: relative; overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--blue);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s;
+    }
+
+    .skill-card:hover { border-color: var(--blue-dim); transform: translateY(-3px); box-shadow: 0 8px 32px var(--blue-glow); }
+    .skill-card:hover::before { transform: scaleX(1); }
+
+    .skill-cat {
+      font-family: 'DM Mono', monospace;
+      font-size: .65rem;
+      color: var(--blue);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+
+    .skill-name {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+    }
+
+    .skill-tags {
+      display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .8rem;
+    }
+
+    .tag {
+      background: var(--blue-dim);
+      color: var(--accent);
+      font-family: 'DM Mono', monospace;
+      font-size: .68rem;
+      padding: .2rem .65rem;
+      border-radius: 2px;
+      letter-spacing: .04em;
+    }
+
+    /* ─── STAGES ─── */
+    .stages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.6rem;
+    }
+
+    .stage-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2rem;
+      background: var(--surface);
+      position: relative; overflow: hidden;
+      transition: border-color .25s, box-shadow .25s;
+    }
+
+    .stage-card:hover { border-color: var(--blue); box-shadow: 0 8px 40px var(--blue-glow); }
+
+    .stage-year {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      color: var(--blue);
+      letter-spacing: .14em;
+      margin-bottom: .8rem;
+    }
+
+    .stage-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: .4rem;
+    }
+
+    .stage-company {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      font-weight: 600;
+    }
+
+    .stage-desc {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 1.4rem;
+    }
+
+    .stage-tasks { list-style: none; }
+    .stage-tasks li {
+      font-size: .84rem;
+      color: var(--muted);
+      padding: .35rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: .6rem; align-items: flex-start;
+    }
+    .stage-tasks li:last-child { border-bottom: none; }
+    .stage-tasks li::before { content: '→'; color: var(--blue); flex-shrink: 0; }
+
+    /* ─── CONTACT ─── */
+    #contact { background: var(--surface); }
+
+    .contact-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .contact-text {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+
+    .contact-links { display: flex; flex-direction: column; gap: .8rem; }
+
+    .contact-link {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color .2s, background .2s, color .2s;
+      font-family: 'DM Mono', monospace;
+      font-size: .82rem;
+    }
+
+    .contact-link:hover {
+      border-color: var(--blue);
+      background: var(--blue-glow);
+      color: var(--accent);
+    }
+
+    .contact-link svg { flex-shrink: 0; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+
+    .form-group label {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: .75rem 1rem;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      font-size: .9rem;
+      transition: border-color .2s;
+      resize: vertical;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--blue); }
+
+    .form-group textarea { min-height: 120px; }
+
+    .btn-send {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: .85rem 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background .2s, box-shadow .2s;
+    }
+    .btn-send:hover { background: var(--accent); box-shadow: 0 0 24px var(--blue-glow); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 2rem clamp(2rem, 8vw, 10rem);
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      color: var(--muted);
+      letter-spacing: .06em;
+    }
+
+    footer a { color: var(--blue); text-decoration: none; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(6px); }
+    }
+
+    /* scroll reveal */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .6s, transform .6s;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { gap: 1.2rem; }
+      section { padding: 4rem 1.5rem; }
+      .contact-wrapper { grid-template-columns: 1fr; gap: 2.5rem; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="glow-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">R<span>.</span>Limousin</a>
+  <ul>
+    <li><a href="#competences">Compétences</a></li>
+    <li><a href="#stages">Stages</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <p class="hero-tag">// BTS SIO — Option SISR — 2ème année</p>
+  <h1 class="hero-name">Raphaël<br><em>Limousin</em></h1>
+  <p class="hero-sub">Étudiant en infrastructure, systèmes & réseaux</p>
+  <div class="hero-ctas">
+    <a href="https://github.com/raphaellimousin07" target="_blank" class="btn-primary">
+      GitHub
+    </a>
+    <a href="#contact" class="btn-ghost">Me contacter</a>
+  </div>
+  <div class="hero-line"></div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-dot"></div>
+  </div>
+</section>
+
+<!-- COMPÉTENCES -->
+<section id="competences">
+  <p class="section-label">// 01</p>
+  <h2 class="section-title reveal">Compétences</h2>
+  <div class="divider"></div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <p class="skill-cat">Systèmes</p>
+      <p class="skill-name">Administration système</p>
+      <div class="skill-tags">
+        <span class="tag">Windows Server</span>
+        <span class="tag">Active Directory</span>
+        <span class="tag">Linux</span>
+        <span class="tag">GPO</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <p class="skill-cat">Réseaux</p>
+      <p class="skill-name">Infrastructure réseau</p>
+      <div class="skill-tags">
+        <span class="tag">TCP/IP</span>
+        <span class="tag">VLAN</span>
+        <span class="tag">Routage</span>
+        <span class="tag">Switching</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <p class="skill-cat">Virtualisation</p>
+      <p class="skill-name">Environnements virtuels</p>
+      <div class="skill-tags">
+        <span class="tag">VMware</span>
+        <span class="tag">VirtualBox</span>
+        <span class="tag">Hyper-V</span>
+        <span class="tag">Proxmox</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <p class="skill-cat">Sécurité</p>
+      <p class="skill-name">Cybersécurité</p>
+      <div class="skill-tags">
+        <span class="tag">Firewall</span>
+        <span class="tag">VPN</span>
+        <span class="tag">DHCP / DNS</span>
+        <span class="tag">HTTPS / TLS</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <p class="skill-cat">Supervision & Scripts</p>
+      <p class="skill-name">Monitoring & Automatisation</p>
+      <div class="skill-tags">
+        <span class="tag">PowerShell</span>
+        <span class="tag">Bash</span>
+        <span class="tag">Nagios</span>
+        <span class="tag">GLPI</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <p class="skill-cat">Soft skills</p>
+      <p class="skill-name">Savoir-être</p>
+      <div class="skill-tags">
+        <span class="tag">Autonomie</span>
+        <span class="tag">Rigueur</span>
+        <span class="tag">Esprit d'équipe</span>
+        <span class="tag">Curiosité</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STAGES -->
+<section id="stages">
+  <p class="section-label">// 02</p>
+  <h2 class="section-title reveal">Expériences de stage</h2>
+  <div class="divider"></div>
+  <div class="stages-grid">
+
+    <!-- Stage 1ère année -->
+    <div class="stage-card reveal">
+      <p class="stage-year">Stage — 1ère année BTS SIO · 2024</p>
+      <h3 class="stage-title">Développeur stagiaire</h3>
+      <p class="stage-company">Entreprise — à compléter</p>
+      <p class="stage-desc">
+        Premier stage en entreprise réalisé dans le cadre du BTS SIO. Découverte du monde professionnel et mise en pratique des compétences acquises en formation.
+      </p>
+      <ul class="stage-tasks">
+        <li>Participation au développement d'une application interne</li>
+        <li>Gestion et requêtes sur une base de données SQL</li>
+        <li>Rédaction de documentation technique</li>
+        <li>Travail en équipe avec les développeurs en poste</li>
+      </ul>
+    </div>
+
+    <!-- Stage 2ème année -->
+    <div class="stage-card reveal">
+      <p class="stage-year">Stage — 2ème année BTS SIO · 2025</p>
+      <h3 class="stage-title">Développeur stagiaire</h3>
+      <p class="stage-company">Entreprise — à compléter</p>
+      <p class="stage-desc">
+        Second stage effectué en fin de formation. Montée en compétences sur des projets plus complexes avec davantage d'autonomie et de responsabilités.
+      </p>
+      <ul class="stage-tasks">
+        <li>Conception et développement d'une fonctionnalité complète</li>
+        <li>Intégration dans un environnement de production</li>
+        <li>Veille technologique et proposition de solutions</li>
+        <li>Présentation des travaux réalisés à l'équipe</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">// 03</p>
+  <h2 class="section-title reveal">Contact</h2>
+  <div class="divider"></div>
+  <div class="contact-wrapper">
+    <div class="reveal">
+      <p class="contact-text">
+        Étudiant en BTS SIO 2ème année, disponible pour tout échange autour d'un projet, d'un stage ou d'une alternance. N'hésitez pas à me contacter.
+      </p>
+      <div class="contact-links">
+        <a href="https://github.com/raphaellimousin07" target="_blank" class="contact-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+          </svg>
+          github.com/raphaellimousin07
+        </a>
+        <a href="/cdn-cgi/l/email-protection#bfcddecfd7dedad391d3d6d2d0caccd6d1ffdad2ded6d391dcd0d2" class="contact-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <span class="__cf_email__" data-cfemail="2e5c4f5e464f4b4200424743415b5d47406e4b434f4742004d4143">[email&#160;protected]</span>
+        </a>
+        <a href="https://www.linkedin.com/in/raphael-limousin" target="_blank" class="contact-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+            <rect x="2" y="9" width="4" height="12"/>
+            <circle cx="4" cy="4" r="2"/>
+          </svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <div class="form-group">
+        <label>Nom</label>
+        <input type="text" placeholder="Votre nom" required />
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="votre@email.com" required />
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Votre message..." required></textarea>
+      </div>
+      <button type="submit" class="btn-send">Envoyer →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Raphaël Limousin — BTS SIO 2ème année</p>
+  <p>Fait avec <a href="https://github.com/raphaellimousin07" target="_blank">passion & code</a></p>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.b
