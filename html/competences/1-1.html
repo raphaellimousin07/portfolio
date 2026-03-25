@@ -54,34 +54,23 @@
         <div class="acc-body">
           <div class="acc-inner">
 
-            <div class="screenshots-block">
-              <p class="screenshots-label">Screenshots</p>
-              <div class="screenshots-grid">
-        <div class="screenshot-thumb" onclick="openLightbox(this)">
-          <img src="/img/1-1/glpi-inventaire.png" alt="screenshot" loading="lazy"/>
-        </div>
-              </div>
-            </div>
-
-            <div class="pdfs-block">
-              <p class="pdfs-label">Documents PDF</p>
-              <div class="pdfs-list">
-        <div class="pdf-row">
-          <div class="pdf-row-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          </div>
-          <span class="pdf-row-name">CR-GLPI.pdf</span>
-          <div class="pdf-row-actions">
-            <a href="/pdf/1-1/CR-GLPI.pdf" target="_blank" class="pdf-row-btn view">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>Voir</span>
-            </a>
-            <a href="/pdf/1-1/CR-GLPI.pdf" download class="pdf-row-btn dl">
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span>DL</span>
-            </a>
-          </div>
-        </div>
+<div class="pdfs-block">
+  <p class="pdfs-label">Documents PDF</p>
+  <div class="pdfs-list">
+    <div class="pdf-row">
+      <div class="pdf-row-icon">...</div>
+      <span class="pdf-row-name">NOM.pdf</span>
+      <div class="pdf-row-actions">
+        <a href="/pdf/..." download class="pdf-row-btn dl">
+          <svg ...>...</svg>
+          <span>Télécharger</span>
+        </a>
+      </div>
+    </div>
+    <!-- Aperçu inline -->
+    <iframe src="/pdf/chemin.pdf" class="pdf-preview"></iframe>
+  </div>
+</div>
               </div>
             </div>
 
