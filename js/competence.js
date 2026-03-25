@@ -14,7 +14,8 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
     // Ouvre celui cliqué (si pas déjà ouvert)
     if (!isOpen) {
       item.classList.add('open');
-      body.style.maxHeight = '9999px';    }
+      body.style.maxHeight = '9999px';
+    }
   });
 });
 
