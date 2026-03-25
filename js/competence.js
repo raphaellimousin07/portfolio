@@ -122,9 +122,5 @@ function loadPDF(container, pdfUrl) {
 
 // ─── SCROLL REVEAL ───
 const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
-}, { threshold: 0.1 });
-reveals.forEach(el => observer.observe(el));
+// Force visible directement sans observer
+reveals.forEach(el => el.classList.add('visible'));
