@@ -27,26 +27,6 @@ if (first) {
     first.querySelector('.acc-body').scrollHeight + 'px';
 }
 
-// ─── LIGHTBOX ───
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-
-document.querySelectorAll('.screenshot-thumb').forEach(thumb => {
-  thumb.addEventListener('click', () => {
-    const src = thumb.querySelector('img').src;
-    lightboxImg.src = src;
-    lightbox.classList.add('open');
-  });
-});
-
-document.getElementById('lightbox-close')?.addEventListener('click', () => {
-  lightbox.classList.remove('open');
-});
-
-lightbox?.addEventListener('click', e => {
-  if (e.target === lightbox) lightbox.classList.remove('open');
-});
-
 // ─── SCROLL REVEAL ───
 const reveals = document.querySelectorAll('.reveal');
 const observer = new IntersectionObserver(entries => {
