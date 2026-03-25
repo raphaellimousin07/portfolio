@@ -1,0 +1,96 @@
+/* ─── CARTES COMPÉTENCES SISR ─── */
+.competences-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .competences-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .competences-grid { grid-template-columns: 1fr; }
+}
+
+.competence-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.8rem;
+  position: relative;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.8rem;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  color: var(--text);
+}
+
+.competence-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--blue);
+  background: var(--surface-hover);
+  box-shadow: 0 12px 40px var(--blue-glow);
+  color: var(--text);
+}
+
+/* Numéro en haut à droite */
+.competence-num {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--blue);
+  letter-spacing: 0.05em;
+}
+
+/* Icône SVG */
+.competence-icon {
+  width: 52px;
+  height: 52px;
+  color: var(--blue);
+  margin-top: 0.5rem;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s;
+}
+
+.competence-card:hover .competence-icon {
+  transform: scale(1.15);
+  color: var(--accent);
+}
+
+.competence-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  color: var(--text);
+  margin-top: 0.4rem;
+}
+
+.competence-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* Flèche discrète au survol */
+.competence-arrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--blue);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s, transform 0.25s;
+  margin-top: auto;
+  padding-top: 0.8rem;
+}
+
+.competence-card:hover .competence-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
