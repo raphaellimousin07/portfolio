@@ -341,3 +341,12 @@
   .screenshots-grid { grid-template-columns: repeat(2, 1fr); }
   .pdf-row-btn span { display: none; }
 }
+/* ─── APERÇU PDF INLINE ─── */
+.pdf-preview {
+  width: 100%;
+  height: 500px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-top: 0.8rem;
+  background: var(--surface);
+}
