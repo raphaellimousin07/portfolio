@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Raphaël Limousin — Portfolio BTS SIO SISR</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Feuilles de style -->
+  <link rel="stylesheet" href="../css/base.css" />
+  <link rel="stylesheet" href="../css/nav.css" />
+  <link rel="stylesheet" href="../css/hero.css" />
+  <link rel="stylesheet" href="../css/skills.css" />
+  <link rel="stylesheet" href="../css/stages.css" />
+  <link rel="stylesheet" href="../css/contact.css" />
+</head>
+<body>
+
+  <!-- ─── ÉTOILES FILANTES ─── -->
+  <div class="star-container">
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+  </div>
+
+  <!-- ─── NAVBAR ─── -->
+  <nav>
+    <div class="container nav-content">
+      <span class="nav-logo">RL<span style="color:var(--blue);">.</span></span>
+      <div class="nav-links">
+        <a href="#about">À propos</a>
+        <a href="#skills">Compétences</a>
+        <a href="#stages">Stages</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <!-- ─── HERO ─── -->
+    <section class="hero" id="about">
+      <div class="reveal">
+        <p class="hero-subtitle mono">// BTS SIO — SISR — 2ème année</p>
+        <h1 class="hero-title">Raphaël<br><em>Limousin</em></h1>
+        <p class="hero-desc">
+          Étudiant spécialisé en infrastructure, systèmes et réseaux. Passionné par la cybersécurité et l'administration de serveurs.
+        </p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn-primary">Me contacter</a>
+          <a href="#skills" class="btn btn-ghost">Mon profil</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── COMPÉTENCES ─── -->
+    <section id="skills">
+      <h2 class="section-title reveal">Compétences Techniques</h2>
+      <div class="skills-grid">
+
+        <div class="skill-card reveal">
+          <span class="my-icon">🖥️</span>
+          <p class="skill-cat">Administration</p>
+          <h3 class="skill-name">Systèmes</h3>
+          <div class="skill-tags">
+            <span class="tag">Windows Server</span>
+            <span class="tag">Active Directory</span>
+            <span class="tag">Linux (Rocky 9-10)</span>
+            <span class="tag">GPO</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <span class="my-icon">🌐</span>
+          <p class="skill-cat">Infrastructure</p>
+          <h3 class="skill-name">Réseaux</h3>
+          <div class="skill-tags">
+            <span class="tag">Cisco IOS</span>
+            <span class="tag">VLAN</span>
+            <span class="tag">DHCP / DNS</span>
+            <span class="tag">Routage / Switching</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal">
+          <span class="my-icon">☁️</span>
+          <p class="skill-cat">Virtualisation</p>
+          <h3 class="skill-name">Cloud & Hyperviseurs</h3>
+          <div class="skill-tags">
+            <span class="tag">VMware ESXi</span>
+            <span class="tag">VMware Workstation</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Azure</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── STAGES ─── -->
+    <section id="stages">
+      <h2 class="section-title reveal">Expériences en entreprise</h2>
+      <div class="stages-grid">
+
+        <div class="stage-card reveal">
+          <p class="stage-year">Stage — 2ème année BTS SIO · 2024</p>
+          <h3 class="stage-title">Administrateur Systèmes & Réseaux</h3>
+          <p class="stage-company">EPSM LM — Armentières</p>
+          <ul class="stage-tasks">
+            <li>Gestion et sécurisation des accès via Active Directory et stratégies de groupe (GPO).</li>
+            <li>Réservation d'IP via le service DHCP sur Active Directory.</li>
+            <li>Déclaration de PC Portable sur le réseau Wi-Fi via la plateforme Aruba.</li>
+          </ul>
+        </div>
+
+        <div class="stage-card reveal">
+          <p class="stage-year">Stage — 1ère année BTS SIO · 2023</p>
+          <h3 class="stage-title">Support</h3>
+          <p class="stage-company">EPSM LM — Armentières</p>
+          <ul class="stage-tasks">
+            <li>Déploiement de postes utilisateurs.</li>
+            <li>Gestion des tickets GLPI.</li>
+            <li>Brassage réseau et maintenance hardware.</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── CONTACT ─── -->
+    <section id="contact">
+      <h2 class="section-title reveal">Me contacter</h2>
+      <div class="contact-wrapper">
+
+        <div class="reveal">
+          <p class="contact-intro">
+            Actuellement à la recherche d'une alternance pour une licence professionnelle en administration système ou cybersécurité.
+          </p>
+          <div class="contact-links">
+            <a href="https://github.com/raphaellimousin07" target="_blank" class="contact-link">
+              GitHub — raphaellimousin07
+            </a>
+            <a href="https://linkedin.com/in/raphael-limousin" target="_blank" class="contact-link">
+              LinkedIn — Raphaël Limousin
+            </a>
+          </div>
+        </div>
+
+        <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" placeholder="Votre nom" required />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="votre@email.com" required />
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea placeholder="Votre message..." required></textarea>
+          </div>
+          <button type="submit" class="btn-send">Envoyer le message →</button>
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <p>© 2026 Portfolio Raphaël Limousin — BTS SIO 2ème année SISR</p>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

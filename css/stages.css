@@ -1,0 +1,53 @@
+/* ─── STAGES ─── */
+.stages-grid {
+  display: grid;
+  gap: 2rem;
+}
+
+.stage-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 2rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.stage-card:hover {
+  box-shadow: 0 8px 32px var(--blue-glow);
+}
+
+.stage-year {
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.stage-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem;
+  margin-bottom: 0.3rem;
+  color: var(--text);
+}
+
+.stage-company {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.stage-tasks {
+  list-style-position: inside;
+  color: #b0b4c4;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.stage-tasks li {
+  font-size: 0.9rem;
+  line-height: 1.6;
+}

@@ -1,0 +1,64 @@
+/* ─── GRILLE COMPÉTENCES ─── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.skill-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--blue-dim);
+  background: var(--surface-hover);
+}
+
+/* Icône emoji avec zoom au survol */
+.my-icon {
+  font-size: 3.5rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.skill-card:hover .my-icon {
+  transform: scale(1.3) rotate(5deg);
+}
+
+.skill-cat {
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.skill-name {
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+/* ─── TAGS ─── */
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background: var(--blue-glow);
+  color: var(--accent);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(59,130,246,0.3);
+}
