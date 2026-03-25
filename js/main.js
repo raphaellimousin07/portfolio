@@ -25,3 +25,14 @@ function handleSubmit(event) {
     event.target.reset();
   }, 3000);
 }
+
+// ─── ONGLETS PDF ───
+function switchTab(event, tabId) {
+  // Désactiver tous les onglets et panels
+  document.querySelectorAll('.pdf-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pdf-panel').forEach(p => p.classList.remove('active'));
+ 
+  // Activer l'onglet cliqué et son panel
+  event.currentTarget.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
