@@ -1,0 +1,209 @@
+/* ─── PAGE ATELIER DE PROFESSIONNALISATION ─── */
+
+.ap-page {
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+  max-width: 960px;
+}
+
+/* ─── EN-TÊTE ─── */
+.ap-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.ap-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--blue);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.ap-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  line-height: 1.1;
+  color: var(--text);
+}
+
+.ap-subtitle {
+  font-size: 1rem;
+  color: var(--muted);
+  max-width: 700px;
+  line-height: 1.7;
+}
+
+/* ─── SECTION LABEL ─── */
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--blue);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 1.4rem;
+}
+
+/* ─── FICHE PROJET ─── */
+.ap-section { margin-bottom: 3.5rem; }
+
+.project-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+
+.meta-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+}
+
+.meta-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.meta-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* ─── CHOIX AP ─── */
+.choices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.choice-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.choice-card:hover {
+  border-color: var(--blue-dim);
+  box-shadow: 0 6px 24px var(--blue-glow);
+}
+
+.choice-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--blue);
+  background: var(--blue-dim);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  align-self: flex-start;
+  letter-spacing: 0.1em;
+}
+
+.choice-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.choice-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.choice-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* ─── SPECS ACCORDION ─── */
+.specs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.spec-group-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ─── SERVERS GRID ─── */
+.servers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.8rem;
+}
+
+.server-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.server-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.server-detail {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* ─── DOCUMENTS ─── */
+.docs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* ─── TAGS ─── */
+.tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--accent);
+  background: var(--blue-dim);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  .project-meta { grid-template-columns: 1fr 1fr; }
+  .choices-grid { grid-template-columns: 1fr; }
+  .servers-grid { grid-template-columns: 1fr 1fr; }
+}

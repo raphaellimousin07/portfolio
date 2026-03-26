@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Atelier de Professionnalisation — WashingtonMedilab · Raphaël Limousin</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/base.css"/>
+  <link rel="stylesheet" href="/css/nav.css"/>
+  <link rel="stylesheet" href="/css/competence-page.css"/>
+  <link rel="stylesheet" href="/css/ap.css"/>
+</head>
+<body>
+
+  <div class="star-container">
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+  </div>
+
+  <nav>
+    <div class="container nav-content">
+      <a href="/html/index.html" class="nav-logo">RL<span style="color:var(--blue);">.</span></a>
+      <div class="nav-links">
+        <a href="/html/index.html#competences-sisr">Compétences</a>
+        <a href="/html/index.html#stages">Stages</a>
+        <a href="/html/index.html#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container ap-page">
+
+    <a href="/html/index.html" class="back-link">← Retour à l'accueil</a>
+
+    <!-- ─── EN-TÊTE ─── -->
+    <div class="ap-header reveal">
+      <span class="ap-tag">Épreuve E4 · BTS SIO SISR</span>
+      <svg style="width:48px;height:48px;color:var(--blue);margin-bottom:0.4rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+        <path d="M7 8h4M7 11h2"/>
+        <rect x="14" y="7" width="4" height="5" rx="1"/>
+      </svg>
+      <h1 class="ap-title">Atelier de<br><em>Professionnalisation</em></h1>
+      <p class="ap-subtitle">Spécifications et documentation du projet AP réalisé dans le cadre du BTS SIO option SISR — Projet WashingtonMedilab.</p>
+    </div>
+
+    <!-- ─── PRÉSENTATION ─── -->
+    <div class="ap-section reveal">
+      <p class="section-label">// Présentation du projet</p>
+      <div class="project-meta">
+        <div class="meta-card">
+          <p class="meta-label">Nom du projet</p>
+          <p class="meta-value">WashingtonMedilab</p>
+        </div>
+        <div class="meta-card">
+          <p class="meta-label">Période</p>
+          <p class="meta-value">Sept. 2025 — Avr. 2026</p>
+        </div>
+        <div class="meta-card">
+          <p class="meta-label">Équipe</p>
+          <p class="meta-value">R. Cauche · A. Stamper<br>R. Limousin · Dior</p>
+        </div>
+        <div class="meta-card">
+          <p class="meta-label">Option</p>
+          <p class="meta-value">SISR</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CHOIX AP ─── -->
+    <div class="ap-section reveal">
+      <p class="section-label">// Mes choix pour l'examen AP</p>
+      <div class="choices-grid">
+
+        <div class="choice-card">
+          <span class="choice-num">Choix n°1</span>
+          <h3 class="choice-title">Le réseau de l'infrastructure</h3>
+          <p class="choice-desc">Mise en place et configuration de l'infrastructure réseau complète du projet WashingtonMedilab : routeur Cisco, switchs Cisco, segmentation en VLANs, pare-feu Stormshield et interconnexion des équipements.</p>
+          <div class="choice-tags">
+            <span class="tag">Cisco</span>
+            <span class="tag">VLAN</span>
+            <span class="tag">Stormshield</span>
+            <span class="tag">Routage</span>
+          </div>
+        </div>
+
+        <div class="choice-card">
+          <span class="choice-num">Choix n°2</span>
+          <h3 class="choice-title">HAProxy — Load Balancer</h3>
+          <p class="choice-desc">Déploiement et configuration d'HAProxy en tant que répartiteur de charge entre les deux serveurs web du projet. Assure la haute disponibilité des services et la continuité en cas de panne d'un serveur.</p>
+          <div class="choice-tags">
+            <span class="tag">HAProxy</span>
+            <span class="tag">Load Balancing</span>
+            <span class="tag">Haute dispo.</span>
+            <span class="tag">Rocky Linux</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── SPÉCIFICATIONS TECHNIQUES ─── -->
+    <div class="ap-section reveal">
+      <p class="section-label">// Spécifications techniques</p>
+
+      <div class="specs-grid">
+
+        <!-- Infrastructure réseau -->
+        <div>
+          <p class="spec-group-title">Infrastructure réseau</p>
+          <div class="accordion">
+
+            <div class="acc-item">
+              <button class="acc-trigger">
+                <span class="acc-num">R1</span>
+                <span class="acc-title">Routeur Cisco</span>
+                <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="acc-body">
+                <div class="acc-inner">
+                  <p style="font-size:0.9rem;color:var(--muted);line-height:1.6;">Routage inter-VLAN, tables de routage, ACL.</p>
+                  <div class="choice-tags" style="margin-top:0.8rem;">
+                    <span class="tag">Cisco</span><span class="tag">Routage</span><span class="tag">Inter-VLAN</span><span class="tag">ACL</span>
+                  </div>
+                  <div class="pdfs-block" style="margin-top:1.2rem;">
+                    <p class="pdfs-label">Documents PDF</p>
+                    <div class="pdf-viewer-container" id="pdfviewer-r1" data-src="/pdf/ap/routeur.pdf"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <button class="acc-trigger">
+                <span class="acc-num">R2</span>
+                <span class="acc-title">Switchs Cisco (x2)</span>
+                <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="acc-body">
+                <div class="acc-inner">
+                  <p style="font-size:0.9rem;color:var(--muted);line-height:1.6;">Commutation, segmentation en VLANs.</p>
+                  <div class="choice-tags" style="margin-top:0.8rem;">
+                    <span class="tag">Cisco</span><span class="tag">Switch</span><span class="tag">VLAN</span><span class="tag">Trunk</span>
+                  </div>
+                  <div class="pdfs-block" style="margin-top:1.2rem;">
+                    <p class="pdfs-label">Documents PDF</p>
+                    <div class="pdf-viewer-container" id="pdfviewer-r2" data-src="/pdf/ap/switch.pdf"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="acc-item">
+              <button class="acc-trigger">
+                <span class="acc-num">R3</span>
+                <span class="acc-title">Firewall Stormshield</span>
+                <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="acc-body">
+                <div class="acc-inner">
+                  <p style="font-size:0.9rem;color:var(--muted);line-height:1.6;">Filtrage, inspection des paquets, IPS.</p>
+                  <div class="choice-tags" style="margin-top:0.8rem;">
+                    <span class="tag">Stormshield</span><span class="tag">Firewall</span><span class="tag">Filtrage</span><span class="tag">IPS</span><span class="tag">Sécurité</span>
+                  </div>
+                  <div class="pdfs-block" style="margin-top:1.2rem;">
+                    <p class="pdfs-label">Documents PDF</p>
+                    <div class="pdf-viewer-container" id="pdfviewer-r3" data-src="/pdf/ap/stormshield.pdf"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Serveurs & services -->
+        <div>
+          <p class="spec-group-title">Serveurs & services — virtualisés sur VMware ESXi 6.5</p>
+          <div class="servers-grid">
+            <div class="server-card">
+              <p class="server-name">VMware ESXi 6.5</p>
+              <p class="server-detail">Hyperviseur Type-1</p>
+            </div>
+            <div class="server-card">
+              <p class="server-name">Active Directory</p>
+              <p class="server-detail">Windows Server 2025 · DNS · GPO</p>
+            </div>
+            <div class="server-card">
+              <p class="server-name">Machine de test</p>
+              <p class="server-detail">Windows 11 · Client domaine</p>
+            </div>
+            <div class="server-card">
+              <p class="server-name">Zabbix</p>
+              <p class="server-detail">Supervision réseau · Rocky Linux</p>
+            </div>
+            <div class="server-card">
+              <p class="server-name">Rsyslog</p>
+              <p class="server-detail">Centralisation des logs · Rocky Linux</p>
+            </div>
+            <div class="server-card">
+              <p class="server-name">Serveurs Web (x2)</p>
+              <p class="server-detail">Rocky Linux · derrière HAProxy</p>
+            </div>
+            <div class="server-card">
+              <p class="server-name">HAProxy</p>
+              <p class="server-detail">Load Balancer · Rocky Linux</p>
+            </div>
+            <div class="server-card">
+              <p class="server-name">Wiki.js</p>
+              <p class="server-detail">Documentation interne · Rocky Linux</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── DOCUMENTS ─── -->
+    <div class="ap-section reveal">
+      <p class="section-label">// Documents</p>
+      <div class="docs-list">
+
+        <a href="https://trello.com/b/aWoqrY71/washingtonmedilab-ap" target="_blank" rel="noopener" class="ext-link-card">
+          <div class="ext-link-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/>
+            </svg>
+          </div>
+          <div class="ext-link-info">
+            <span class="ext-link-name">Tableau Trello — WashingtonMedilab AP</span>
+            <span class="ext-link-url">trello.com/b/aWoqrY71/washingtonmedilab-ap</span>
+          </div>
+          <svg class="ext-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+
+        <a href="/pdf/ap/cahier-des-charges.pdf" target="_blank" class="ext-link-card">
+          <div class="ext-link-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div class="ext-link-info">
+            <span class="ext-link-name">Cahier des charges</span>
+            <span class="ext-link-url">PDF · WashingtonMedilab</span>
+          </div>
+          <svg class="ext-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/js/competence.js"></script>
+</body>
+</html>
