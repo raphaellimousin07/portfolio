@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../css/contact.css" />
   <link rel="stylesheet" href="../css/competences.css" />
   <link rel="stylesheet" href="../css/ap-index.css" />
+  <link rel="stylesheet" href="../css/competence-page.css" />
 </head>
 <body>
 
@@ -167,8 +168,22 @@
         </a>
 
       </div>
-      <div style="margin-top:2rem;text-align:center;">
-        <a href="/pdf/grille-E5.pdf" target="_blank" class="btn btn-ghost">Grille d'évaluation E5 →</a>
+      <div class="accordion" style="margin-top:2rem;">
+        <div class="acc-item">
+          <button class="acc-trigger">
+            <span class="acc-num">E5</span>
+            <span class="acc-title">Grille d'évaluation E5</span>
+            <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="acc-body">
+            <div class="acc-inner">
+              <div class="pdfs-block">
+                <p class="pdfs-label">Document PDF</p>
+                <div class="pdf-viewer-container" id="pdfviewer-e5" data-src="/pdf/grille-E5.pdf"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
