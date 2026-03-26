@@ -10,11 +10,15 @@
   border-left: 4px solid var(--blue);
   border-radius: var(--radius);
   padding: 2rem;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
 }
 
 .stage-card:hover {
   box-shadow: 0 8px 32px var(--blue-glow);
+  border-color: var(--blue);
 }
 
 .stage-year {
@@ -50,4 +54,18 @@
 .stage-tasks li {
   font-size: 0.9rem;
   line-height: 1.6;
+}
+
+.stage-arrow {
+  display: inline-block;
+  margin-top: 1.2rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  transition: letter-spacing 0.2s;
+}
+
+.stage-card:hover .stage-arrow {
+  letter-spacing: 0.12em;
 }
