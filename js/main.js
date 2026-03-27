@@ -199,3 +199,34 @@ function loadPDF(container, pdfUrl) {
     }
   });
 }
+
+document.querySelectorAll('.sub-acc-trigger').forEach(trigger => {
+    trigger.addEventListener('click', () => {
+        const item = trigger.parentElement;
+        item.classList.toggle('active');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // On sélectionne tous les déclencheurs de sous-menus
+    const subTriggers = document.querySelectorAll('.sub-acc-trigger');
+
+    subTriggers.forEach(trigger => {
+        trigger.addEventListener('click', (e) => {
+            // Empêche l'événement de remonter au menu parent
+            e.stopPropagation(); 
+            
+            const parent = trigger.parentElement; // Le .sub-acc-item
+            
+            // On bascule la classe 'active'
+            parent.classList.toggle('active');
+
+            // Optionnel : Fermer les autres PDF quand on en ouvre un
+            subTriggers.forEach(other => {
+                if (other !== trigger) {
+                    other.parentElement.classList.remove('active');
+                }
+            });
+        });
+    });
+});

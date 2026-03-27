@@ -215,3 +215,38 @@
   .servers-grid { grid-template-columns: 1fr 1fr; }
   .ap-section { margin-bottom: 2.5rem; }
 }
+
+/* Style des sous-accordéons PDF */
+.sub-acc-item {
+    border: 1px solid var(--border-color, #333);
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.sub-acc-trigger {
+    width: 100%;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.sub-acc-body {
+    display: none; /* Caché par défaut */
+    padding: 10px;
+    background: #000;
+}
+
+.sub-acc-item.active .sub-acc-body {
+    display: block;
+}
+
+.sub-acc-item.active .acc-arrow {
+    transform: rotate(180deg);
+}
