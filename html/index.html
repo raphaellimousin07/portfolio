@@ -24,6 +24,15 @@
     <div class="star"></div><div class="star"></div><div class="star"></div>
     <div class="star"></div><div class="star"></div><div class="star"></div>
   </div>
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+    <defs>
+      <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%"  stop-color="#60a5fa"/>
+        <stop offset="55%" stop-color="#a78bfa"/>
+        <stop offset="100%" stop-color="#34d399"/>
+      </linearGradient>
+    </defs>
+  </svg>
 
   <!-- ─── NAVBAR ─── -->
   <nav>
@@ -37,6 +46,7 @@
         <a href="#ap">AP</a>
         <a href="#contact">Contact</a>
       </div>
+      <button class="nav-burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
@@ -58,7 +68,7 @@
     </section>
 
     <!-- ─── COMPÉTENCES ─── -->
-    <section id="skills">
+    <section id="skills" data-num="01">
       <h2 class="section-title reveal">Compétences Techniques</h2>
       <div class="skills-grid">
 
@@ -103,7 +113,7 @@
 
 
     <!-- ─── COMPÉTENCES SISR ─── -->
-    <section id="competences-sisr">
+    <section id="competences-sisr" data-num="02">
       <h2 class="section-title reveal">Compétences BTS SIO SISR</h2>
       <div class="competences-grid">
 
@@ -188,13 +198,13 @@
     </section>
 
     <!-- ─── STAGES ─── -->
-    <section id="stages">
+    <section id="stages" data-num="03">
       <h2 class="section-title reveal">Expériences en entreprise</h2>
       <div class="stages-grid">
 
         <a href="stages/stage-2a.html" class="stage-card reveal">
           <p class="stage-year">Stage — 2ème année BTS SIO · 2026</p>
-          <h3 class="stage-title">Administrateur Systèmes & Réseaux</h3>
+          <h3 class="stage-title">Administration Systèmes & Réseaux</h3>
           <p class="stage-company">EPSM LM — Armentières</p>
           <ul class="stage-tasks">
             <li>Gestion et sécurisation des accès via Active Directory et stratégies de groupe (GPO).</li>
@@ -221,7 +231,7 @@
     </section>
 
     <!-- ─── ATELIER DE PROFESSIONNALISATION ─── -->
-    <section id="ap">
+    <section id="ap" data-num="04">
       <h2 class="section-title reveal">Atelier de Professionnalisation</h2>
       <div class="ap-banner reveal">
         <div class="ap-banner-content">
@@ -255,7 +265,7 @@
     </section>
 
     <!-- ─── CONTACT ─── -->
-    <section id="contact">
+    <section id="contact" data-num="05">
       <h2 class="section-title reveal">Me contacter</h2>
       <div class="contact-wrapper">
 

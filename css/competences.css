@@ -14,8 +14,11 @@
 }
 
 .competence-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: rgba(17, 19, 24, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);
   border-radius: var(--radius);
   padding: 2rem 1.8rem;
   position: relative;
@@ -26,15 +29,14 @@
   align-items: center;
   text-align: center;
   gap: 0.8rem;
-  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   color: var(--text);
 }
 
 .competence-card:hover {
   transform: translateY(-6px);
-  border-color: var(--blue);
-  background: var(--surface-hover);
-  box-shadow: 0 12px 40px var(--blue-glow);
+  border-color: rgba(59,130,246,0.35);
+  box-shadow: 0 16px 48px rgba(59,130,246,0.13), inset 0 1px 0 rgba(255,255,255,0.07);
   color: var(--text);
 }
 
@@ -46,8 +48,11 @@
   font-family: 'DM Mono', monospace;
   font-size: 0.85rem;
   font-weight: 500;
-  color: var(--blue);
   letter-spacing: 0.05em;
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 55%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Icône SVG */
@@ -77,6 +82,24 @@
   color: var(--muted);
   line-height: 1.65;
 }
+
+/* Spotlight */
+.competence-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(59,130,246,0.08) 0%,
+    transparent 65%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.competence-card:hover::after { opacity: 1; }
 
 /* Flèche discrète au survol */
 .competence-arrow {

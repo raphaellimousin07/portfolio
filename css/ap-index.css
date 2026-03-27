@@ -27,9 +27,12 @@
 .ap-banner-tag {
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
-  color: var(--blue);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 55%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .ap-banner-title {
@@ -56,9 +59,10 @@
   font-family: 'DM Mono', monospace;
   font-size: 0.68rem;
   color: var(--accent);
-  background: var(--blue-dim);
-  padding: 0.22rem 0.6rem;
-  border-radius: 4px;
+  background: linear-gradient(135deg, rgba(59,130,246,0.12), rgba(139,92,246,0.08));
+  border: 1px solid rgba(59,130,246,0.18);
+  padding: 0.22rem 0.65rem;
+  border-radius: 20px;
   letter-spacing: 0.06em;
 }
 

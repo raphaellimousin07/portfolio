@@ -5,10 +5,28 @@
   flex-direction: column;
   justify-content: center;
   padding-top: 4rem;
+  position: relative;
 }
 
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero > * { position: relative; z-index: 1; }
+
 .hero-subtitle {
-  color: var(--accent);
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 55%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 1rem;
   letter-spacing: 1px;
 }
@@ -17,6 +35,14 @@
   font-size: clamp(3rem, 6vw, 5rem);
   line-height: 1.1;
   margin-bottom: 1.5rem;
+}
+
+.hero-title em {
+  font-style: italic;
+  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 55%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-desc {
@@ -29,6 +55,14 @@
 .hero-ctas {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .hero { padding-top: 2rem; }
+  .hero-desc { font-size: 1rem; }
+  .hero-ctas { flex-direction: column; align-items: flex-start; }
+  .btn { width: 100%; justify-content: center; }
 }
 
 /* ─── BOUTONS ─── */
@@ -46,14 +80,22 @@
 }
 
 .btn-primary {
-  background: var(--blue);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
   color: #fff;
-  box-shadow: 0 4px 20px var(--blue-glow);
+  box-shadow: 0 4px 24px rgba(59,130,246,0.35);
 }
 
 .btn-primary:hover {
-  background: var(--accent);
   color: #fff;
+  box-shadow: 0 6px 32px rgba(139,92,246,0.4);
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .btn-ghost {
