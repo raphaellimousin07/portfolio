@@ -135,6 +135,7 @@ function loadPDF(container, pdfUrl) {
       const totalPages = pdfDoc.numPages;
       let currentPage = 1;
 
+      const isModal = container.id === 'pdf-modal-viewer';
       const nav = document.createElement('div');
       nav.className = 'pdf-nav';
       nav.innerHTML = `
@@ -148,8 +149,10 @@ function loadPDF(container, pdfUrl) {
             <line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
           Télécharger
-        </a>`;
+        </a>
+        ${!isModal ? `<button class="pdf-expand-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Plein écran</button>` : ''}`;
       container.appendChild(nav);
+      if (!isModal) nav.querySelector('.pdf-expand-btn').addEventListener('click', () => openPDFModal(pdfUrl));
 
       const pagesWrapper = document.createElement('div');
       pagesWrapper.className = 'pdf-pages';
@@ -170,7 +173,7 @@ function loadPDF(container, pdfUrl) {
 
       for (let i = 1; i <= totalPages; i++) {
         const page = await pdfDoc.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 });
+        const viewport = page.getViewport({ scale: isModal ? 2.0 : 1.5 });
         const canvas = document.createElement('canvas');
         canvas.className = 'pdf-canvas';
         canvas.dataset.page = i;
@@ -198,6 +201,37 @@ function loadPDF(container, pdfUrl) {
       container.innerHTML = `<div class="pdf-error">Impossible de charger le PDF.</div>`;
     }
   });
+}
+
+// ─── PDF MODAL PLEIN ÉCRAN ───
+function openPDFModal(pdfUrl) {
+  if (!document.getElementById('pdf-modal')) {
+    const modal = document.createElement('div');
+    modal.id = 'pdf-modal';
+    modal.innerHTML = `
+      <div class="pdf-modal-backdrop"></div>
+      <div class="pdf-modal-inner">
+        <button class="pdf-modal-close" title="Fermer (Échap)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="pdf-viewer-container" id="pdf-modal-viewer"></div>
+      </div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('.pdf-modal-backdrop').addEventListener('click', closePDFModal);
+    modal.querySelector('.pdf-modal-close').addEventListener('click', closePDFModal);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closePDFModal(); });
+  }
+  const viewer = document.getElementById('pdf-modal-viewer');
+  viewer.innerHTML = '';
+  delete viewer.dataset.loaded;
+  document.getElementById('pdf-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadPDF(viewer, pdfUrl);
+}
+
+function closePDFModal() {
+  const modal = document.getElementById('pdf-modal');
+  if (modal) { modal.classList.remove('open'); document.body.style.overflow = ''; }
 }
 
 document.querySelectorAll('.sub-acc-trigger').forEach(trigger => {

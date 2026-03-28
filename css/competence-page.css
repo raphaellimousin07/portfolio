@@ -598,3 +598,86 @@
   font-size: 0.84rem;
   color: var(--text);
 }
+
+/* ─── BOUTON PLEIN ÉCRAN PDF ─── */
+.pdf-expand-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: none;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.55rem;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.02em;
+  transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.pdf-expand-btn:hover { border-color: rgba(96,165,250,0.5); color: #60a5fa; }
+
+/* ─── MODAL PLEIN ÉCRAN PDF ─── */
+#pdf-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+#pdf-modal.open { display: flex; }
+
+.pdf-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(8px);
+}
+
+.pdf-modal-inner {
+  position: relative;
+  z-index: 1;
+  width: min(92vw, 920px);
+  height: 90vh;
+  background: rgba(17,19,24,0.98);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+
+.pdf-modal-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  padding: 0.35rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.pdf-modal-close:hover {
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.4);
+  color: #ef4444;
+}
+
+.pdf-modal-inner .pdf-viewer-container {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.pdf-modal-inner .pdf-pages {
+  max-height: calc(90vh - 52px);
+}
