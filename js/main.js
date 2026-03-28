@@ -142,6 +142,11 @@ function loadPDF(container, pdfUrl) {
         <button class="pdf-nav-btn" id="prev-${container.id}" disabled>‹ Préc.</button>
         <span class="pdf-nav-info">Page <span id="page-num-${container.id}">1</span> / ${totalPages}</span>
         <button class="pdf-nav-btn" id="next-${container.id}" ${totalPages <= 1 ? 'disabled' : ''}>Suiv. ›</button>
+        <div class="pdf-zoom-group">
+          <button class="pdf-nav-btn" id="zoom-out-${container.id}">−</button>
+          <span class="pdf-zoom-level" id="zoom-level-${container.id}">100%</span>
+          <button class="pdf-nav-btn" id="zoom-in-${container.id}">+</button>
+        </div>
         <a href="${pdfUrl}" download class="pdf-nav-dl">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" width="14" height="14">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -157,6 +162,20 @@ function loadPDF(container, pdfUrl) {
       const pagesWrapper = document.createElement('div');
       pagesWrapper.className = 'pdf-pages';
       container.appendChild(pagesWrapper);
+
+      let zoomLevel = 1;
+      const applyZoom = () => {
+        pagesWrapper.style.zoom = zoomLevel;
+        document.getElementById(`zoom-level-${container.id}`).textContent = Math.round(zoomLevel * 100) + '%';
+        document.getElementById(`zoom-out-${container.id}`).disabled = zoomLevel <= 0.5;
+        document.getElementById(`zoom-in-${container.id}`).disabled = zoomLevel >= 3.0;
+      };
+      document.getElementById(`zoom-out-${container.id}`).addEventListener('click', () => {
+        zoomLevel = Math.max(0.5, +(zoomLevel - 0.25).toFixed(2)); applyZoom();
+      });
+      document.getElementById(`zoom-in-${container.id}`).addEventListener('click', () => {
+        zoomLevel = Math.min(3.0, +(zoomLevel + 0.25).toFixed(2)); applyZoom();
+      });
 
       const canvases = [];
 
