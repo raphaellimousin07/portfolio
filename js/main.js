@@ -55,20 +55,40 @@ const observer = new IntersectionObserver((entries) => {
 
 reveals.forEach(reveal => observer.observe(reveal));
 
-// ─── FORMULAIRE DE CONTACT ───
+// ─── FORMULAIRE DE CONTACT (EmailJS) ───
+emailjs.init('ur9uIFJO2PmLispN9');
+
 function handleSubmit(event) {
   event.preventDefault();
-  const btn = event.target.querySelector('.btn-send');
-  const originalText = btn.textContent;
+  const form = event.target;
+  const btn = form.querySelector('.btn-send');
 
-  btn.textContent = "Message envoyé ! ✓";
-  btn.style.background = "#10b981";
+  btn.textContent = 'Envoi en cours…';
+  btn.disabled = true;
 
-  setTimeout(() => {
-    btn.textContent = originalText;
-    btn.style.background = "";
-    event.target.reset();
-  }, 3000);
+  emailjs.send('service_7ij6y9h', 'template_1w5za0p', {
+    from_name: form.from_name.value,
+    name:      form.from_name.value,
+    email:     form.email.value,
+    message:   form.message.value,
+  }).then(() => {
+    btn.textContent = 'Message envoyé ! ✓';
+    btn.style.background = '#10b981';
+    form.reset();
+    setTimeout(() => {
+      btn.textContent = 'Envoyer le message →';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }).catch(() => {
+    btn.textContent = 'Erreur — réessaie';
+    btn.style.background = '#ef4444';
+    btn.disabled = false;
+    setTimeout(() => {
+      btn.textContent = 'Envoyer le message →';
+      btn.style.background = '';
+    }, 3000);
+  });
 }
 
 // ─── ONGLETS PDF ───

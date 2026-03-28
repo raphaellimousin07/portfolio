@@ -286,15 +286,15 @@
         <form class="contact-form reveal" onsubmit="handleSubmit(event)">
           <div class="form-group">
             <label>Nom</label>
-            <input type="text" placeholder="Votre nom" required />
+            <input type="text" name="from_name" placeholder="Votre nom" required />
           </div>
           <div class="form-group">
             <label>Email</label>
-            <input type="email" placeholder="votre@email.com" required />
+            <input type="email" name="email" placeholder="votre@email.com" required />
           </div>
           <div class="form-group">
             <label>Message</label>
-            <textarea placeholder="Votre message..." required></textarea>
+            <textarea name="message" placeholder="Votre message..." required></textarea>
           </div>
           <button type="submit" class="btn-send">Envoyer le message →</button>
         </form>
@@ -309,6 +309,7 @@
     <p>© 2026 Portfolio Raphaël Limousin — BTS SIO 2ème année SISR</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script src="../js/main.js"></script>
 </body>
 </html>
