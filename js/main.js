@@ -371,7 +371,7 @@ document.addEventListener('keydown', (e) => {
         setTimeout(() => {
             // Redirection vers ton fichier memento
             // Note : Vérifie bien le chemin (../html/memento.html ou html/memento.html selon ta structure)
-            window.location.href = "html/memento.html"; 
+            window.location.href = "html/Memento.html"; 
         }, 500);
     }
 });
