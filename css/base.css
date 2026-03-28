@@ -101,9 +101,9 @@ section {
 section[data-num]::before {
   content: attr(data-num);
   position: absolute;
-  top: 1rem;
+  top: 0;
   right: -0.5rem;
-  font-size: clamp(6rem, 14vw, 10rem);
+  font-size: clamp(5rem, 7.5vw, 7rem);
   font-family: 'DM Serif Display', serif;
   color: rgba(255,255,255,0.025);
   font-weight: 700;
