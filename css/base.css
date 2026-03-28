@@ -116,16 +116,21 @@ section[data-num]::before {
 /* ─── CURSEUR PERSONNALISÉ ─── */
 .cursor {
   position: fixed;
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399, #60a5fa);
-  background-size: 300% 300%;
+  width: 23px;
+  height: 23px;
+  background: repeating-linear-gradient(
+    135deg,
+    #60a5fa 0px,
+    #a78bfa 20px,
+    #34d399 40px,
+    #60a5fa 60px
+  );
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
   transform: translate(-50%, -50%);
   transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-  animation: cursor-gradient 2.5s ease-in-out infinite alternate;
+  animation: cursor-gradient 2s linear infinite;
 }
 
 .cursor.grow {
@@ -135,8 +140,8 @@ section[data-num]::before {
 }
 
 @keyframes cursor-gradient {
-  0%   { background-position: 0% 0%; }
-  100% { background-position: 100% 100%; }
+  from { background-position: 0px 0px; }
+  to   { background-position: 42px 42px; }
 }
 
 .has-cursor, .has-cursor * { cursor: none !important; }
