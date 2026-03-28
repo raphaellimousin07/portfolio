@@ -64,7 +64,7 @@ function handleSubmit(event) {
   btn.textContent = 'Envoi en cours…';
   btn.disabled = true;
 
-  emailjs.send('service_7ij6y9h', 'template_1w5za0p', {
+  emailjs.send('service_7ij6y9h', '1w5za0p', {
     from_name: form.from_name.value,
     name:      form.from_name.value,
     email:     form.email.value,
