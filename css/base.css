@@ -125,7 +125,7 @@ section[data-num]::before {
   z-index: 9999;
   transform: translate(-50%, -50%);
   transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-  animation: cursor-gradient 3s linear infinite;
+  animation: cursor-gradient 2.5s ease-in-out infinite alternate;
 }
 
 .cursor.grow {
