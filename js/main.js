@@ -56,8 +56,6 @@ const observer = new IntersectionObserver((entries) => {
 reveals.forEach(reveal => observer.observe(reveal));
 
 // ─── FORMULAIRE DE CONTACT (EmailJS) ───
-emailjs.init('ur9uIFJO2PmLispN9');
-
 function handleSubmit(event) {
   event.preventDefault();
   const form = event.target;
@@ -71,7 +69,7 @@ function handleSubmit(event) {
     name:      form.from_name.value,
     email:     form.email.value,
     message:   form.message.value,
-  }).then(() => {
+  }, { publicKey: 'ur9uIFJO2PmLispN9' }).then(() => {
     btn.textContent = 'Message envoyé ! ✓';
     btn.style.background = '#10b981';
     form.reset();
