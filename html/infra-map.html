@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carte d'infrastructure — WashingtonMedilab · Raphaël Limousin</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/base.css"/>
+  <link rel="stylesheet" href="/css/nav.css"/>
+  <link rel="stylesheet" href="/css/infra-map.css"/>
+</head>
+<body class="infra-map-page">
+
+  <div class="star-container">
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+    <div class="star"></div><div class="star"></div><div class="star"></div>
+  </div>
+
+  <nav>
+    <div class="container nav-content">
+      <a href="/html/index.html" class="nav-logo">Raphaël Limousin<span style="color:var(--blue);">.</span></a>
+      <div class="nav-links">
+        <a href="/html/atelier-pro.html">← Atelier Pro</a>
+        <a href="/html/index.html#competences-sisr">Compétences</a>
+        <a href="/html/index.html#contact">Contact</a>
+      </div>
+      <button class="nav-burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="infra-layout">
+
+    <!-- ─── SIDEBAR ─── -->
+    <aside class="im-sidebar">
+      <div class="im-sidebar-header">
+        <p class="im-sidebar-title">Infrastructure Map</p>
+        <p class="im-sidebar-sub">WashingtonMedilab · VMware ESXi</p>
+      </div>
+
+      <div class="im-sidebar-nav" id="sidebar-nav">
+        <button class="im-reset-btn" onclick="resetZoom()">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          Réinitialiser la vue
+        </button>
+
+        <p class="im-section-label">✦ Assistant IA</p>
+        <button class="im-ai-btn" onclick="toggleAIPanel()">✦ Diagnostiquer l'infra</button>
+
+        <p class="im-section-label">Machines Virtuelles (11)</p>
+        <div id="vm-list"></div>
+      </div>
+
+      <div class="im-sidebar-footer">
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <div class="status-dot" style="width:8px;height:8px;background:#10b981;border-radius:50%;"></div>
+          <span>Système OK</span>
+        </div>
+        <span id="im-zoom-indicator">Zoom : 100%</span>
+      </div>
+    </aside>
+
+    <!-- ─── CARTE ─── -->
+    <main class="im-main" id="map-viewport">
+
+      <div class="im-map-label">
+        <h2>Topologie de l'infrastructure</h2>
+        <p>Survolez un nœud pour les détails · Scroll pour zoomer</p>
+      </div>
+
+      <div class="im-zoom-controls">
+        <button class="im-zoom-btn" onclick="applyZoom(1.2)" title="Zoom +">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        </button>
+        <button class="im-zoom-btn" onclick="applyZoom(0.8)" title="Zoom −">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
+        </button>
+      </div>
+
+      <svg id="infra-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet">
+        <g id="zoom-container">
+          <g id="connections"></g>
+          <g id="nodes"></g>
+        </g>
+      </svg>
+
+      <!-- ─── TOOLTIP ─── -->
+      <div id="im-tooltip" class="im-tooltip">
+        <div class="tt-header">
+          <div>
+            <p id="tt-name" class="tt-name"></p>
+            <p id="tt-os" class="tt-os"></p>
+          </div>
+          <div class="tt-status-dot"></div>
+        </div>
+        <div class="tt-ip-block">
+          <p class="tt-ip-label">Adresse IP Statique</p>
+          <p id="tt-ip" class="tt-ip"></p>
+        </div>
+        <div class="tt-actions">
+          <button id="tt-btn-connect" class="tt-btn-connect">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+            Connexion
+          </button>
+          <button id="tt-btn-ai" class="tt-btn-ai" title="Analyse IA">✦</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ─── PANNEAU IA ─── -->
+  <div id="im-ai-panel" class="im-ai-panel">
+    <div class="im-ai-panel-header">
+      <p class="im-ai-panel-title"><span>✦</span> Assistant Gemini</p>
+      <button class="im-ai-close" onclick="toggleAIPanel()">&times;</button>
+    </div>
+    <div class="im-ai-messages" id="ai-messages">
+      <div class="im-ai-msg ai">
+        <p style="font-style:italic;opacity:0.6;">Système d'analyse prêt. Posez une question sur l'infrastructure.</p>
+      </div>
+    </div>
+    <div class="im-ai-footer">
+      <div class="im-ai-input-wrap">
+        <input id="ai-input" class="im-ai-input" type="text" placeholder="Question sur l'infrastructure…"/>
+        <button class="im-ai-send" onclick="askAI()">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_KEY = "";
+
+    const infra = {
+      center: { id: 'r1', label: 'Routeur R1', ip: '172.16.31.254', type: 'router', url: 'http://172.16.31.254', x: 600, y: 130 },
+      switches: [
+        { id: 'sw1', label: 'Switch SW1', ip: '172.16.31.241', type: 'switch', url: 'http://172.16.31.241', x: 340, y: 290 },
+        { id: 'sw2', label: 'Switch SW2', ip: '192.168.1.3', type: 'switch', url: 'http://192.168.1.3', x: 860, y: 290 }
+      ],
+      vms: [
+        { id: 'srv-log',      label: 'Srv Log',                ip: '172.16.27.6',   type: 'vm', url: 'http://172.16.27.6',         parent: 'sw1', x: 90,   y: 460, os: 'Linux (64 bits)',    ram: '0 Mo',    storage: '8 Go' },
+        { id: 'srv-log-c',    label: 'SRV log client',         ip: '172.16.27.7',   type: 'vm', url: 'http://172.16.27.7',         parent: 'sw1', x: 210,  y: 510, os: 'Linux (64 bits)',    ram: '0 Mo',    storage: '8 Go' },
+        { id: 'zabbix',       label: 'Zabbix',                 ip: '172.16.27.5',   type: 'vm', url: 'http://172.16.27.5/zabbix/', parent: 'sw1', x: 340,  y: 530, os: 'Linux (64 bits)',    ram: '967 Mo',  storage: '21 Go' },
+        { id: 'ad-ap',        label: 'Active Directory',       ip: '172.16.31.242', type: 'vm', url: 'http://172.16.31.242',        parent: 'sw1', x: 470,  y: 510, os: 'Windows Server',    ram: '4.07 Go', storage: '104 Go' },
+        { id: 'wikijs',       label: 'Wiki.js',                ip: '172.16.26.17',  type: 'vm', url: 'http://172.16.26.17/',        parent: 'sw1', x: 200,  y: 680, os: 'Linux (64 bits)',    ram: '0 Mo',    storage: '32 Go' },
+        { id: 'zabbix-c',     label: 'Clone Zabbix',           ip: '172.16.27.25',  type: 'vm', url: 'http://172.16.27.25',         parent: 'sw1', x: 370,  y: 690, os: 'Linux (32 bits)',    ram: '0 Mo',    storage: '10 Go' },
+        { id: 'userw10',      label: 'UserW10',                ip: '172.16.27.100', type: 'vm', url: 'http://172.16.27.100',        parent: 'sw2', x: 660,  y: 460, os: 'Windows 10',         ram: '0 Mo',    storage: '32 Go' },
+        { id: 'userw11',      label: 'User W11',               ip: '172.16.27.111', type: 'vm', url: 'http://172.16.27.111',        parent: 'sw2', x: 790,  y: 510, os: 'Windows 11',         ram: '0 Mo',    storage: '68 Go' },
+        { id: 'srv-web-1',    label: 'Srv Web 1',              ip: '172.16.26.9',   type: 'vm', url: 'http://172.16.26.9',          parent: 'sw2', x: 930,  y: 530, os: 'Linux (32 bits)',    ram: '0 Mo',    storage: '20 Go' },
+        { id: 'haproxy',      label: 'HAProxy',                ip: '172.16.26.12',  type: 'vm', url: 'http://172.16.26.12',         parent: 'sw2', x: 1060, y: 490, os: 'CentOS 7',           ram: '0 Mo',    storage: '22 Go' },
+        { id: 'srv-web-2',    label: 'Srv Web 2',              ip: '172.16.26.13',  type: 'vm', url: 'http://172.16.26.13',         parent: 'sw2', x: 860,  y: 700, os: 'CentOS 7',           ram: '0 Mo',    storage: '20 Go' }
+      ]
+    };
+
+    // ─── ZOOM / PAN ───
+    let scale = 1, tx = 0, ty = 0, dragging = false, startX, startY;
+    const svg = document.getElementById('infra-svg');
+    const zoomG = document.getElementById('zoom-container');
+    const zoomIndicator = document.getElementById('im-zoom-indicator');
+
+    function updateTransform() {
+      zoomG.setAttribute('transform', `translate(${tx},${ty}) scale(${scale})`);
+      zoomIndicator.textContent = `Zoom : ${Math.round(scale * 100)}%`;
+    }
+
+    svg.addEventListener('wheel', e => {
+      e.preventDefault();
+      const factor = Math.pow(1.1, -e.deltaY / 100);
+      const newScale = Math.min(Math.max(scale * factor, 0.2), 5);
+      const rect = svg.getBoundingClientRect();
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      tx = mx - (mx - tx) * (newScale / scale);
+      ty = my - (my - ty) * (newScale / scale);
+      scale = newScale;
+      updateTransform();
+    });
+
+    svg.addEventListener('mousedown', e => {
+      if (e.button !== 0) return;
+      dragging = true; startX = e.clientX - tx; startY = e.clientY - ty;
+    });
+    window.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      tx = e.clientX - startX; ty = e.clientY - startY;
+      updateTransform();
+    });
+    window.addEventListener('mouseup', () => dragging = false);
+
+    function applyZoom(factor) {
+      const newScale = Math.min(Math.max(scale * factor, 0.2), 5);
+      const cx = svg.clientWidth / 2, cy = svg.clientHeight / 2;
+      tx = cx - (cx - tx) * (newScale / scale);
+      ty = cy - (cy - ty) * (newScale / scale);
+      scale = newScale; updateTransform();
+    }
+    function resetZoom() { scale = 1; tx = 0; ty = 0; updateTransform(); }
+
+    // ─── IA ───
+    async function callGemini(prompt, system = '') {
+      if (!API_KEY) return 'Clé API non configurée.';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+      const payload = {
+        contents: [{ parts: [{ text: prompt }] }],
+        ...(system && { systemInstruction: { parts: [{ text: system }] } })
+      };
+      for (let i = 0; i < 3; i++) {
+        try {
+          const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+          if (!r.ok) throw new Error();
+          const d = await r.json();
+          return d.candidates?.[0]?.content?.parts?.[0]?.text ?? 'Réponse vide.';
+        } catch { await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000)); }
+      }
+      return 'Service indisponible.';
+    }
+
+    function toggleAIPanel() { document.getElementById('im-ai-panel').classList.toggle('open'); }
+
+    async function askAI() {
+      const input = document.getElementById('ai-input');
+      const q = input.value.trim(); if (!q) return;
+      addMsg(q, 'user'); input.value = '';
+      const lid = addMsg('Analyse en cours…', 'ai', true);
+      const r = await callGemini(q, `Expert IT réseau. Infra: ${JSON.stringify(infra.vms)}.`);
+      document.getElementById(lid)?.remove();
+      addMsg(r, 'ai');
+    }
+
+    async function analyzeVM(vm) {
+      document.getElementById('im-ai-panel').classList.add('open');
+      const lid = addMsg(`Analyse de ${vm.label}…`, 'ai', true);
+      const r = await callGemini(`VM : ${vm.label}, OS: ${vm.os}, RAM: ${vm.ram}, Stockage: ${vm.storage}.`, 'Expert IT. Sois concis.');
+      document.getElementById(lid)?.remove();
+      addMsg(r, 'ai');
+    }
+
+    function addMsg(text, role, loading = false) {
+      const id = 'msg-' + Math.random().toString(36).slice(2, 9);
+      const el = document.createElement('div');
+      el.id = id; el.className = `im-ai-msg ${role}${loading ? ' loading' : ''}`;
+      el.innerHTML = `<p>${text.replace(/\n/g, '<br>')}</p>`;
+      const msgs = document.getElementById('ai-messages');
+      msgs.appendChild(el); msgs.scrollTop = msgs.scrollHeight;
+      return id;
+    }
+
+    // ─── DESSIN ───
+    const nodesG = document.getElementById('nodes');
+    const connectionsG = document.getElementById('connections');
+    const vmList = document.getElementById('vm-list');
+    const tooltip = document.getElementById('im-tooltip');
+
+    function nodeColor(item) {
+      if (item.type === 'router') return '#3b82f6';
+      if (item.type === 'switch') return '#6366f1';
+      if (item.label.includes('User') || item.label.includes('user')) return '#f59e0b';
+      return '#10b981';
+    }
+
+    function nodeIcon(type) {
+      if (type === 'router') return 'M12 2L3 7l9 5 9-5-9-5z M3 17l9 5 9-5 M3 12l9 5 9-5';
+      if (type === 'switch') return 'M4 6h16 M4 12h16 M4 18h16 M8 4v16 M16 4v16';
+      return 'M4 7a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V7z M9 19v1 M15 19v1 M12 11v1';
+    }
+
+    function createNode(item) {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', 'node');
+
+      const r = item.type === 'router' ? 36 : 26;
+      const color = nodeColor(item);
+
+      const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      circle.setAttribute('cx', item.x); circle.setAttribute('cy', item.y);
+      circle.setAttribute('r', r);
+      circle.setAttribute('fill', '#111318');
+      circle.setAttribute('stroke', color); circle.setAttribute('stroke-width', '2');
+
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', item.x); label.setAttribute('y', item.y + r + 16);
+      label.setAttribute('text-anchor', 'middle');
+      label.setAttribute('fill', '#9ca3af');
+      label.setAttribute('font-size', '11');
+      label.setAttribute('font-family', 'DM Mono, monospace');
+      label.textContent = item.label;
+
+      const iconG = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      iconG.setAttribute('transform', `translate(${item.x - 11},${item.y - 11})`);
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', nodeIcon(item.type));
+      path.setAttribute('stroke', color); path.setAttribute('stroke-width', '1.8');
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke-linecap', 'round'); path.setAttribute('stroke-linejoin', 'round');
+      iconG.appendChild(path);
+
+      g.appendChild(circle); g.appendChild(label); g.appendChild(iconG);
+
+      // Tooltip events
+      g.addEventListener('mouseenter', () => {
+        document.getElementById('tt-name').textContent = item.label;
+        document.getElementById('tt-ip').textContent = item.ip;
+        document.getElementById('tt-os').textContent = item.os ?? 'Équipement réseau';
+        document.getElementById('tt-btn-connect').onclick = ev => { ev.stopPropagation(); window.open(item.url, '_blank'); };
+        const aibtn = document.getElementById('tt-btn-ai');
+        if (item.type === 'vm') { aibtn.style.display = 'flex'; aibtn.onclick = ev => { ev.stopPropagation(); analyzeVM(item); }; }
+        else { aibtn.style.display = 'none'; }
+        tooltip.classList.add('visible');
+      });
+      g.addEventListener('mousemove', e => {
+        const pad = 16, w = tooltip.offsetWidth, h = tooltip.offsetHeight;
+        let x = e.clientX + 18, y = e.clientY + 18;
+        if (x + w > window.innerWidth - pad) x = e.clientX - w - pad;
+        if (y + h > window.innerHeight - pad) y = e.clientY - h - pad;
+        tooltip.style.left = x + 'px'; tooltip.style.top = y + 'px';
+      });
+      g.addEventListener('mouseleave', () => { setTimeout(() => { if (!tooltip.matches(':hover')) tooltip.classList.remove('visible'); }, 200); });
+
+      nodesG.appendChild(g);
+
+      // Sidebar entry for VMs
+      if (item.type === 'vm') {
+        const btn = document.createElement('button');
+        btn.className = 'im-vm-btn';
+        btn.onclick = () => window.open(item.url, '_blank');
+        btn.innerHTML = `
+          <div class="im-vm-btn-top">
+            <span class="im-vm-name">${item.label}</span>
+            <span class="im-vm-badge">→</span>
+          </div>
+          <div class="im-vm-meta">
+            <span>${item.ip}</span>
+            <span>${item.os}</span>
+          </div>
+        `;
+        vmList.appendChild(btn);
+      }
+    }
+
+    function createLink(a, b) {
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
+      line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
+      line.setAttribute('class', 'connection-line');
+      connectionsG.appendChild(line);
+    }
+
+    tooltip.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+    document.getElementById('ai-input').addEventListener('keypress', e => { if (e.key === 'Enter') askAI(); });
+
+    // ─── INIT ───
+    infra.switches.forEach(sw => createLink(infra.center, sw));
+    infra.vms.forEach(vm => {
+      const parent = infra.switches.find(s => s.id === vm.parent);
+      if (parent) createLink(parent, vm);
+    });
+    createNode(infra.center);
+    infra.switches.forEach(sw => createNode(sw));
+    infra.vms.forEach(vm => createNode(vm));
+  </script>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>

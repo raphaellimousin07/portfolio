@@ -55,6 +55,26 @@ document.querySelectorAll('.acc-trigger').forEach(trigger => {
       item.classList.add('open');
       body.style.maxHeight = '9999px';
       item.querySelectorAll('.pdf-viewer-container[data-src]').forEach(container => {
+        if (!container.closest('.sub-acc-item') && !container.dataset.loaded) {
+          loadPDF(container, container.dataset.src);
+          container.dataset.loaded = 'true';
+        }
+      });
+    }
+  });
+});
+
+// ─── SUB-ACCORDION (imbriqué) ───
+document.querySelectorAll('.sub-acc-trigger').forEach(trigger => {
+  trigger.addEventListener('click', () => {
+    const item = trigger.closest('.sub-acc-item');
+    const isOpen = item.classList.contains('open');
+
+    if (isOpen) {
+      item.classList.remove('open');
+    } else {
+      item.classList.add('open');
+      item.querySelectorAll('.pdf-viewer-container[data-src]').forEach(container => {
         if (!container.dataset.loaded) {
           loadPDF(container, container.dataset.src);
           container.dataset.loaded = 'true';
@@ -171,33 +191,3 @@ function loadPDF(container, pdfUrl) {
   });
 }
 
-document.querySelectorAll('.sub-acc-trigger').forEach(trigger => {
-    trigger.addEventListener('click', () => {
-        const item = trigger.parentElement;
-        item.classList.toggle('active');
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    // On sélectionne tous les déclencheurs de sous-menus
-    const subTriggers = document.querySelectorAll('.sub-acc-trigger');
-
-    subTriggers.forEach(trigger => {
-        trigger.addEventListener('click', (e) => {
-            // Empêche l'événement de remonter au menu parent
-            e.stopPropagation(); 
-            
-            const parent = trigger.parentElement; // Le .sub-acc-item
-            
-            // On bascule la classe 'active'
-            parent.classList.toggle('active');
-
-            // Optionnel : Fermer les autres PDF quand on en ouvre un
-            subTriggers.forEach(other => {
-                if (other !== trigger) {
-                    other.parentElement.classList.remove('active');
-                }
-            });
-        });
-    });
-});

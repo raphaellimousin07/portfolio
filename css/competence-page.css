@@ -143,7 +143,7 @@
   transition: transform 0.3s ease, stroke 0.2s;
 }
 
-.acc-item.open .acc-arrow {
+.acc-item.open > .acc-trigger .acc-arrow {
   transform: rotate(180deg);
   stroke: var(--accent);
 }
@@ -418,6 +418,7 @@
 }
 .lightbox-close:hover { color: var(--accent); border-color: var(--blue); }
 
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 640px) {
   .screenshots-grid { grid-template-columns: repeat(2, 1fr); }
@@ -444,9 +445,9 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 8px;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  padding: 4px;
+  background: rgba(96, 165, 250, 0.08);
+  border: 1px solid rgba(96, 165, 250, 0.2);
   border-top: none;
   border-radius: 0 0 8px 8px;
   scrollbar-width: thin;

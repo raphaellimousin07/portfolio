@@ -119,6 +119,23 @@
         <!-- Infrastructure réseau -->
         <div>
           <p class="spec-group-title">Infrastructure réseau</p>
+
+          <a href="/html/infra-map.html" class="ext-link-card" style="margin-bottom:1.2rem;">
+            <div class="ext-link-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="19" cy="19" r="2"/>
+                <path stroke-linecap="round" d="M12 7v4M9.5 17.5l-2.5-1M14.5 17.5l2.5-1M12 11l-4 6M12 11l4 6"/>
+              </svg>
+            </div>
+            <div class="ext-link-info">
+              <span class="ext-link-name">Carte d'infrastructure — WashingtonMedilab</span>
+              <span class="ext-link-url">Topologie interactive · Routeur · Switchs · VMs ESXi</span>
+            </div>
+            <svg class="ext-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </a>
+
           <div class="accordion">
 
             <div class="acc-item">
@@ -157,25 +174,26 @@
                     <p class="pdfs-label">Documents PDF</p>
 
                     <div class="sub-acc-item">
-                      <button type="button" class="sub-acc-trigger">
-                          <span>📄 Compte rendu - Switch (AP)</span>
-                          <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                      </button>
-                      <div class="sub-acc-body">
-                        <div class="pdf-viewer-container" id="pdfviewer-r2" data-src="/pdf/ap/switch.pdf"></div>
+                      <div class="sub-acc-trigger" role="button" tabindex="0">
+                        <span>Compte rendu — Switch (AP)</span>
+                        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                       </div>
-                   </div>
+                      <div class="sub-acc-body">
+                        <p style="font-size:0.8rem;color:var(--muted);font-family:'DM Mono',monospace;padding:0.3rem 0;">Document à venir.</p>
+                      </div>
+                    </div>
 
                     <div class="sub-acc-item">
-                      <button type="button" class="sub-acc-trigger">
-                         <span>📄 Compte Rendu - LAG LACP</span>
-                         <svg class="acc-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                      </button>
-                     <div class="sub-acc-body">
-                        <div class="pdf-viewer-container" id="pdfviewer-r4" data-src="/pdf/1-5/CR-LAG-LACP.pdf"></div>
-                     </div>
+                      <div class="sub-acc-trigger" role="button" tabindex="0">
+                        <span>Compte rendu — LAG/LACP</span>
+                        <svg class="acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                      </div>
+                      <div class="sub-acc-body">
+                        <div class="pdf-viewer-container" id="pdfviewer-r4" data-src="/pdf/ap/CR-LAG-LACP.pdf"></div>
+                      </div>
                     </div>
-              </div>
+
+                  </div>
                 </div>
               </div>
             </div>

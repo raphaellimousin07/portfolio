@@ -133,7 +133,7 @@ section[data-num]::before {
   opacity: 0.5;
 }
 
-.has-cursor * { cursor: none !important; }
+.has-cursor, .has-cursor * { cursor: none !important; }
 
 /* ─── ANIMATIONS ─── */
 .reveal {
