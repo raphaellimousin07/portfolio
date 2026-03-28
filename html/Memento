@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mémento — Cisco & Rocky Linux</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#F2EDE4; --paper2:#EAE4D8; --ink:#1A1714; --ink2:#3D3730; --ink3:#7A7269;
+  --cisco:#CC2222; --cisco-bg:#F9E8E8; --router:#1A4FA0; --router-bg:#E7EDF8;
+  --rocky:#1A7A4A; --rocky-bg:#E7F4EE; --rule:#C8BFB0; --code-bg:#1A1714; --code-txt:#F5D76E;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--paper); color:var(--ink); font-family:'Barlow',sans-serif; font-size:12px; line-height:1.5; }
+
+.masthead { background:var(--ink); color:var(--paper); display:grid; grid-template-columns:auto 1fr auto; align-items:stretch; }
+.mast-left { background:var(--cisco); padding:16px 24px; display:flex; flex-direction:column; justify-content:center; }
+.mast-left .label { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; opacity:.7; margin-bottom:4px; }
+.mast-left h1 { font-family:'Barlow Condensed',sans-serif; font-size:28px; font-weight:900; letter-spacing:-0.5px; line-height:1; text-transform:uppercase; }
+.mast-center { padding:12px 28px; display:flex; align-items:center; gap:24px; }
+.device-pill { display:flex; align-items:center; gap:8px; }
+.pill-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.pill-dot.cisco { background:var(--cisco); } .pill-dot.router { background:#5B9BF5; } .pill-dot.rocky { background:#3DD68C; }
+.device-name { font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.5px; color:#ccc; }
+.mast-sep { width:1px; background:#333; align-self:stretch; margin:10px 0; }
+.mast-right { padding:12px 24px; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; gap:2px; }
+.mast-right .ver { font-family:'IBM Plex Mono',monospace; font-size:9px; color:#666; letter-spacing:1px; }
+
+.cat-bar { display:flex; align-items:center; border-top:3px solid var(--ink); margin-top:24px; }
+.cat-label { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:900; text-transform:uppercase; letter-spacing:2px; padding:6px 16px; color:white; white-space:nowrap; }
+.cat-label.cisco { background:var(--cisco); } .cat-label.router { background:var(--router); } .cat-label.rocky { background:var(--rocky); }
+.cat-bar-line { flex:1; height:3px; }
+.cat-bar-line.cisco { background:linear-gradient(90deg,var(--cisco) 0%,var(--paper) 100%); }
+.cat-bar-line.router { background:linear-gradient(90deg,var(--router) 0%,var(--paper) 100%); }
+.cat-bar-line.rocky { background:linear-gradient(90deg,var(--rocky) 0%,var(--paper) 100%); }
+
+.page { padding:20px 24px 40px; max-width:1900px; }
+.grid { display:grid; gap:14px; }
+.g3 { grid-template-columns:repeat(3,1fr); }
+.g4 { grid-template-columns:repeat(4,1fr); }
+.g2 { grid-template-columns:repeat(2,1fr); }
+.g12 { grid-template-columns:1fr 2fr; }
+.g21 { grid-template-columns:2fr 1fr; }
+
+.card { background:white; border:1.5px solid var(--rule); }
+.card-head { padding:7px 12px; border-bottom:1.5px solid var(--rule); display:flex; align-items:baseline; gap:8px; }
+.card-head.cisco { border-left:4px solid var(--cisco); background:var(--cisco-bg); }
+.card-head.router { border-left:4px solid var(--router); background:var(--router-bg); }
+.card-head.rocky { border-left:4px solid var(--rocky); background:var(--rocky-bg); }
+.card-title { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:1px; }
+.card-title.cisco { color:var(--cisco); } .card-title.router { color:var(--router); } .card-title.rocky { color:var(--rocky); }
+.card-body { padding:10px 12px; display:flex; flex-direction:column; gap:10px; }
+.inner { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.inner3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+
+.sec { margin-bottom:0; }
+.sec-title { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink3); border-bottom:1px solid var(--rule); padding-bottom:3px; margin-bottom:4px; }
+
+table { width:100%; border-collapse:collapse; }
+tr:hover td { background:#FAFAF7; }
+td { padding:2.5px 4px; vertical-align:top; }
+.cmd { font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:600; color:var(--ink); white-space:nowrap; padding-right:10px; user-select:all; }
+.cmd .h { color:var(--cisco); } .cmd .v { color:#6B21A8; } .cmd .k { color:var(--rocky); } .cmd .r { color:var(--router); } .cmd .w { color:#B45309; }
+.desc { font-size:11px; color:var(--ink2); line-height:1.35; }
+.desc em { font-style:normal; font-size:9.5px; background:#FEF3C7; color:#92400E; padding:0 4px; border:1px solid #FDE68A; border-radius:2px; margin-left:2px; }
+.desc strong { color:var(--ink); font-weight:600; }
+.desc code { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:#F0EBE3; padding:0 3px; border:1px solid var(--rule); border-radius:2px; }
+
+.mode-block { background:var(--code-bg); border:1px solid #333; padding:9px 12px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; line-height:1.7; }
+.mode-block .p { color:#7DD3FC; } .mode-block .p.r { color:#93C5FD; } .mode-block .c { color:#6B7280; font-style:italic; } .mode-block .x { color:var(--code-txt); }
+
+.note { background:#FFFBEB; border:1px solid #FDE68A; border-left:3px solid #F59E0B; padding:5px 9px; font-size:10.5px; color:var(--ink2); line-height:1.4; }
+.note b { color:#92400E; }
+.note-blue { background:#EFF6FF; border:1px solid #BFDBFE; border-left:3px solid var(--router); padding:5px 9px; font-size:10.5px; color:var(--ink2); line-height:1.4; }
+.note-blue b { color:var(--router); }
+.note-green { background:#ECFDF5; border:1px solid #A7F3D0; border-left:3px solid var(--rocky); padding:5px 9px; font-size:10.5px; color:var(--ink2); line-height:1.4; }
+.note-green b { color:var(--rocky); }
+
+.tag { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:700; padding:1px 5px; border-radius:2px; margin-left:3px; vertical-align:middle; }
+.tag-cisco { background:var(--cisco-bg); color:var(--cisco); border:1px solid #FBBFBF; }
+.tag-ok { background:#ECFDF5; color:var(--rocky); border:1px solid #A7F3D0; }
+.tag-warn { background:#FEF3C7; color:#92400E; border:1px solid #FDE68A; }
+
+.cron-row { display:flex; gap:3px; font-family:'IBM Plex Mono',monospace; font-size:10px; align-items:center; padding:2px 0; border-bottom:1px dotted var(--rule); }
+.cron-field { background:var(--ink); color:var(--code-txt); padding:1px 5px; font-weight:700; min-width:26px; text-align:center; font-size:9.5px; }
+.cron-field.star { background:#3D3730; color:#94A3B8; }
+.cron-desc { color:var(--ink2); font-family:'Barlow',sans-serif; font-size:10.5px; margin-left:6px; }
+.cron-cmd { color:var(--rocky); font-size:9.5px; margin-left:auto; }
+.divrow { height:1px; background:var(--rule); margin:4px 0; }
+
+/* SEARCH BAR */
+.searchbar {
+  background: #111;
+  border-bottom: 2px solid #222;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.search-wrap {
+  display: flex;
+  align-items: center;
+  background: #1e1e1e;
+  border: 1.5px solid #333;
+  border-radius: 4px;
+  padding: 0 12px;
+  gap: 8px;
+  flex: 1;
+  max-width: 560px;
+  transition: border-color .15s;
+}
+.search-wrap:focus-within {
+  border-color: #F5D76E;
+}
+.search-icon {
+  color: #555;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+#searchInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #eee;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  padding: 7px 0;
+  width: 100%;
+  letter-spacing: .3px;
+}
+#searchInput::placeholder { color: #444; }
+#searchClear {
+  background: none;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  line-height: 1;
+  display: none;
+}
+#searchClear:hover { color: #F5D76E; }
+.search-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: #555;
+  white-space: nowrap;
+}
+.search-count span { color: #F5D76E; font-weight: 700; }
+.search-shortcuts {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.search-shortcut {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: #444;
+  background: #1a1a1a;
+  border: 1px solid #2a2a2a;
+  border-radius: 3px;
+  padding: 2px 6px;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.search-shortcut:hover { color: #eee; border-color: #444; }
+.search-shortcut.active { color: #F5D76E; border-color: #F5D76E44; background: #F5D76E11; }
+
+/* SEARCH RESULTS */
+tr.cmd-row { transition: opacity .1s; }
+tr.cmd-row.hidden { display: none; }
+mark.hl {
+  background: #F5D76E;
+  color: #1A1714;
+  border-radius: 2px;
+  padding: 0 1px;
+  font-style: normal;
+  font-weight: 700;
+}
+.card.search-empty .card-body { opacity: .3; }
+.card.search-empty .card-head { opacity: .4; }
+.sec.all-hidden .sec-title { display: none; }
+#noResults {
+  display: none;
+  text-align: center;
+  padding: 48px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: var(--ink3);
+}
+#noResults span { color: var(--ink); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="mast-left">
+    <div class="label">Référence technique</div>
+    <h1>Mémento<br>Réseau & Sys.</h1>
+  </div>
+  <div class="mast-center">
+    <div class="device-pill"><span class="pill-dot cisco"></span><span class="device-name">Catalyst 2960-S</span></div>
+    <div class="mast-sep"></div>
+    <div class="device-pill"><span class="pill-dot router"></span><span class="device-name">Cisco 2921</span></div>
+    <div class="mast-sep"></div>
+    <div class="device-pill"><span class="pill-dot rocky"></span><span class="device-name">Rocky Linux EL9</span></div>
+  </div>
+  <div class="mast-right"><span class="ver">REV. 2026-03</span><span class="ver">IOS 15.x · EL9</span></div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="searchbar">
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="searchInput" placeholder="Rechercher une commande, un mot-clé…" autocomplete="off" spellcheck="false">
+    <button id="searchClear" title="Effacer">✕</button>
+  </div>
+  <div class="search-count" id="searchCount"></div>
+  <div class="search-shortcuts">
+    <button class="search-shortcut" data-q="show">show</button>
+    <button class="search-shortcut" data-q="vlan">vlan</button>
+    <button class="search-shortcut" data-q="ospf">ospf</button>
+    <button class="search-shortcut" data-q="nat">nat</button>
+    <button class="search-shortcut" data-q="ssh">ssh</button>
+    <button class="search-shortcut" data-q="firewall">firewall</button>
+    <button class="search-shortcut" data-q="selinux">selinux</button>
+    <button class="search-shortcut" data-q="dnf">dnf</button>
+    <button class="search-shortcut" data-q="systemctl">systemctl</button>
+    <button class="search-shortcut" data-q="lvm">lvm</button>
+  </div>
+</div>
+
+<div id="noResults">Aucun résultat pour « <span id="noResultsTerm"></span> »</div>
+
+<div class="page">
+
+<!-- ═══════ SWITCH ═══════ -->
+<div class="cat-bar"><div class="cat-label cisco">⬡ Catalyst 2960-S — Switch</div><div class="cat-bar-line cisco"></div></div>
+
+<div class="grid g3" style="margin-top:12px">
+
+<!-- MODES & ACCÈS -->
+<div class="card">
+  <div class="card-head cisco"><span class="card-title cisco">Modes IOS & Accès Console</span></div>
+  <div class="card-body">
+    <div class="mode-block">
+      <div><span class="p">Switch&gt;</span> <span class="c">— Utilisateur : show limité, no config</span></div>
+      <div><span class="p">Switch&gt;</span> <span class="x">enable</span> <span class="c">              → demande enable secret</span></div>
+      <div><span class="p">Switch#</span> <span class="c">— EXEC privilégié : tous les show</span></div>
+      <div><span class="p">Switch#</span> <span class="x">configure terminal</span> <span class="c">     (conf t)</span></div>
+      <div><span class="p">Switch(config)#</span> <span class="c">— Config globale</span></div>
+      <div><span class="p">Switch(config)#</span> <span class="x">interface FastEthernet0/1</span></div>
+      <div><span class="p">Switch(config-if)#</span> <span class="c">— Mode interface</span></div>
+      <div><span class="p">Switch(config-if)#</span> <span class="x">interface vlan 10</span></div>
+      <div><span class="p">Switch(config-if)#</span> <span class="c">— Mode SVI</span></div>
+      <div><span class="p">Switch(config)#</span> <span class="x">line vty 0 15</span></div>
+      <div><span class="p">Switch(config-line)#</span> <span class="c">— Mode ligne</span></div>
+      <div><span class="p">Switch(config-if)#</span> <span class="x">exit</span> <span class="c">       → remonte d'un niveau</span></div>
+      <div><span class="p">Switch(config)#</span> <span class="x">end</span> <span class="c">  / Ctrl+Z → retour EXEC #</span></div>
+      <div><span class="p">Switch#</span> <span class="x">disable</span> <span class="c">            → retour mode User &gt;</span></div>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Sécurité de base</div>
+      <table><tbody>
+        <tr><td class="cmd">hostname <span class="v">SW-CORE-01</span></td><td class="desc">Nom du switch (apparaît dans le prompt)</td></tr>
+        <tr><td class="cmd">enable secret <span class="v">P@ssw0rd</span></td><td class="desc">Mdp mode privilégié hashé MD5/SCRYPT. Préférer à <code>enable password</code></td></tr>
+        <tr><td class="cmd">no enable password</td><td class="desc">Supprime l'ancien mdp en clair si présent</td></tr>
+        <tr><td class="cmd">service password-encryption</td><td class="desc">Chiffre tous les mdp en clair (type 7) dans la running-config</td></tr>
+        <tr><td class="cmd">security passwords min-length <span class="v">10</span></td><td class="desc">Longueur minimale imposée pour tout nouveau mdp</td></tr>
+        <tr><td class="cmd">login block-for <span class="v">120</span> attempts <span class="v">3</span> within <span class="v">60</span></td><td class="desc">Bloque les connexions 120 s après 3 échecs en 60 s</td></tr>
+        <tr><td class="cmd">no ip domain-lookup</td><td class="desc">Évite que les fautes de frappe soient résolues en DNS (délai)</td></tr>
+        <tr><td class="cmd">banner motd #<span class="v">Accès restreint. Déconnectez-vous.</span>#</td><td class="desc">Bannière légale affichée avant login</td></tr>
+        <tr><td class="cmd">banner login #<span class="v">Authentification requise</span>#</td><td class="desc">Bannière affichée juste avant le prompt de login</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Lignes Console & VTY</div>
+      <table><tbody>
+        <tr><td class="cmd">line console 0</td><td class="desc">Ligne console physique (câble RJ-45/DB9)</td></tr>
+        <tr><td class="cmd">  password <span class="v">ConsoleP@ss</span></td><td class="desc">Mdp ligne console</td></tr>
+        <tr><td class="cmd">  login</td><td class="desc">Active la demande de mdp sur la ligne</td></tr>
+        <tr><td class="cmd">  login local</td><td class="desc">Auth via la base locale (username/secret)</td></tr>
+        <tr><td class="cmd">  exec-timeout <span class="v">10 0</span></td><td class="desc">Déconnexion après 10 min d'inactivité (0 0 = jamais)</td></tr>
+        <tr><td class="cmd">  logging synchronous</td><td class="desc">Empêche les messages syslog de couper la saisie</td></tr>
+        <tr><td class="cmd">line vty 0 15</td><td class="desc">16 sessions Telnet/SSH simultanées (0–15)</td></tr>
+        <tr><td class="cmd">  transport input ssh</td><td class="desc"><strong>Force SSH</strong> — refuse Telnet</td></tr>
+        <tr><td class="cmd">  transport input telnet ssh</td><td class="desc">Autorise Telnet ET SSH <em>⚠ prod</em></td></tr>
+        <tr><td class="cmd">  access-class <span class="v">10</span> in</td><td class="desc">Filtre les IP source autorisées à se connecter</td></tr>
+        <tr><td class="cmd">  exec-timeout <span class="v">5 0</span></td><td class="desc">Déconnexion SSH après 5 min d'inactivité</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">SSH — Configuration complète</div>
+      <table><tbody>
+        <tr><td class="cmd">ip domain-name <span class="v">entreprise.local</span></td><td class="desc">Domaine DNS requis pour générer les clés RSA</td></tr>
+        <tr><td class="cmd">crypto key generate rsa modulus <span class="v">2048</span></td><td class="desc">Génère la paire de clés RSA (2048 bits = SSHv2 requis)</td></tr>
+        <tr><td class="cmd">crypto key zeroize rsa</td><td class="desc">Supprime les clés RSA (avant régénération)</td></tr>
+        <tr><td class="cmd">ip ssh version 2</td><td class="desc">Force SSHv2 (désactive SSHv1 vulnérable)</td></tr>
+        <tr><td class="cmd">ip ssh time-out <span class="v">60</span></td><td class="desc">Délai de négociation SSH en secondes</td></tr>
+        <tr><td class="cmd">ip ssh authentication-retries <span class="v">3</span></td><td class="desc">Tentatives max avant déconnexion forcée</td></tr>
+        <tr><td class="cmd">username <span class="v">admin</span> privilege <span class="v">15</span> secret <span class="v">P@ssw0rd</span></td><td class="desc">Compte local niveau 15 (accès direct EXEC sans enable)</td></tr>
+        <tr><td class="cmd">username <span class="v">ops</span> privilege <span class="v">5</span> secret <span class="v">P@ss</span></td><td class="desc">Compte lecture seule (niveau 5)</td></tr>
+        <tr><td class="cmd">show ip ssh</td><td class="desc">Version SSH, timeout, tentatives, connexions actives</td></tr>
+        <tr><td class="cmd">show ssh</td><td class="desc">Sessions SSH ouvertes en cours</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- VLANs -->
+<div class="card">
+  <div class="card-head cisco"><span class="card-title cisco">VLANs & Trunk</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">Création, nommage & administration</div>
+      <table><tbody>
+        <tr><td class="cmd">vlan <span class="v">10</span></td><td class="desc">Crée le VLAN 10 et entre dans son mode de config</td></tr>
+        <tr><td class="cmd">  name <span class="v">SERVEURS</span></td><td class="desc">Nomme le VLAN (jusqu'à 32 caractères, sans espace)</td></tr>
+        <tr><td class="cmd">  state <span class="k">active</span></td><td class="desc">État actif (défaut). <code>suspend</code> = VLAN existe mais inactif</td></tr>
+        <tr><td class="cmd">no vlan <span class="v">10</span></td><td class="desc">Supprime le VLAN et retire les ports qui lui sont assignés</td></tr>
+        <tr><td class="cmd">show vlan brief</td><td class="desc">Résumé : ID, nom, statut, ports membres</td></tr>
+        <tr><td class="cmd">show vlan id <span class="v">10</span></td><td class="desc">Détail complet d'un VLAN (ports, type, MTU)</td></tr>
+        <tr><td class="cmd">show vlan name <span class="v">SERVEURS</span></td><td class="desc">Recherche par nom</td></tr>
+        <tr><td class="cmd">show interfaces vlan <span class="v">10</span></td><td class="desc">Statut de la SVI associée au VLAN</td></tr>
+        <tr><td class="cmd">copy running-config startup-config</td><td class="desc">Sauvegarde VLANs dans startup-config <em>essentiel</em></td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Ports Access (un seul VLAN)</div>
+      <table><tbody>
+        <tr><td class="cmd">interface <span class="h">FastEthernet0/1</span></td><td class="desc">Entre sur le port physique Fa0/1</td></tr>
+        <tr><td class="cmd">  switchport mode access</td><td class="desc">Force le mode accès (désactive la négociation DTP)</td></tr>
+        <tr><td class="cmd">  switchport access vlan <span class="v">10</span></td><td class="desc">Assigne le port au VLAN 10</td></tr>
+        <tr><td class="cmd">  switchport nonegotiate</td><td class="desc">Désactive DTP — empêche la formation de trunk non voulue</td></tr>
+        <tr><td class="cmd">  description <span class="v">PC-Bureau-42</span></td><td class="desc">Documentation du port</td></tr>
+        <tr><td class="cmd">  shutdown</td><td class="desc">Désactive physiquement un port inutilisé <em>bonne pratique</em></td></tr>
+        <tr><td class="cmd">interface range <span class="h">Fa0/1-12</span></td><td class="desc">Config simultanée sur une plage de ports</td></tr>
+        <tr><td class="cmd">interface range <span class="h">Fa0/1-6</span>, <span class="h">Fa0/10-12</span></td><td class="desc">Plages non consécutives séparées par une virgule</td></tr>
+        <tr><td class="cmd">show interfaces <span class="h">Fa0/1</span> switchport</td><td class="desc">Mode (access/trunk), VLAN natif, VLANs autorisés</td></tr>
+        <tr><td class="cmd">show interfaces status</td><td class="desc">Tous les ports : vitesse, duplex, VLAN, statut</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Ports Trunk 802.1Q (tags VLAN)</div>
+      <table><tbody>
+        <tr><td class="cmd">  switchport trunk encapsulation dot1q</td><td class="desc">Encapsulation 802.1Q <em>requis sur certains modèles</em></td></tr>
+        <tr><td class="cmd">  switchport mode trunk</td><td class="desc">Force le mode trunk (ignore DTP)</td></tr>
+        <tr><td class="cmd">  switchport trunk native vlan <span class="v">999</span></td><td class="desc">VLAN natif = non tagué. Utiliser un VLAN non utilisé par sécurité</td></tr>
+        <tr><td class="cmd">  switchport trunk allowed vlan <span class="v">10,20,30</span></td><td class="desc"><strong>Remplace</strong> la liste des VLANs autorisés (écrase l'existant)</td></tr>
+        <tr><td class="cmd">  switchport trunk allowed vlan add <span class="v">40</span></td><td class="desc">Ajoute un VLAN sans effacer les autres</td></tr>
+        <tr><td class="cmd">  switchport trunk allowed vlan remove <span class="v">20</span></td><td class="desc">Retire un VLAN de la liste autorisée</td></tr>
+        <tr><td class="cmd">  switchport trunk allowed vlan except <span class="v">999</span></td><td class="desc">Autorise tous sauf ceux listés</td></tr>
+        <tr><td class="cmd">show interfaces <span class="h">Fa0/24</span> trunk</td><td class="desc">Encapsulation, mode, VLANs actifs, VLANs en STP Forwarding</td></tr>
+        <tr><td class="cmd">show interfaces trunk</td><td class="desc">Récapitulatif de tous les trunks actifs du switch</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Interface de gestion SVI</div>
+      <table><tbody>
+        <tr><td class="cmd">interface vlan <span class="v">10</span></td><td class="desc">Crée ou entre dans la SVI (Switch Virtual Interface)</td></tr>
+        <tr><td class="cmd">  ip address <span class="v">192.168.10.1 255.255.255.0</span></td><td class="desc">IP de gestion sur ce VLAN. Doit être dans le VLAN actif</td></tr>
+        <tr><td class="cmd">  no shutdown</td><td class="desc">Nécessaire : les SVIs sont shut par défaut</td></tr>
+        <tr><td class="cmd">  description <span class="v">SVI gestion VLAN10</span></td><td class="desc">Documentation</td></tr>
+        <tr><td class="cmd">ip default-gateway <span class="v">192.168.10.254</span></td><td class="desc">Passerelle du switch (mode L2 uniquement, pas de routing)</td></tr>
+        <tr><td class="cmd">show interface vlan <span class="v">10</span></td><td class="desc">Statut SVI, IP, MTU, compteurs</td></tr>
+      </tbody></table>
+    </div>
+    <div class="note"><b>⚠</b> Un port en mode access ne peut appartenir qu'à <strong>un seul VLAN</strong>. Un trunk peut transporter tous les VLANs. Le VLAN natif doit être identique des deux côtés du trunk.</div>
+  </div>
+</div>
+
+<!-- STP + PORT SEC + DIAG -->
+<div class="card">
+  <div class="card-head cisco"><span class="card-title cisco">STP · Port Security · Diagnostics</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">Spanning-Tree Protocol (STP)</div>
+      <table><tbody>
+        <tr><td class="cmd">spanning-tree mode <span class="k">rapid-pvst</span></td><td class="desc">Rapid-PVST+ : convergence rapide (~1 s). Recommandé sur 2960-S</td></tr>
+        <tr><td class="cmd">spanning-tree mode <span class="k">pvst</span></td><td class="desc">PVST+ classique (802.1D) : convergence lente (~30–50 s)</td></tr>
+        <tr><td class="cmd">spanning-tree vlan <span class="v">10</span> root primary</td><td class="desc">Abaisse la priorité automatiquement pour devenir root bridge</td></tr>
+        <tr><td class="cmd">spanning-tree vlan <span class="v">10</span> root secondary</td><td class="desc">Root bridge secondaire (priorité 28672)</td></tr>
+        <tr><td class="cmd">spanning-tree vlan <span class="v">10</span> priority <span class="v">4096</span></td><td class="desc">Priorité manuelle — multiples de 4096 (0=plus prioritaire)</td></tr>
+        <tr><td class="cmd">spanning-tree vlan <span class="v">10</span> hello-time <span class="v">2</span></td><td class="desc">Intervalle Hello (défaut 2 s)</td></tr>
+        <tr><td class="cmd">spanning-tree vlan <span class="v">10</span> forward-time <span class="v">15</span></td><td class="desc">Délai Forward/Listen (défaut 15 s)</td></tr>
+        <tr><td class="cmd">spanning-tree vlan <span class="v">10</span> max-age <span class="v">20</span></td><td class="desc">Durée de validité des BPDUs (défaut 20 s)</td></tr>
+        <tr><td class="cmd">show spanning-tree</td><td class="desc">STP tous VLANs : root ID, bridge ID, port roles, états</td></tr>
+        <tr><td class="cmd">show spanning-tree vlan <span class="v">10</span></td><td class="desc">STP d'un VLAN : Root, coûts, états des ports (Root/Desg/Altn)</td></tr>
+        <tr><td class="cmd">show spanning-tree summary</td><td class="desc">Nombre de VLANs, mode, ports bloqués/forwarding</td></tr>
+        <tr><td class="cmd">show spanning-tree detail</td><td class="desc">Compteurs BPDUs, transitions, timers</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">PortFast, BPDU Guard, Root Guard</div>
+      <table><tbody>
+        <tr><td class="cmd">  spanning-tree portfast</td><td class="desc">Passe directement en Forwarding (pour ports access vers PC/serveurs uniquement)</td></tr>
+        <tr><td class="cmd">spanning-tree portfast default</td><td class="desc">Active PortFast sur <strong>tous</strong> les ports access du switch (global)</td></tr>
+        <tr><td class="cmd">  spanning-tree bpduguard enable</td><td class="desc">Err-disable le port si un BPDU est reçu (switch non autorisé)</td></tr>
+        <tr><td class="cmd">spanning-tree portfast bpduguard default</td><td class="desc">BPDU Guard sur tous les ports PortFast (global)</td></tr>
+        <tr><td class="cmd">  spanning-tree guard root</td><td class="desc">Root Guard : bloque si un BPDU supérieur est reçu (protège root bridge)</td></tr>
+        <tr><td class="cmd">  spanning-tree guard loop</td><td class="desc">Loop Guard : err-disable si plus de BPDU reçus sur un port bloquant</td></tr>
+        <tr><td class="cmd">  spanning-tree link-type point-to-point</td><td class="desc">Force liaison point-à-point pour Rapid-PVST (Gi ports)</td></tr>
+        <tr><td class="cmd">errdisable recovery cause bpduguard</td><td class="desc">Récupération automatique après err-disable BPDU Guard</td></tr>
+        <tr><td class="cmd">errdisable recovery interval <span class="v">300</span></td><td class="desc">Délai de récupération en secondes (défaut 300 s)</td></tr>
+        <tr><td class="cmd">show errdisable recovery</td><td class="desc">Causes activées et délais de récupération</td></tr>
+        <tr><td class="cmd">show errdisable detect</td><td class="desc">Toutes les causes de err-disable disponibles</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Port Security</div>
+      <table><tbody>
+        <tr><td class="cmd">  switchport mode access</td><td class="desc">Port-security ne fonctionne que sur un port en mode access</td></tr>
+        <tr><td class="cmd">  switchport port-security</td><td class="desc">Active port-security avec les valeurs par défaut (max 1, shutdown)</td></tr>
+        <tr><td class="cmd">  switchport port-security maximum <span class="v">3</span></td><td class="desc">Nombre max d'adresses MAC tolérées sur ce port</td></tr>
+        <tr><td class="cmd">  switchport port-security mac-address <span class="v">AABB.CCDD.EEFF</span></td><td class="desc">Adresse MAC statique autorisée</td></tr>
+        <tr><td class="cmd">  switchport port-security mac-address sticky</td><td class="desc">Apprend dynamiquement les MAC et les écrit dans la config</td></tr>
+        <tr><td class="cmd">  switchport port-security violation <span class="k">shutdown</span></td><td class="desc"><strong>shutdown</strong> : err-disable le port + syslog + SNMP trap (défaut)</td></tr>
+        <tr><td class="cmd">  switchport port-security violation <span class="k">restrict</span></td><td class="desc"><strong>restrict</strong> : rejette les trames illégales + compteur + syslog</td></tr>
+        <tr><td class="cmd">  switchport port-security violation <span class="k">protect</span></td><td class="desc"><strong>protect</strong> : rejette silencieusement (pas de log)</td></tr>
+        <tr><td class="cmd">show port-security</td><td class="desc">Résumé global : ports sécurisés, violations, actions</td></tr>
+        <tr><td class="cmd">show port-security interface <span class="h">Fa0/1</span></td><td class="desc">Détail : max MAC, MAC apprises, violation count, mode</td></tr>
+        <tr><td class="cmd">show port-security address</td><td class="desc">Toutes les adresses MAC sécurisées (statiques + sticky)</td></tr>
+        <tr><td class="cmd">clear port-security sticky interface <span class="h">Fa0/1</span></td><td class="desc">Efface les MAC sticky d'un port</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Diagnostics, sauvegarde & maintenance</div>
+      <table><tbody>
+        <tr><td class="cmd">copy running-config startup-config</td><td class="desc">Sauvegarde la config active en NVRAM <em>indispensable</em></td></tr>
+        <tr><td class="cmd">copy running-config tftp:</td><td class="desc">Sauvegarde sur serveur TFTP (demande IP + nom fichier)</td></tr>
+        <tr><td class="cmd">copy tftp: running-config</td><td class="desc">Restaure depuis TFTP (merge avec la config actuelle)</td></tr>
+        <tr><td class="cmd">erase startup-config</td><td class="desc">Efface la config sauvegardée (reset usine)</td></tr>
+        <tr><td class="cmd">show running-config</td><td class="desc">Config active en RAM</td></tr>
+        <tr><td class="cmd">show running-config | section <span class="v">interface</span></td><td class="desc">Filtre : affiche seulement les blocs "interface"</td></tr>
+        <tr><td class="cmd">show running-config | include <span class="v">vlan</span></td><td class="desc">Filtre : affiche les lignes contenant "vlan"</td></tr>
+        <tr><td class="cmd">show startup-config</td><td class="desc">Config sauvegardée en NVRAM</td></tr>
+        <tr><td class="cmd">show version</td><td class="desc">IOS version, modèle, RAM/Flash, uptime, numéro de série</td></tr>
+        <tr><td class="cmd">show interfaces <span class="h">Fa0/1</span></td><td class="desc">Compteurs erreurs : CRC, giants, runts, collisions, input/output drops</td></tr>
+        <tr><td class="cmd">show interfaces <span class="h">Fa0/1</span> status</td><td class="desc">Ligne rapide : connected/notconnect, vitesse, duplex, VLAN</td></tr>
+        <tr><td class="cmd">show interfaces counters errors</td><td class="desc">Erreurs sur toutes les interfaces en une vue</td></tr>
+        <tr><td class="cmd">show mac address-table</td><td class="desc">Table MAC complète (adresse, VLAN, port)</td></tr>
+        <tr><td class="cmd">show mac address-table vlan <span class="v">10</span></td><td class="desc">Table MAC filtrée par VLAN</td></tr>
+        <tr><td class="cmd">show mac address-table address <span class="v">AABB.CCDD.EEFF</span></td><td class="desc">Localise une MAC sur le switch</td></tr>
+        <tr><td class="cmd">clear mac address-table dynamic</td><td class="desc">Vide la table MAC dynamique</td></tr>
+        <tr><td class="cmd">show cdp neighbors</td><td class="desc">Voisins CDP : hostname, port local/distant, plateforme</td></tr>
+        <tr><td class="cmd">show cdp neighbors detail</td><td class="desc">Voisins CDP + IP de management + IOS version</td></tr>
+        <tr><td class="cmd">show ip interface brief</td><td class="desc">Résumé IP : adresse, statut ligne, statut protocole</td></tr>
+        <tr><td class="cmd">show processes cpu</td><td class="desc">Charge CPU par processus (détecter boucles STP/CDP)</td></tr>
+        <tr><td class="cmd">show logging</td><td class="desc">Buffer syslog interne (derniers événements)</td></tr>
+        <tr><td class="cmd">logging buffered <span class="v">16384</span></td><td class="desc">Taille du buffer syslog interne en octets</td></tr>
+        <tr><td class="cmd">logging host <span class="v">192.168.1.250</span></td><td class="desc">Envoie syslog vers un serveur externe</td></tr>
+        <tr><td class="cmd">reload</td><td class="desc">Redémarre le switch (demande confirmation)</td></tr>
+        <tr><td class="cmd">reload in <span class="v">30</span></td><td class="desc">Redémarre dans 30 minutes (annulable)</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+</div><!-- /grid switch -->
+
+<!-- ═══════ ROUTEUR ═══════ -->
+<div class="cat-bar"><div class="cat-label router">⬡ Cisco 2921 — Routeur</div><div class="cat-bar-line router"></div></div>
+
+<div class="grid g3" style="margin-top:12px">
+
+<!-- INTERFACES ROUTEUR -->
+<div class="card">
+  <div class="card-head router"><span class="card-title router">Interfaces & Config de base</span></div>
+  <div class="card-body">
+    <div class="mode-block">
+      <div><span class="p r">Router(config)#</span> <span class="x">interface GigabitEthernet0/0</span></div>
+      <div><span class="p r">Router(config-if)#</span> <span class="x">ip address 10.0.0.1 255.255.255.0</span></div>
+      <div><span class="p r">Router(config-if)#</span> <span class="x">no shutdown</span> <span class="c">  ← obligatoire, shut par défaut</span></div>
+      <div><span class="p r">Router(config-if)#</span> <span class="x">description ** LAN INTERNE **</span></div>
+      <div><span class="p r">Router(config-if)#</span> <span class="x">ip helper-address 10.0.0.10</span> <span class="c">← DHCP relay</span></div>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Interfaces physiques GE — Gi0/0, Gi0/1, Gi0/2</div>
+      <table><tbody>
+        <tr><td class="cmd">show ip interface brief</td><td class="desc">Résumé toutes interfaces : IP, line status, protocol status</td></tr>
+        <tr><td class="cmd">show interfaces <span class="r">Gi0/0</span></td><td class="desc">Compteurs détaillés : BW, delay, reliability, erreurs, collisions</td></tr>
+        <tr><td class="cmd">show interfaces <span class="r">Gi0/0</span> counters</td><td class="desc">Compteurs trafic in/out en paquets et octets</td></tr>
+        <tr><td class="cmd">  duplex <span class="k">full</span></td><td class="desc">Force le full-duplex (auto = défaut)</td></tr>
+        <tr><td class="cmd">  speed <span class="v">1000</span></td><td class="desc">Force 1000 Mbps (auto = défaut)</td></tr>
+        <tr><td class="cmd">  ip mtu <span class="v">1500</span></td><td class="desc">MTU IP (peut différer du MTU interface pour MPLS/tunnels)</td></tr>
+        <tr><td class="cmd">  bandwidth <span class="v">100000</span></td><td class="desc">Bande passante logique en kbps (pour calculs OSPF/QoS)</td></tr>
+        <tr><td class="cmd">  ip access-group <span class="v">FILTER</span> in</td><td class="desc">Applique une ACL nommée en entrée de l'interface</td></tr>
+        <tr><td class="cmd">  shutdown / no shutdown</td><td class="desc">Désactive / réactive l'interface</td></tr>
+        <tr><td class="cmd">  no ip address</td><td class="desc">Supprime l'adresse IP d'une interface</td></tr>
+        <tr><td class="cmd">  ip address <span class="v">10.0.0.2 255.255.255.0</span> secondary</td><td class="desc">Adresse IP secondaire (multihoming sur une interface)</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Sous-interfaces — Router-on-a-Stick (inter-VLAN)</div>
+      <table><tbody>
+        <tr><td class="cmd">interface <span class="r">Gi0/0</span></td><td class="desc">L'interface physique parent doit être <strong>up, sans IP</strong></td></tr>
+        <tr><td class="cmd">  no ip address</td><td class="desc">Retire toute IP de l'interface physique parent</td></tr>
+        <tr><td class="cmd">  no shutdown</td><td class="desc">Active l'interface physique (les sous-interfaces héritent)</td></tr>
+        <tr><td class="cmd">interface <span class="r">Gi0/0</span>.<span class="v">10</span></td><td class="desc">Sous-interface : le numéro n'est pas forcément le VLAN ID mais c'est recommandé</td></tr>
+        <tr><td class="cmd">  encapsulation dot1Q <span class="v">10</span></td><td class="desc">Associe le tag VLAN 10 à cette sous-interface <em>obligatoire</em></td></tr>
+        <tr><td class="cmd">  ip address <span class="v">192.168.10.1 255.255.255.0</span></td><td class="desc">Passerelle par défaut des hôtes du VLAN 10</td></tr>
+        <tr><td class="cmd">  description <span class="v">Passerelle VLAN 10 - SERVEURS</span></td><td class="desc">Documentation</td></tr>
+        <tr><td class="cmd">interface <span class="r">Gi0/0</span>.<span class="v">1</span></td><td class="desc">Sous-interface pour le VLAN natif</td></tr>
+        <tr><td class="cmd">  encapsulation dot1Q <span class="v">1</span> native</td><td class="desc">Indique que ce VLAN n'est pas tagué (natif)</td></tr>
+        <tr><td class="cmd">show vlans</td><td class="desc">VLANs routés par les sous-interfaces du routeur</td></tr>
+        <tr><td class="cmd">show interfaces <span class="r">Gi0/0</span>.<span class="v">10</span></td><td class="desc">Statut et statistiques d'une sous-interface</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Loopback & interface série</div>
+      <table><tbody>
+        <tr><td class="cmd">interface Loopback<span class="v">0</span></td><td class="desc">Interface virtuelle toujours up — idéale pour Router-ID OSPF/BGP</td></tr>
+        <tr><td class="cmd">  ip address <span class="v">10.255.0.1 255.255.255.255</span></td><td class="desc">En /32 pour ne pas annoncer de réseau parasite</td></tr>
+        <tr><td class="cmd">interface Serial<span class="v">0/0/0</span></td><td class="desc">Interface série (WAN, Frame Relay, HDLC)</td></tr>
+        <tr><td class="cmd">  encapsulation <span class="k">ppp</span></td><td class="desc">PPP sur lien série (<code>hdlc</code> par défaut)</td></tr>
+        <tr><td class="cmd">  clock rate <span class="v">64000</span></td><td class="desc">DCE uniquement : fournit l'horloge au DTE</td></tr>
+        <tr><td class="cmd">  bandwidth <span class="v">64</span></td><td class="desc">BW logique pour OSPF (en kbps)</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Diagnostics interfaces</div>
+      <table><tbody>
+        <tr><td class="cmd">show controllers <span class="r">Gi0/0</span></td><td class="desc">Infos hardware : DCE/DTE, erreurs bas niveau</td></tr>
+        <tr><td class="cmd">show ip traffic</td><td class="desc">Statistiques IP globales : paquets routés, forwarded, dropped</td></tr>
+        <tr><td class="cmd">debug ip packet</td><td class="desc">Trace chaque paquet IP <em>⚠ uniquement en labo</em></td></tr>
+        <tr><td class="cmd">no debug all</td><td class="desc">Arrête tous les debugs actifs</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ROUTAGE -->
+<div class="card">
+  <div class="card-head router"><span class="card-title router">Routage — Statique & OSPF</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">Routes statiques</div>
+      <table><tbody>
+        <tr><td class="cmd">ip route <span class="v">0.0.0.0 0.0.0.0</span> <span class="r">203.0.113.1</span></td><td class="desc">Route par défaut via next-hop — priorité AD 1</td></tr>
+        <tr><td class="cmd">ip route <span class="v">0.0.0.0 0.0.0.0</span> <span class="r">Gi0/1</span></td><td class="desc">Route par défaut via interface de sortie (liens point-à-point)</td></tr>
+        <tr><td class="cmd">ip route <span class="v">10.2.0.0 255.255.0.0</span> <span class="r">10.0.0.254</span></td><td class="desc">Route statique avec next-hop IP</td></tr>
+        <tr><td class="cmd">ip route <span class="v">10.3.0.0 255.255.0.0</span> <span class="r">10.0.0.254</span> <span class="v">5</span></td><td class="desc">Route flottante (AD=5 > OSPF AD=110, backup)</td></tr>
+        <tr><td class="cmd">ip route <span class="v">10.2.0.0 255.255.0.0</span> Null0</td><td class="desc">Route blackhole : absorbe le trafic sans destination (anti-loop)</td></tr>
+        <tr><td class="cmd">no ip route <span class="v">10.2.0.0 255.255.0.0 10.0.0.254</span></td><td class="desc">Supprime une route statique spécifique</td></tr>
+        <tr><td class="cmd">show ip route static</td><td class="desc">Affiche uniquement les routes statiques (marquées S)</td></tr>
+        <tr><td class="cmd">ip routing</td><td class="desc">Active le routage IP (désactivé sur switchs L2 par défaut)</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">OSPF — Configuration complète</div>
+      <table><tbody>
+        <tr><td class="cmd">router ospf <span class="v">1</span></td><td class="desc">Active le processus OSPF 1 (local au routeur, pas échangé)</td></tr>
+        <tr><td class="cmd">  router-id <span class="v">10.255.0.1</span></td><td class="desc">Router-ID unique dans le domaine. Si non défini = loopback la plus haute</td></tr>
+        <tr><td class="cmd">  network <span class="v">10.0.0.0 0.0.0.255</span> area <span class="v">0</span></td><td class="desc">Annonce le réseau 10.0.0.x dans l'area backbone 0</td></tr>
+        <tr><td class="cmd">  network <span class="v">0.0.0.0 255.255.255.255</span> area <span class="v">0</span></td><td class="desc">Annonce toutes les interfaces dans area 0 (wildcard total)</td></tr>
+        <tr><td class="cmd">  passive-interface <span class="r">Gi0/0</span></td><td class="desc">N'envoie pas de Hello sur cette interface mais annonce le réseau</td></tr>
+        <tr><td class="cmd">  passive-interface default</td><td class="desc">Toutes les interfaces passives par défaut</td></tr>
+        <tr><td class="cmd">  no passive-interface <span class="r">Gi0/1</span></td><td class="desc">Réactive les Hellos sur une interface spécifique</td></tr>
+        <tr><td class="cmd">  default-information originate</td><td class="desc">Redistribue la route par défaut vers les voisins OSPF</td></tr>
+        <tr><td class="cmd">  default-information originate always</td><td class="desc">Même sans route par défaut dans la table de routage</td></tr>
+        <tr><td class="cmd">  auto-cost reference-bandwidth <span class="v">10000</span></td><td class="desc">Recalibre les coûts pour 10 Gbps (défaut = 100 Mbps, inadapté)</td></tr>
+        <tr><td class="cmd">  area <span class="v">1</span> stub</td><td class="desc">Déclare l'area 1 comme stub (réduit les LSAs)</td></tr>
+        <tr><td class="cmd">  area <span class="v">1</span> totally-stub</td><td class="desc">Totally-stub : envoie uniquement une route par défaut (ABR)</td></tr>
+        <tr><td class="cmd">  summary-address <span class="v">10.0.0.0 255.0.0.0</span></td><td class="desc">Résume les routes OSPF (ABR uniquement)</td></tr>
+        <tr><td class="cmd">  redistribute static subnets</td><td class="desc">Redistribue les routes statiques dans OSPF</td></tr>
+        <tr><td class="cmd">  redistribute connected subnets</td><td class="desc">Redistribue les interfaces directement connectées</td></tr>
+        <tr><td class="cmd">  log-adjacency-changes</td><td class="desc">Loggue les changements d'état de voisinage (utile pour débogage)</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">OSPF — Configuration sur interface</div>
+      <table><tbody>
+        <tr><td class="cmd">  ip ospf <span class="v">1</span> area <span class="v">0</span></td><td class="desc">Méthode alternative : assigne l'interface à OSPF directement sur l'interface</td></tr>
+        <tr><td class="cmd">  ip ospf cost <span class="v">10</span></td><td class="desc">Coût OSPF manuel (défaut = BW_ref / BW_interface)</td></tr>
+        <tr><td class="cmd">  ip ospf priority <span class="v">100</span></td><td class="desc">Priorité DR/BDR (0 = jamais DR/BDR, 1–255)</td></tr>
+        <tr><td class="cmd">  ip ospf hello-interval <span class="v">5</span></td><td class="desc">Intervalle Hello (doit être identique des deux côtés)</td></tr>
+        <tr><td class="cmd">  ip ospf dead-interval <span class="v">20</span></td><td class="desc">Temps avant déclarer le voisin mort (4× hello par défaut)</td></tr>
+        <tr><td class="cmd">  ip ospf authentication message-digest</td><td class="desc">Authentification MD5 OSPF</td></tr>
+        <tr><td class="cmd">  ip ospf message-digest-key <span class="v">1</span> md5 <span class="v">clé</span></td><td class="desc">Clé MD5 pour authentification OSPF</td></tr>
+        <tr><td class="cmd">  ip ospf network <span class="k">broadcast</span></td><td class="desc">Type réseau : broadcast (Ethernet), point-to-point, non-broadcast…</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">OSPF — Vérification & débogage</div>
+      <table><tbody>
+        <tr><td class="cmd">show ip ospf neighbor</td><td class="desc">Voisins : état (Full/2WAY/EXSTART…), DR/BDR, interface</td></tr>
+        <tr><td class="cmd">show ip ospf neighbor detail</td><td class="desc">+ Options, priorité, délais, nombre de retransmissions</td></tr>
+        <tr><td class="cmd">show ip ospf database</td><td class="desc">LSDB complète : Router LSA, Network LSA, Summary LSA…</td></tr>
+        <tr><td class="cmd">show ip ospf database router</td><td class="desc">LSAs de type 1 (Router-LSA)</td></tr>
+        <tr><td class="cmd">show ip ospf database summary</td><td class="desc">LSAs de type 3 (Summary-LSA — inter-area)</td></tr>
+        <tr><td class="cmd">show ip ospf interface <span class="r">Gi0/0</span></td><td class="desc">Type réseau, DR/BDR, coût, timers, voisins sur l'interface</td></tr>
+        <tr><td class="cmd">show ip ospf</td><td class="desc">Processus OSPF : router-id, area info, SPF stats</td></tr>
+        <tr><td class="cmd">show ip route ospf</td><td class="desc">Routes apprises via OSPF (marquées O, OIA, OE1, OE2)</td></tr>
+        <tr><td class="cmd">clear ip ospf process</td><td class="desc">Réinitialise les adjacences OSPF <em>⚠ interruption brève</em></td></tr>
+        <tr><td class="cmd">debug ip ospf adj</td><td class="desc">Trace la formation des adjacences</td></tr>
+        <tr><td class="cmd">debug ip ospf hello</td><td class="desc">Trace les paquets Hello</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Table de routage & tests</div>
+      <table><tbody>
+        <tr><td class="cmd">show ip route</td><td class="desc">Table complète : C=connected, S=static, O=OSPF, R=RIP, B=BGP…</td></tr>
+        <tr><td class="cmd">show ip route <span class="v">192.168.10.0</span></td><td class="desc">Meilleure route correspondante pour un réseau</td></tr>
+        <tr><td class="cmd">show ip route <span class="v">10.5.0.1</span></td><td class="desc">Route exacte vers une IP (longest match)</td></tr>
+        <tr><td class="cmd">show ip route summary</td><td class="desc">Nombre de routes par protocole</td></tr>
+        <tr><td class="cmd">ping <span class="v">8.8.8.8</span></td><td class="desc">Ping de 5 paquets (. = timeout, ! = succès)</td></tr>
+        <tr><td class="cmd">ping <span class="v">8.8.8.8</span> repeat <span class="v">100</span> size <span class="v">1500</span></td><td class="desc">Ping étendu : 100 paquets de 1500 octets</td></tr>
+        <tr><td class="cmd">ping <span class="v">10.0.0.254</span> source <span class="r">Loopback0</span></td><td class="desc">Ping avec IP source spécifique (test symétrie)</td></tr>
+        <tr><td class="cmd">traceroute <span class="v">8.8.8.8</span></td><td class="desc">Trace le chemin hop par hop</td></tr>
+        <tr><td class="cmd">traceroute <span class="v">8.8.8.8</span> source <span class="r">Gi0/0</span></td><td class="desc">Traceroute depuis une interface source donnée</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- NAT + ACL -->
+<div class="card">
+  <div class="card-head router"><span class="card-title router">NAT/PAT · ACL · Services</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">NAT / PAT (Overload)</div>
+      <table><tbody>
+        <tr><td class="cmd">  ip nat inside</td><td class="desc">Interface côté LAN (réseau privé) — sur Gi0/0</td></tr>
+        <tr><td class="cmd">  ip nat outside</td><td class="desc">Interface côté WAN (Internet) — sur Gi0/1</td></tr>
+        <tr><td class="cmd">access-list <span class="v">1</span> permit <span class="v">192.168.0.0 0.0.255.255</span></td><td class="desc">ACL standard identifiant les sources à translater</td></tr>
+        <tr><td class="cmd">ip nat inside source list <span class="v">1</span> interface <span class="r">Gi0/1</span> overload</td><td class="desc">PAT : tous les hôtes de l'ACL 1 partagent l'IP de Gi0/1</td></tr>
+        <tr><td class="cmd">ip nat inside source list <span class="v">1</span> pool <span class="v">POOL_WAN</span> overload</td><td class="desc">PAT avec un pool d'adresses publiques</td></tr>
+        <tr><td class="cmd">ip nat pool <span class="v">POOL_WAN</span> <span class="v">203.0.113.10 203.0.113.20</span> netmask <span class="v">255.255.255.0</span></td><td class="desc">Définit un pool d'IPs publiques</td></tr>
+        <tr><td class="cmd">ip nat inside source static <span class="v">10.0.0.5 203.0.113.5</span></td><td class="desc">NAT statique 1:1 : l'IP privée est toujours traduite vers la même IP publique</td></tr>
+        <tr><td class="cmd">ip nat inside source static tcp <span class="v">10.0.0.5 80 203.0.113.5 80</span></td><td class="desc">Redirection de port : expose un serveur interne sur un port public</td></tr>
+        <tr><td class="cmd">show ip nat translations</td><td class="desc">Table des traductions actives (inside local/global, outside local/global)</td></tr>
+        <tr><td class="cmd">show ip nat translations verbose</td><td class="desc">+ Âge de l'entrée, protocole, flags</td></tr>
+        <tr><td class="cmd">show ip nat statistics</td><td class="desc">Compteurs : hits, misses, translations créées/expirées</td></tr>
+        <tr><td class="cmd">clear ip nat translation *</td><td class="desc">Vide toute la table NAT dynamique</td></tr>
+        <tr><td class="cmd">clear ip nat translation inside <span class="v">10.0.0.5</span></td><td class="desc">Vide les traductions d'un seul hôte</td></tr>
+        <tr><td class="cmd">debug ip nat</td><td class="desc">Trace les traductions en temps réel <em>⚠ verbeux en prod</em></td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">ACL Standard (numérotées 1–99 / 1300–1999)</div>
+      <table><tbody>
+        <tr><td class="cmd">access-list <span class="v">10</span> remark <span class="v">Autorise LAN interne</span></td><td class="desc">Commentaire (remark) dans l'ACL</td></tr>
+        <tr><td class="cmd">access-list <span class="v">10</span> permit <span class="v">192.168.1.0 0.0.0.255</span></td><td class="desc">Autorise tout le réseau 192.168.1.0/24</td></tr>
+        <tr><td class="cmd">access-list <span class="v">10</span> permit host <span class="v">192.168.1.50</span></td><td class="desc">Autorise un seul hôte (équivaut à wildcard 0.0.0.0)</td></tr>
+        <tr><td class="cmd">access-list <span class="v">10</span> deny any log</td><td class="desc">Refuse tout le reste + journalise les correspondances</td></tr>
+        <tr><td class="cmd">  ip access-group <span class="v">10</span> <span class="k">in</span></td><td class="desc">Applique en entrée de l'interface (filtrage des sources)</td></tr>
+        <tr><td class="cmd">  ip access-group <span class="v">10</span> <span class="k">out</span></td><td class="desc">Applique en sortie de l'interface</td></tr>
+        <tr><td class="cmd">no access-list <span class="v">10</span></td><td class="desc">Supprime toute l'ACL 10 (une ACL standard ne peut pas être éditée ligne par ligne)</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">ACL Étendue nommée (100–199 / nommée)</div>
+      <table><tbody>
+        <tr><td class="cmd">ip access-list extended <span class="v">FILTER_WAN</span></td><td class="desc">Crée une ACL étendue nommée (mieux qu'un numéro)</td></tr>
+        <tr><td class="cmd">  10 remark <span class="v">Trafic autorisé vers le web</span></td><td class="desc">Commentaire numéroté (permet insertion/suppression)</td></tr>
+        <tr><td class="cmd">  20 permit tcp <span class="v">192.168.0.0 0.0.255.255</span> any eq <span class="v">80</span></td><td class="desc">Autorise HTTP depuis le LAN vers Internet</td></tr>
+        <tr><td class="cmd">  30 permit tcp <span class="v">192.168.0.0 0.0.255.255</span> any eq <span class="v">443</span></td><td class="desc">Autorise HTTPS depuis le LAN</td></tr>
+        <tr><td class="cmd">  40 permit tcp any any established</td><td class="desc">Autorise les réponses TCP des sessions établies (ACK)</td></tr>
+        <tr><td class="cmd">  50 permit udp any any eq <span class="v">53</span></td><td class="desc">Autorise DNS (UDP 53)</td></tr>
+        <tr><td class="cmd">  60 permit icmp <span class="v">192.168.0.0 0.0.255.255</span> any</td><td class="desc">Autorise ping depuis le LAN</td></tr>
+        <tr><td class="cmd">  70 permit tcp any host <span class="v">10.0.0.5</span> eq <span class="v">22</span></td><td class="desc">Autorise SSH vers un serveur spécifique</td></tr>
+        <tr><td class="cmd">  80 deny ip <span class="v">10.0.0.0 0.255.255.255</span> any log</td><td class="desc">Bloque les RFC1918 avec log</td></tr>
+        <tr><td class="cmd">  90 deny ip any any log</td><td class="desc">Refuse tout le reste avec log</td></tr>
+        <tr><td class="cmd">no <span class="v">20</span></td><td class="desc">Supprime la ligne numéro 20 de l'ACL (sans réécrire l'ACL entière)</td></tr>
+        <tr><td class="cmd">show ip access-lists</td><td class="desc">Toutes les ACLs avec compteurs de correspondances (matches)</td></tr>
+        <tr><td class="cmd">show ip access-lists <span class="v">FILTER_WAN</span></td><td class="desc">ACL spécifique avec compteurs</td></tr>
+        <tr><td class="cmd">clear ip access-list counters <span class="v">FILTER_WAN</span></td><td class="desc">Remet à zéro les compteurs de l'ACL</td></tr>
+        <tr><td class="cmd">show running-config | section access-list</td><td class="desc">Toutes les ACLs dans la running-config</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">DHCP serveur & relais</div>
+      <table><tbody>
+        <tr><td class="cmd">ip dhcp pool <span class="v">LAN_POOL</span></td><td class="desc">Crée un pool DHCP nommé</td></tr>
+        <tr><td class="cmd">  network <span class="v">192.168.1.0 255.255.255.0</span></td><td class="desc">Réseau et masque du pool</td></tr>
+        <tr><td class="cmd">  default-router <span class="v">192.168.1.1</span></td><td class="desc">Passerelle transmise aux clients</td></tr>
+        <tr><td class="cmd">  dns-server <span class="v">8.8.8.8 8.8.4.4</span></td><td class="desc">DNS transmis aux clients</td></tr>
+        <tr><td class="cmd">  domain-name <span class="v">lab.local</span></td><td class="desc">Domaine DNS transmis aux clients</td></tr>
+        <tr><td class="cmd">  lease <span class="v">1 12</span></td><td class="desc">Durée du bail : 1 jour 12 heures</td></tr>
+        <tr><td class="cmd">ip dhcp excluded-address <span class="v">192.168.1.1 192.168.1.20</span></td><td class="desc">Plage exclue de l'attribution dynamique</td></tr>
+        <tr><td class="cmd">show ip dhcp binding</td><td class="desc">Baux actifs : MAC, IP, expiration, type</td></tr>
+        <tr><td class="cmd">show ip dhcp pool</td><td class="desc">Pools : adresses utilisées/disponibles</td></tr>
+        <tr><td class="cmd">show ip dhcp conflict</td><td class="desc">Conflits d'adresses détectés</td></tr>
+        <tr><td class="cmd">  ip helper-address <span class="v">192.168.10.5</span></td><td class="desc">Relais DHCP : transmet les broadcasts DHCP vers le serveur</td></tr>
+      </tbody></table>
+    </div>
+    <div class="note"><b>⚠ Règle d'or ACL :</b> ACL étendues → <strong>proche de la SOURCE</strong> (pour stopper le trafic tôt). ACL standard → <strong>proche de la DESTINATION</strong> (filtrage sur adresse source uniquement).</div>
+  </div>
+</div>
+</div><!-- /grid routeur -->
+
+<!-- ═══════ ROCKY ═══════ -->
+<div class="cat-bar"><div class="cat-label rocky">◈ Rocky Linux — EL9</div><div class="cat-bar-line rocky"></div></div>
+
+<div class="grid g3" style="margin-top:12px">
+
+<!-- DNF -->
+<div class="card">
+  <div class="card-head rocky"><span class="card-title rocky">Paquets DNF · RPM · Dépôts</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">DNF — Opérations courantes</div>
+      <table><tbody>
+        <tr><td class="cmd">dnf <span class="k">check-update</span></td><td class="desc">Liste les mises à jour disponibles sans les installer</td></tr>
+        <tr><td class="cmd">dnf <span class="k">update</span></td><td class="desc">Met à jour tous les paquets installés</td></tr>
+        <tr><td class="cmd">dnf <span class="k">update</span> <span class="v">kernel</span></td><td class="desc">Met à jour uniquement le kernel</td></tr>
+        <tr><td class="cmd">dnf <span class="k">install</span> <span class="v">vim curl wget git</span></td><td class="desc">Installe plusieurs paquets en une commande</td></tr>
+        <tr><td class="cmd">dnf <span class="k">install</span> -y <span class="v">httpd</span></td><td class="desc">Installe sans demander de confirmation (<code>-y</code>)</td></tr>
+        <tr><td class="cmd">dnf <span class="k">install</span> --downloadonly <span class="v">httpd</span></td><td class="desc">Télécharge sans installer (mise en cache)</td></tr>
+        <tr><td class="cmd">dnf <span class="k">reinstall</span> <span class="v">paquet</span></td><td class="desc">Réinstalle un paquet sans le désinstaller d'abord</td></tr>
+        <tr><td class="cmd">dnf <span class="k">downgrade</span> <span class="v">paquet-1.0.0</span></td><td class="desc">Revient à une version antérieure</td></tr>
+        <tr><td class="cmd">dnf <span class="k">remove</span> <span class="v">paquet</span></td><td class="desc">Désinstalle le paquet et ses dépendances non requises ailleurs</td></tr>
+        <tr><td class="cmd">dnf <span class="k">autoremove</span></td><td class="desc">Supprime les dépendances devenues orphelines</td></tr>
+        <tr><td class="cmd">dnf <span class="k">search</span> <span class="v">nginx</span></td><td class="desc">Recherche dans les noms et résumés des paquets</td></tr>
+        <tr><td class="cmd">dnf <span class="k">search all</span> <span class="v">nginx</span></td><td class="desc">Recherche aussi dans les descriptions complètes</td></tr>
+        <tr><td class="cmd">dnf <span class="k">info</span> <span class="v">httpd</span></td><td class="desc">Nom, version, taille, dépôt, description, dépendances</td></tr>
+        <tr><td class="cmd">dnf <span class="k">list installed</span></td><td class="desc">Tous les paquets installés avec leur version</td></tr>
+        <tr><td class="cmd">dnf <span class="k">list available</span> <span class="v">http*</span></td><td class="desc">Paquets disponibles correspondant au pattern</td></tr>
+        <tr><td class="cmd">dnf <span class="k">provides</span> <span class="v">/usr/bin/python3</span></td><td class="desc">Quel paquet fournit un fichier ou une commande</td></tr>
+        <tr><td class="cmd">dnf <span class="k">provides</span> <span class="v">'perl(Net::SNMP)'</span></td><td class="desc">Quel paquet fournit un module Perl/Python</td></tr>
+        <tr><td class="cmd">dnf <span class="k">clean all</span></td><td class="desc">Vide tout le cache DNF (métadonnées + paquets téléchargés)</td></tr>
+        <tr><td class="cmd">dnf <span class="k">makecache</span></td><td class="desc">Recrée le cache des métadonnées des dépôts</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">DNF — Historique & groupes</div>
+      <table><tbody>
+        <tr><td class="cmd">dnf <span class="k">history</span></td><td class="desc">Historique des transactions (numéro, date, utilisateur, action)</td></tr>
+        <tr><td class="cmd">dnf <span class="k">history info</span> <span class="v">5</span></td><td class="desc">Détail de la transaction n°5 (paquets installés/supprimés)</td></tr>
+        <tr><td class="cmd">dnf <span class="k">history undo</span> <span class="v">5</span></td><td class="desc">Annule complètement la transaction n°5</td></tr>
+        <tr><td class="cmd">dnf <span class="k">history rollback</span> <span class="v">3</span></td><td class="desc">Retour à l'état avant la transaction n°3</td></tr>
+        <tr><td class="cmd">dnf <span class="k">group list</span></td><td class="desc">Groupes disponibles : environnements et groupes de paquets</td></tr>
+        <tr><td class="cmd">dnf <span class="k">group info</span> <span class="v">"Development Tools"</span></td><td class="desc">Paquets inclus dans un groupe</td></tr>
+        <tr><td class="cmd">dnf <span class="k">group install</span> <span class="v">"Development Tools"</span></td><td class="desc">Installe tous les paquets du groupe</td></tr>
+        <tr><td class="cmd">dnf <span class="k">group remove</span> <span class="v">"Development Tools"</span></td><td class="desc">Supprime les paquets du groupe</td></tr>
+        <tr><td class="cmd">dnf <span class="k">upgrade --security</span></td><td class="desc">Applique uniquement les mises à jour de sécurité</td></tr>
+        <tr><td class="cmd">dnf <span class="k">updateinfo list cves</span></td><td class="desc">CVEs applicables au système</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Dépôts & modules</div>
+      <table><tbody>
+        <tr><td class="cmd">dnf repolist</td><td class="desc">Dépôts activés avec leur ID et nombre de paquets</td></tr>
+        <tr><td class="cmd">dnf repolist all</td><td class="desc">Tous les dépôts (activés + désactivés)</td></tr>
+        <tr><td class="cmd">dnf repoinfo <span class="v">baseos</span></td><td class="desc">Détails d'un dépôt : URL, expire, métadonnées</td></tr>
+        <tr><td class="cmd">dnf install epel-release</td><td class="desc">Active EPEL (Extra Packages for Enterprise Linux)</td></tr>
+        <tr><td class="cmd">dnf config-manager --enable <span class="v">crb</span></td><td class="desc">Active le dépôt CRB (CodeReady Builder)</td></tr>
+        <tr><td class="cmd">dnf config-manager --disable <span class="v">epel</span></td><td class="desc">Désactive temporairement un dépôt</td></tr>
+        <tr><td class="cmd">dnf install --enablerepo=<span class="v">epel</span> <span class="v">htop</span></td><td class="desc">Installe depuis un dépôt sans l'activer globalement</td></tr>
+        <tr><td class="cmd">dnf module list</td><td class="desc">Modules disponibles (Application Streams)</td></tr>
+        <tr><td class="cmd">dnf module enable <span class="v">postgresql:15</span></td><td class="desc">Active un stream de module spécifique</td></tr>
+        <tr><td class="cmd">dnf module install <span class="v">postgresql:15</span></td><td class="desc">Installe le module</td></tr>
+        <tr><td class="cmd">dnf module reset <span class="v">postgresql</span></td><td class="desc">Réinitialise le module au stream par défaut</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">RPM — Gestion bas niveau</div>
+      <table><tbody>
+        <tr><td class="cmd">rpm -qa</td><td class="desc">Liste tous les paquets RPM installés</td></tr>
+        <tr><td class="cmd">rpm -qa | grep <span class="v">httpd</span></td><td class="desc">Recherche un paquet installé</td></tr>
+        <tr><td class="cmd">rpm -qi <span class="v">httpd</span></td><td class="desc">Infos détaillées : version, build date, description</td></tr>
+        <tr><td class="cmd">rpm -ql <span class="v">httpd</span></td><td class="desc">Liste tous les fichiers installés par le paquet</td></tr>
+        <tr><td class="cmd">rpm -qc <span class="v">httpd</span></td><td class="desc">Fichiers de configuration du paquet</td></tr>
+        <tr><td class="cmd">rpm -qd <span class="v">httpd</span></td><td class="desc">Fichiers de documentation du paquet</td></tr>
+        <tr><td class="cmd">rpm -qf <span class="v">/etc/httpd/conf/httpd.conf</span></td><td class="desc">Quel paquet a installé ce fichier</td></tr>
+        <tr><td class="cmd">rpm -qR <span class="v">httpd</span></td><td class="desc">Dépendances requises par le paquet</td></tr>
+        <tr><td class="cmd">rpm -V <span class="v">httpd</span></td><td class="desc">Vérifie l'intégrité des fichiers (taille, MD5, permissions…)</td></tr>
+        <tr><td class="cmd">rpm -ivh <span class="v">paquet.rpm</span></td><td class="desc">Installe un RPM local (verbose + barre de progression)</td></tr>
+        <tr><td class="cmd">rpm -Uvh <span class="v">paquet.rpm</span></td><td class="desc">Met à jour ou installe un RPM local</td></tr>
+        <tr><td class="cmd">rpm -e <span class="v">httpd</span></td><td class="desc">Désinstalle un paquet (sans supprimer les dépendances)</td></tr>
+        <tr><td class="cmd">rpm --import <span class="v">/etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial</span></td><td class="desc">Importe une clé GPG pour vérification des paquets</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- SYSTEMD -->
+<div class="card">
+  <div class="card-head rocky"><span class="card-title rocky">Systemd · Journald · Boot</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">Gestion des services</div>
+      <table><tbody>
+        <tr><td class="cmd">systemctl <span class="k">start</span> <span class="v">httpd</span></td><td class="desc">Démarre le service immédiatement</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">stop</span> <span class="v">httpd</span></td><td class="desc">Arrête proprement le service (SIGTERM puis SIGKILL)</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">restart</span> <span class="v">httpd</span></td><td class="desc">Arrête puis redémarre (brève interruption)</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">reload</span> <span class="v">httpd</span></td><td class="desc">Recharge la configuration sans interrompre le service (SIGHUP)</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">try-restart</span> <span class="v">httpd</span></td><td class="desc">Redémarre seulement si le service était déjà actif</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">reload-or-restart</span> <span class="v">httpd</span></td><td class="desc">Reload si supporté, sinon restart</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">enable</span> <span class="v">httpd</span></td><td class="desc">Crée les symlinks pour démarrer au boot</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">disable</span> <span class="v">httpd</span></td><td class="desc">Supprime les symlinks boot</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">enable --now</span> <span class="v">httpd</span></td><td class="desc">Enable + start en une commande <em>recommandé</em></td></tr>
+        <tr><td class="cmd">systemctl <span class="k">disable --now</span> <span class="v">httpd</span></td><td class="desc">Disable + stop en une commande</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">mask</span> <span class="v">httpd</span></td><td class="desc">Lie le service à /dev/null — ne peut plus démarrer du tout</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">unmask</span> <span class="v">httpd</span></td><td class="desc">Annule le mask</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">status</span> <span class="v">httpd</span></td><td class="desc">État, PID, mémoire, dernières lignes de log, cgroup</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">is-active</span> <span class="v">httpd</span></td><td class="desc">Retourne : active / inactive / failed / activating…</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">is-enabled</span> <span class="v">httpd</span></td><td class="desc">Retourne : enabled / disabled / static / masked</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">is-failed</span> <span class="v">httpd</span></td><td class="desc">Code de retour 0 si le service est en état failed</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">list-units</span> --type=service</td><td class="desc">Tous les services chargés (actifs + inactifs)</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">list-units</span> --type=service --state=failed</td><td class="desc">Uniquement les services en échec</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">list-unit-files</span> --type=service</td><td class="desc">Tous les fichiers unit avec leur état enabled/disabled</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">daemon-reload</span></td><td class="desc">Relit les fichiers .service modifiés <em>obligatoire après toute modif</em></td></tr>
+        <tr><td class="cmd">systemctl <span class="k">edit</span> <span class="v">httpd</span></td><td class="desc">Crée un override.conf pour personnaliser sans modifier le fichier système</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">cat</span> <span class="v">httpd</span></td><td class="desc">Affiche le contenu du fichier unit et ses overrides</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">show</span> <span class="v">httpd</span></td><td class="desc">Toutes les propriétés du service en format clé=valeur</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">reset-failed</span></td><td class="desc">Réinitialise l'état "failed" de tous les services</td></tr>
+        <tr><td class="cmd">systemctl <span class="k">reset-failed</span> <span class="v">httpd</span></td><td class="desc">Réinitialise l'état "failed" d'un service spécifique</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Journald — Logs système</div>
+      <table><tbody>
+        <tr><td class="cmd">journalctl</td><td class="desc">Tous les logs depuis le début (du plus ancien au plus récent)</td></tr>
+        <tr><td class="cmd">journalctl -f</td><td class="desc">Suit les logs en temps réel (équiv. <code>tail -f</code>)</td></tr>
+        <tr><td class="cmd">journalctl -u <span class="v">httpd</span></td><td class="desc">Logs d'une unité spécifique</td></tr>
+        <tr><td class="cmd">journalctl -u <span class="v">httpd</span> -f</td><td class="desc">Suit les logs d'un service en temps réel</td></tr>
+        <tr><td class="cmd">journalctl -u <span class="v">httpd</span> -n <span class="v">50</span></td><td class="desc">50 dernières lignes d'un service</td></tr>
+        <tr><td class="cmd">journalctl -u <span class="v">httpd</span> --since <span class="v">"today"</span></td><td class="desc">Logs depuis aujourd'hui</td></tr>
+        <tr><td class="cmd">journalctl -p <span class="k">err</span></td><td class="desc">Niveaux : emerg(0) alert(1) crit(2) err(3) warn(4) notice(5) info(6) debug(7)</td></tr>
+        <tr><td class="cmd">journalctl -p <span class="k">err</span> -b</td><td class="desc">Erreurs depuis le dernier boot</td></tr>
+        <tr><td class="cmd">journalctl -b</td><td class="desc">Logs du boot en cours</td></tr>
+        <tr><td class="cmd">journalctl -b <span class="v">-1</span></td><td class="desc">Logs du boot précédent</td></tr>
+        <tr><td class="cmd">journalctl --list-boots</td><td class="desc">Historique des boots avec leur ID et date</td></tr>
+        <tr><td class="cmd">journalctl --since <span class="v">"2026-03-01 08:00"</span> --until <span class="v">"2026-03-01 10:00"</span></td><td class="desc">Fenêtre temporelle précise</td></tr>
+        <tr><td class="cmd">journalctl -k</td><td class="desc">Messages kernel uniquement (dmesg via journald)</td></tr>
+        <tr><td class="cmd">journalctl _PID=<span class="v">1234</span></td><td class="desc">Logs d'un PID spécifique</td></tr>
+        <tr><td class="cmd">journalctl _UID=<span class="v">1000</span></td><td class="desc">Logs d'un utilisateur spécifique</td></tr>
+        <tr><td class="cmd">journalctl --disk-usage</td><td class="desc">Espace occupé par les journaux persistants</td></tr>
+        <tr><td class="cmd">journalctl --vacuum-size=<span class="v">500M</span></td><td class="desc">Réduit les journaux à 500 Mo maximum</td></tr>
+        <tr><td class="cmd">journalctl --vacuum-time=<span class="v">2weeks</span></td><td class="desc">Supprime les journaux plus anciens que 2 semaines</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Cibles (targets = runlevels)</div>
+      <table><tbody>
+        <tr><td class="cmd">systemctl get-default</td><td class="desc">Cible par défaut au boot</td></tr>
+        <tr><td class="cmd">systemctl set-default <span class="v">multi-user.target</span></td><td class="desc">Boot en mode texte (équiv. runlevel 3)</td></tr>
+        <tr><td class="cmd">systemctl set-default <span class="v">graphical.target</span></td><td class="desc">Boot avec interface graphique (équiv. runlevel 5)</td></tr>
+        <tr><td class="cmd">systemctl isolate <span class="v">multi-user.target</span></td><td class="desc">Bascule immédiatement sans reboot (stoppe le GUI si présent)</td></tr>
+        <tr><td class="cmd">systemctl isolate <span class="v">rescue.target</span></td><td class="desc">Mode secours (root seul, services minimaux)</td></tr>
+        <tr><td class="cmd">systemctl isolate <span class="v">emergency.target</span></td><td class="desc">Mode urgence (root seul, filesystem en lecture seule)</td></tr>
+        <tr><td class="cmd">systemctl poweroff</td><td class="desc">Éteint le système proprement</td></tr>
+        <tr><td class="cmd">systemctl reboot</td><td class="desc">Redémarre proprement</td></tr>
+        <tr><td class="cmd">systemctl suspend</td><td class="desc">Suspend en RAM</td></tr>
+        <tr><td class="cmd">systemctl hibernate</td><td class="desc">Hiberne sur disque</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Timers systemd (alternative cron)</div>
+      <table><tbody>
+        <tr><td class="cmd">systemctl list-timers --all</td><td class="desc">Tous les timers : prochain déclenchement, dernière exécution</td></tr>
+        <tr><td class="cmd">systemctl enable --now <span class="v">dnf-automatic.timer</span></td><td class="desc">Active un timer (updates automatiques)</td></tr>
+        <tr><td class="cmd">cat /usr/lib/systemd/system/<span class="v">dnf-automatic.timer</span></td><td class="desc">Voir la définition d'un timer (OnCalendar, OnBootSec…)</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- RÉSEAU -->
+<div class="card">
+  <div class="card-head rocky"><span class="card-title rocky">Réseau — ip · nmcli · Diagnostic</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">ip — Adresses & interfaces</div>
+      <table><tbody>
+        <tr><td class="cmd">ip addr show</td><td class="desc">Toutes les interfaces : adresses, flags, MTU, state</td></tr>
+        <tr><td class="cmd">ip addr show <span class="k">ens160</span></td><td class="desc">Une interface spécifique</td></tr>
+        <tr><td class="cmd">ip addr add <span class="v">192.168.1.10/24</span> dev <span class="k">ens160</span></td><td class="desc">Ajoute une IP (temporaire, perdue au reboot)</td></tr>
+        <tr><td class="cmd">ip addr del <span class="v">192.168.1.10/24</span> dev <span class="k">ens160</span></td><td class="desc">Supprime une IP de l'interface</td></tr>
+        <tr><td class="cmd">ip addr flush dev <span class="k">ens160</span></td><td class="desc">Supprime toutes les IPs d'une interface</td></tr>
+        <tr><td class="cmd">ip link set <span class="k">ens160</span> <span class="v">up</span></td><td class="desc">Active l'interface physiquement</td></tr>
+        <tr><td class="cmd">ip link set <span class="k">ens160</span> <span class="v">down</span></td><td class="desc">Désactive l'interface physiquement</td></tr>
+        <tr><td class="cmd">ip link set <span class="k">ens160</span> mtu <span class="v">9000</span></td><td class="desc">Change le MTU (jumbo frames)</td></tr>
+        <tr><td class="cmd">ip link set <span class="k">ens160</span> promisc <span class="v">on</span></td><td class="desc">Mode promiscuous (capture réseau)</td></tr>
+        <tr><td class="cmd">ip -s link show <span class="k">ens160</span></td><td class="desc">Statistiques : paquets TX/RX, erreurs, drops</td></tr>
+        <tr><td class="cmd">ip -4 addr show</td><td class="desc">Adresses IPv4 uniquement</td></tr>
+        <tr><td class="cmd">ip -6 addr show</td><td class="desc">Adresses IPv6 uniquement</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">ip — Routes & ARP</div>
+      <table><tbody>
+        <tr><td class="cmd">ip route show</td><td class="desc">Table de routage complète</td></tr>
+        <tr><td class="cmd">ip route show default</td><td class="desc">Route(s) par défaut uniquement</td></tr>
+        <tr><td class="cmd">ip route get <span class="v">8.8.8.8</span></td><td class="desc">Interface et next-hop utilisés pour atteindre une IP</td></tr>
+        <tr><td class="cmd">ip route add default via <span class="v">192.168.1.1</span></td><td class="desc">Ajoute la route par défaut (temporaire)</td></tr>
+        <tr><td class="cmd">ip route add <span class="v">10.2.0.0/16</span> via <span class="v">192.168.1.254</span></td><td class="desc">Ajoute une route statique (temporaire)</td></tr>
+        <tr><td class="cmd">ip route del default</td><td class="desc">Supprime la route par défaut</td></tr>
+        <tr><td class="cmd">ip route del <span class="v">10.2.0.0/16</span></td><td class="desc">Supprime une route spécifique</td></tr>
+        <tr><td class="cmd">ip route flush cache</td><td class="desc">Vide le cache de routage</td></tr>
+        <tr><td class="cmd">ip neigh show</td><td class="desc">Table ARP/NDP : IP, MAC, interface, état (REACHABLE/STALE…)</td></tr>
+        <tr><td class="cmd">ip neigh flush all</td><td class="desc">Vide le cache ARP</td></tr>
+        <tr><td class="cmd">ip neigh add <span class="v">192.168.1.1</span> lladdr <span class="v">AA:BB:CC:DD:EE:FF</span> dev <span class="k">ens160</span></td><td class="desc">Entrée ARP statique</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">nmcli — Configuration permanente</div>
+      <table><tbody>
+        <tr><td class="cmd">nmcli device status</td><td class="desc">État de toutes les interfaces : device, type, state, connexion</td></tr>
+        <tr><td class="cmd">nmcli device show <span class="k">ens160</span></td><td class="desc">Tous les paramètres d'une interface (IP, GW, DNS, MAC…)</td></tr>
+        <tr><td class="cmd">nmcli connection show</td><td class="desc">Profils de connexion avec UUID, type, interface</td></tr>
+        <tr><td class="cmd">nmcli con show <span class="v">ens160</span></td><td class="desc">Tous les paramètres d'un profil de connexion</td></tr>
+        <tr><td class="cmd">nmcli con add type ethernet ifname <span class="k">ens160</span> con-name <span class="v">LAN</span></td><td class="desc">Crée un nouveau profil de connexion</td></tr>
+        <tr><td class="cmd">nmcli con mod <span class="v">ens160</span> ipv4.addresses <span class="v">10.0.0.10/24</span></td><td class="desc">Définit l'adresse IP statique</td></tr>
+        <tr><td class="cmd">nmcli con mod <span class="v">ens160</span> ipv4.gateway <span class="v">10.0.0.1</span></td><td class="desc">Définit la passerelle</td></tr>
+        <tr><td class="cmd">nmcli con mod <span class="v">ens160</span> ipv4.dns <span class="v">"8.8.8.8 1.1.1.1"</span></td><td class="desc">Serveurs DNS (plusieurs séparés par espace)</td></tr>
+        <tr><td class="cmd">nmcli con mod <span class="v">ens160</span> ipv4.dns-search <span class="v">lab.local</span></td><td class="desc">Domaine de recherche DNS</td></tr>
+        <tr><td class="cmd">nmcli con mod <span class="v">ens160</span> ipv4.method <span class="k">manual</span></td><td class="desc">IP statique (<code>auto</code> = DHCP)</td></tr>
+        <tr><td class="cmd">nmcli con mod <span class="v">ens160</span> ipv4.method <span class="k">auto</span></td><td class="desc">DHCP</td></tr>
+        <tr><td class="cmd">nmcli con mod <span class="v">ens160</span> connection.autoconnect <span class="k">yes</span></td><td class="desc">Reconnexion automatique au boot</td></tr>
+        <tr><td class="cmd">nmcli con up <span class="v">ens160</span></td><td class="desc">Active le profil et applique les changements</td></tr>
+        <tr><td class="cmd">nmcli con down <span class="v">ens160</span></td><td class="desc">Désactive la connexion</td></tr>
+        <tr><td class="cmd">nmcli con delete <span class="v">ens160</span></td><td class="desc">Supprime le profil de connexion</td></tr>
+        <tr><td class="cmd">nmcli con reload</td><td class="desc">Recharge tous les profils depuis les fichiers</td></tr>
+        <tr><td class="cmd">nmcli general hostname <span class="v">srv-web01</span></td><td class="desc">Change le hostname via NM</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">ss — Sockets & ports</div>
+      <table><tbody>
+        <tr><td class="cmd">ss -tulnp</td><td class="desc">Tous les ports en écoute (TCP+UDP), PID et programme</td></tr>
+        <tr><td class="cmd">ss -tulnp | grep <span class="v">:80</span></td><td class="desc">Quel processus écoute sur le port 80</td></tr>
+        <tr><td class="cmd">ss -tp state established</td><td class="desc">Connexions TCP établies avec PID</td></tr>
+        <tr><td class="cmd">ss -tnp dst <span class="v">8.8.8.8</span></td><td class="desc">Connexions vers une IP distante</td></tr>
+        <tr><td class="cmd">ss -s</td><td class="desc">Statistiques globales (total TCP, UDP, sockets en écoute)</td></tr>
+        <tr><td class="cmd">ss -4 -tnp</td><td class="desc">Connexions IPv4 uniquement</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Diagnostic réseau</div>
+      <table><tbody>
+        <tr><td class="cmd">ping -c4 -W1 <span class="v">8.8.8.8</span></td><td class="desc">4 pings, timeout 1 s par paquet</td></tr>
+        <tr><td class="cmd">ping -I <span class="k">ens160</span> <span class="v">8.8.8.8</span></td><td class="desc">Ping depuis une interface spécifique</td></tr>
+        <tr><td class="cmd">traceroute -n <span class="v">8.8.8.8</span></td><td class="desc">Trace le chemin sans résolution DNS (<code>-n</code> plus rapide)</td></tr>
+        <tr><td class="cmd">traceroute -T -p <span class="v">443</span> <span class="v">example.com</span></td><td class="desc">Traceroute TCP (passe les firewalls bloquant UDP/ICMP)</td></tr>
+        <tr><td class="cmd">mtr <span class="v">8.8.8.8</span></td><td class="desc">Traceroute continu avec stats de perte et latence en temps réel</td></tr>
+        <tr><td class="cmd">dig <span class="v">example.com</span></td><td class="desc">Résolution DNS avec toutes les infos (TTL, serveur interrogé)</td></tr>
+        <tr><td class="cmd">dig <span class="v">example.com</span> MX</td><td class="desc">Records MX (mail)</td></tr>
+        <tr><td class="cmd">dig @<span class="v">8.8.8.8</span> <span class="v">example.com</span></td><td class="desc">Force l'utilisation d'un serveur DNS spécifique</td></tr>
+        <tr><td class="cmd">dig -x <span class="v">8.8.8.8</span></td><td class="desc">Résolution inverse (PTR record)</td></tr>
+        <tr><td class="cmd">nslookup <span class="v">example.com</span></td><td class="desc">Résolution DNS simple (interactif ou one-shot)</td></tr>
+        <tr><td class="cmd">curl -I <span class="v">https://example.com</span></td><td class="desc">Test HTTP : headers de réponse uniquement</td></tr>
+        <tr><td class="cmd">curl -sv <span class="v">https://example.com</span> 2>&1 | head -50</td><td class="desc">Debug TLS : certificat, SNI, handshake</td></tr>
+        <tr><td class="cmd">curl -o /dev/null -w "<span class="v">%{time_total}</span>" <span class="v">https://example.com</span></td><td class="desc">Mesure le temps de réponse HTTP</td></tr>
+        <tr><td class="cmd">tcpdump -i <span class="k">ens160</span> -n -w <span class="v">/tmp/capture.pcap</span></td><td class="desc">Capture toutes les trames dans un fichier .pcap</td></tr>
+        <tr><td class="cmd">tcpdump -i <span class="k">ens160</span> -n port <span class="v">443</span> and host <span class="v">8.8.8.8</span></td><td class="desc">Capture filtrée : HTTPS vers 8.8.8.8</td></tr>
+        <tr><td class="cmd">tcpdump -i <span class="k">ens160</span> -n 'not port 22'</td><td class="desc">Capture tout sauf SSH (évite la boucle)</td></tr>
+        <tr><td class="cmd">ethtool <span class="k">ens160</span></td><td class="desc">Vitesse, duplex, auto-négociation de la carte réseau</td></tr>
+        <tr><td class="cmd">ethtool -S <span class="k">ens160</span></td><td class="desc">Statistiques driver : RX/TX drops, errors, missed</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+</div><!-- /grid rocky row 1 -->
+
+<!-- Rocky row 2 -->
+<div class="grid g4" style="margin-top:14px">
+
+<!-- FIREWALLD -->
+<div class="card">
+  <div class="card-head rocky"><span class="card-title rocky">Firewalld</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">Zones & services</div>
+      <table><tbody>
+        <tr><td class="cmd">systemctl enable --now firewalld</td><td class="desc">Active + démarre le pare-feu</td></tr>
+        <tr><td class="cmd">firewall-cmd --state</td><td class="desc">running ou not running</td></tr>
+        <tr><td class="cmd">firewall-cmd --get-default-zone</td><td class="desc">Zone appliquée aux interfaces sans zone explicite (public)</td></tr>
+        <tr><td class="cmd">firewall-cmd --get-active-zones</td><td class="desc">Zones actives avec leurs interfaces associées</td></tr>
+        <tr><td class="cmd">firewall-cmd --set-default-zone=<span class="v">trusted</span></td><td class="desc">Change la zone par défaut (trusted=tout autorisé)</td></tr>
+        <tr><td class="cmd">firewall-cmd --list-all</td><td class="desc">Règles complètes de la zone active</td></tr>
+        <tr><td class="cmd">firewall-cmd --list-all-zones</td><td class="desc">Règles de toutes les zones</td></tr>
+        <tr><td class="cmd">firewall-cmd --zone=<span class="v">internal</span> --list-all</td><td class="desc">Règles d'une zone spécifique</td></tr>
+        <tr><td class="cmd">firewall-cmd --get-services</td><td class="desc">Tous les services prédéfinis disponibles</td></tr>
+        <tr><td class="cmd">firewall-cmd --info-service=<span class="v">https</span></td><td class="desc">Ports associés à un service prédéfini</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-service=<span class="v">http</span> --permanent</td><td class="desc">Autorise HTTP (port 80/tcp) de façon permanente</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-service=<span class="v">https</span> --permanent</td><td class="desc">Autorise HTTPS (port 443/tcp)</td></tr>
+        <tr><td class="cmd">firewall-cmd --remove-service=<span class="v">dhcpv6-client</span> --permanent</td><td class="desc">Retire un service (nettoyage)</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-port=<span class="v">8080/tcp</span> --permanent</td><td class="desc">Ouvre un port TCP spécifique</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-port=<span class="v">5000-5100/tcp</span> --permanent</td><td class="desc">Ouvre une plage de ports</td></tr>
+        <tr><td class="cmd">firewall-cmd --remove-port=<span class="v">8080/tcp</span> --permanent</td><td class="desc">Ferme un port</td></tr>
+        <tr><td class="cmd">firewall-cmd --reload</td><td class="desc">Applique les règles permanentes <em>obligatoire après --permanent</em></td></tr>
+        <tr><td class="cmd">firewall-cmd --list-services</td><td class="desc">Services autorisés dans la zone courante</td></tr>
+        <tr><td class="cmd">firewall-cmd --list-ports</td><td class="desc">Ports ouverts directement</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Rich Rules & NAT</div>
+      <table><tbody>
+        <tr><td class="cmd">firewall-cmd --add-rich-rule=<span class="v">'rule family=ipv4 source address=10.0.0.0/8 accept'</span> --permanent</td><td class="desc">Autorise toutes les connexions depuis 10.0.0.0/8</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-rich-rule=<span class="v">'rule family=ipv4 source address=1.2.3.4 drop'</span> --permanent</td><td class="desc">Bloque une IP spécifique</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-rich-rule=<span class="v">'rule service name=ssh source address=192.168.1.0/24 accept'</span> --permanent</td><td class="desc">SSH depuis une IP/réseau uniquement</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-rich-rule=<span class="v">'rule service name=ssh limit value=5/m accept'</span> --permanent</td><td class="desc">Rate-limit SSH : 5 connexions par minute</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-masquerade --permanent</td><td class="desc">Active le masquerading NAT/PAT sur la zone</td></tr>
+        <tr><td class="cmd">firewall-cmd --add-forward-port=port=<span class="v">80</span>:proto=<span class="v">tcp</span>:toport=<span class="v">8080</span> --permanent</td><td class="desc">Redirige le port 80 vers 8080 localement</td></tr>
+        <tr><td class="cmd">firewall-cmd --query-masquerade</td><td class="desc">Vérifie si le masquerading est actif</td></tr>
+        <tr><td class="cmd">firewall-cmd --list-rich-rules</td><td class="desc">Liste toutes les rich rules actives</td></tr>
+      </tbody></table>
+    </div>
+    <div class="note-green"><b>💡</b> Sans <code>--permanent</code>, la règle est <strong>active immédiatement mais perdue au reboot</strong>. Avec <code>--permanent</code>, elle est sauvegardée mais nécessite <code>--reload</code>.</div>
+  </div>
+</div>
+
+<!-- SELINUX -->
+<div class="card">
+  <div class="card-head rocky"><span class="card-title rocky">SELinux</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">État & mode</div>
+      <table><tbody>
+        <tr><td class="cmd">getenforce</td><td class="desc">Enforcing (actif) / Permissive (log seulement) / Disabled</td></tr>
+        <tr><td class="cmd">sestatus</td><td class="desc">Statut complet : mode, politique, contextes montés</td></tr>
+        <tr><td class="cmd">sestatus -v</td><td class="desc">Verbose : contexte des processus et fichiers clés</td></tr>
+        <tr><td class="cmd">setenforce <span class="v">0</span></td><td class="desc">Bascule en Permissive <em>temporaire — perdu au reboot</em></td></tr>
+        <tr><td class="cmd">setenforce <span class="v">1</span></td><td class="desc">Repasse en Enforcing</td></tr>
+        <tr><td class="cmd">cat /etc/selinux/config</td><td class="desc">Mode permanent (SELINUX=enforcing/permissive/disabled)</td></tr>
+        <tr><td class="cmd">vi /etc/selinux/config → SELINUX=<span class="v">enforcing</span></td><td class="desc">Modification permanente (appliquée au prochain boot)</td></tr>
+        <tr><td class="cmd">touch /.autorelabel</td><td class="desc">Force le relabelling de tout le FS au prochain boot</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Contextes de fichiers</div>
+      <table><tbody>
+        <tr><td class="cmd">ls -lZ <span class="v">/var/www/html</span></td><td class="desc">Affiche les contextes SELinux (user:role:type:level)</td></tr>
+        <tr><td class="cmd">ls -Z <span class="v">/etc/passwd</span></td><td class="desc">Contexte d'un fichier spécifique</td></tr>
+        <tr><td class="cmd">ps auxZ | grep <span class="v">httpd</span></td><td class="desc">Contexte des processus en cours d'exécution</td></tr>
+        <tr><td class="cmd">restorecon -v <span class="v">/var/www/html/index.html</span></td><td class="desc">Restaure le contexte par défaut d'un fichier</td></tr>
+        <tr><td class="cmd">restorecon -Rv <span class="v">/var/www/html</span></td><td class="desc">Restaure récursivement (-R) avec verbose (-v)</td></tr>
+        <tr><td class="cmd">chcon -t <span class="v">httpd_sys_content_t</span> <span class="k">/data/web/index.html</span></td><td class="desc">Change temporairement le type SELinux d'un fichier</td></tr>
+        <tr><td class="cmd">chcon -R --reference=<span class="v">/var/www/html</span> <span class="k">/data/web</span></td><td class="desc">Copie le contexte d'un répertoire existant</td></tr>
+        <tr><td class="cmd">semanage fcontext -a -t <span class="v">httpd_sys_content_t</span> <span class="v">"/data/web(/.*)?"</span></td><td class="desc">Définit le contexte par défaut permanent d'un chemin</td></tr>
+        <tr><td class="cmd">semanage fcontext -l | grep <span class="v">httpd</span></td><td class="desc">Règles de contexte pour httpd</td></tr>
+        <tr><td class="cmd">matchpathcon <span class="v">/var/www/html/index.html</span></td><td class="desc">Contexte attendu pour un chemin donné</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Booléens & ports</div>
+      <table><tbody>
+        <tr><td class="cmd">getsebool -a</td><td class="desc">Tous les booléens SELinux et leur état</td></tr>
+        <tr><td class="cmd">getsebool <span class="v">httpd_can_network_connect</span></td><td class="desc">État d'un booléen spécifique</td></tr>
+        <tr><td class="cmd">setsebool <span class="v">httpd_can_network_connect</span> on</td><td class="desc">Active un booléen (temporaire)</td></tr>
+        <tr><td class="cmd">setsebool -P <span class="v">httpd_can_network_connect</span> on</td><td class="desc">Active de façon permanente (<code>-P</code>)</td></tr>
+        <tr><td class="cmd">setsebool -P <span class="v">httpd_use_nfs</span> on</td><td class="desc">Autorise httpd à accéder aux partages NFS</td></tr>
+        <tr><td class="cmd">semanage port -l | grep <span class="v">http</span></td><td class="desc">Ports autorisés pour le type http_port_t</td></tr>
+        <tr><td class="cmd">semanage port -a -t <span class="v">http_port_t</span> -p tcp <span class="v">8080</span></td><td class="desc">Autorise httpd à écouter sur le port 8080</td></tr>
+        <tr><td class="cmd">semanage port -d -t <span class="v">http_port_t</span> -p tcp <span class="v">8080</span></td><td class="desc">Retire l'autorisation</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Analyse des refus AVC</div>
+      <table><tbody>
+        <tr><td class="cmd">tail -f /var/log/audit/audit.log | grep <span class="v">AVC</span></td><td class="desc">Refus SELinux en temps réel</td></tr>
+        <tr><td class="cmd">ausearch -m avc -ts recent</td><td class="desc">Refus AVC récents (10 dernières minutes)</td></tr>
+        <tr><td class="cmd">ausearch -m avc -c <span class="v">httpd</span></td><td class="desc">Refus AVC du processus httpd</td></tr>
+        <tr><td class="cmd">ausearch -m avc -ts today | audit2why</td><td class="desc">Explique pourquoi l'accès a été refusé</td></tr>
+        <tr><td class="cmd">ausearch -m avc -ts today | audit2allow -M <span class="v">mypol</span></td><td class="desc">Génère un module de politique pour autoriser les refus</td></tr>
+        <tr><td class="cmd">semodule -i <span class="v">mypol.pp</span></td><td class="desc">Installe le module de politique généré</td></tr>
+        <tr><td class="cmd">sealert -a /var/log/audit/audit.log</td><td class="desc">Analyse complète avec suggestions (setroubleshoot-server)</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- SYSTÈME & STOCKAGE -->
+<div class="card">
+  <div class="card-head rocky"><span class="card-title rocky">Système · LVM · Utilisateurs</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">Supervision système</div>
+      <table><tbody>
+        <tr><td class="cmd">top</td><td class="desc">Processus temps réel, charge CPU, mémoire (touche <strong>M</strong>=trier RAM, <strong>P</strong>=CPU)</td></tr>
+        <tr><td class="cmd">htop</td><td class="desc">Version améliorée de top (nécessite épel)</td></tr>
+        <tr><td class="cmd">free -h</td><td class="desc">RAM totale, utilisée, libre, buffers/cache, swap</td></tr>
+        <tr><td class="cmd">df -h</td><td class="desc">Espace disque de toutes les partitions montées</td></tr>
+        <tr><td class="cmd">df -ih</td><td class="desc">Utilisation des inodes (saturation = plus de fichiers créables)</td></tr>
+        <tr><td class="cmd">du -sh <span class="v">/var/log</span></td><td class="desc">Taille totale d'un répertoire</td></tr>
+        <tr><td class="cmd">du -h --max-depth=1 <span class="v">/var</span></td><td class="desc">Taille des sous-répertoires directs</td></tr>
+        <tr><td class="cmd">lsblk</td><td class="desc">Disques et partitions en arborescence (sda, sda1, LVM…)</td></tr>
+        <tr><td class="cmd">lsblk -f</td><td class="desc">Ajoute le filesystem, UUID, point de montage</td></tr>
+        <tr><td class="cmd">lscpu</td><td class="desc">Architecture, nombre de CPU, sockets, threads, cache</td></tr>
+        <tr><td class="cmd">uptime</td><td class="desc">Uptime, nb d'utilisateurs, charge moyenne 1/5/15 min</td></tr>
+        <tr><td class="cmd">vmstat 1 5</td><td class="desc">Stats CPU (run/block), mémoire, swap, IO, interrupts (5 relevés à 1 s)</td></tr>
+        <tr><td class="cmd">iostat -xz 1</td><td class="desc">Stats I/O par disque : %util, await, iops (sysstat)</td></tr>
+        <tr><td class="cmd">dmesg | tail -20</td><td class="desc">Messages kernel récents (erreurs matérielles, udev)</td></tr>
+        <tr><td class="cmd">dmesg -T | grep <span class="v">error</span></td><td class="desc">Erreurs kernel avec timestamp lisible</td></tr>
+        <tr><td class="cmd">ps aux --sort=-%mem | head</td><td class="desc">Processus triés par consommation mémoire</td></tr>
+        <tr><td class="cmd">ps aux --sort=-%cpu | head</td><td class="desc">Processus triés par CPU</td></tr>
+        <tr><td class="cmd">kill -9 <span class="v">PID</span></td><td class="desc">Force l'arrêt d'un processus (SIGKILL)</td></tr>
+        <tr><td class="cmd">kill -15 <span class="v">PID</span></td><td class="desc">Arrêt propre (SIGTERM)</td></tr>
+        <tr><td class="cmd">pkill -f <span class="v">httpd</span></td><td class="desc">Arrête tous les processus dont le nom correspond</td></tr>
+        <tr><td class="cmd">nice -n <span class="v">10</span> <span class="k">commande</span></td><td class="desc">Lance une commande avec une priorité basse (nice -20 à +19)</td></tr>
+        <tr><td class="cmd">renice <span class="v">+5</span> -p <span class="v">PID</span></td><td class="desc">Change la priorité d'un processus existant</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">LVM — Logical Volume Manager</div>
+      <table><tbody>
+        <tr><td class="cmd">pvs</td><td class="desc">Physical Volumes : device, VG, taille, espace libre</td></tr>
+        <tr><td class="cmd">pvdisplay</td><td class="desc">Détails complets des PV</td></tr>
+        <tr><td class="cmd">pvcreate <span class="v">/dev/sdb</span></td><td class="desc">Initialise un disque en PV LVM</td></tr>
+        <tr><td class="cmd">vgs</td><td class="desc">Volume Groups : taille, nb de PV/LV, espace libre</td></tr>
+        <tr><td class="cmd">vgdisplay <span class="v">vg_data</span></td><td class="desc">Détails complets d'un VG</td></tr>
+        <tr><td class="cmd">vgcreate <span class="v">vg_data /dev/sdb</span></td><td class="desc">Crée un VG sur un PV</td></tr>
+        <tr><td class="cmd">vgextend <span class="v">vg_data /dev/sdc</span></td><td class="desc">Ajoute un PV à un VG existant</td></tr>
+        <tr><td class="cmd">lvs</td><td class="desc">Logical Volumes : nom, VG, taille, FS</td></tr>
+        <tr><td class="cmd">lvdisplay <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">Détails d'un LV</td></tr>
+        <tr><td class="cmd">lvcreate -L <span class="v">20G</span> -n <span class="v">lv_web</span> <span class="v">vg_data</span></td><td class="desc">Crée un LV de 20 Go dans vg_data</td></tr>
+        <tr><td class="cmd">lvcreate -l <span class="v">100%FREE</span> -n <span class="v">lv_data</span> <span class="v">vg_data</span></td><td class="desc">Utilise tout l'espace libre du VG</td></tr>
+        <tr><td class="cmd">mkfs.xfs <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">Formate le LV en XFS (FS par défaut Rocky)</td></tr>
+        <tr><td class="cmd">mkfs.ext4 <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">Formate en ext4</td></tr>
+        <tr><td class="cmd">lvextend -L +<span class="v">10G</span> <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">Agrandit le LV de 10 Go (sans toucher au FS)</td></tr>
+        <tr><td class="cmd">lvextend -l +<span class="v">100%FREE</span> <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">Agrandit le LV avec tout l'espace libre</td></tr>
+        <tr><td class="cmd">xfs_growfs <span class="v">/mountpoint</span></td><td class="desc">Étend le FS XFS après lvextend (en ligne)</td></tr>
+        <tr><td class="cmd">resize2fs <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">Étend le FS ext4 après lvextend (en ligne)</td></tr>
+        <tr><td class="cmd">lvreduce -L <span class="v">10G</span> <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">Réduit un LV <em>⚠ ext4 uniquement, démonter d'abord</em></td></tr>
+        <tr><td class="cmd">lvscan</td><td class="desc">Scan et état (ACTIVE/INACTIVE) de tous les LVs</td></tr>
+        <tr><td class="cmd">blkid</td><td class="desc">UUID, type de FS et label de toutes les partitions</td></tr>
+        <tr><td class="cmd">blkid <span class="v">/dev/vg_data/lv_web</span></td><td class="desc">UUID d'un volume spécifique (pour /etc/fstab)</td></tr>
+        <tr><td class="cmd">cat /etc/fstab</td><td class="desc">Points de montage permanents (UUID recommandé, pas /dev/sdb)</td></tr>
+        <tr><td class="cmd">mount -a</td><td class="desc">Monte tout ce qui est dans /etc/fstab non encore monté</td></tr>
+        <tr><td class="cmd">umount <span class="v">/data</span></td><td class="desc">Démonte un système de fichiers</td></tr>
+        <tr><td class="cmd">findmnt</td><td class="desc">Arborescence de tous les points de montage</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Utilisateurs, groupes & permissions</div>
+      <table><tbody>
+        <tr><td class="cmd">useradd -m -s /bin/bash -c <span class="v">"Jean Martin"</span> <span class="v">jmartin</span></td><td class="desc">Crée un utilisateur avec homedir et commentaire</td></tr>
+        <tr><td class="cmd">useradd -r -s /sbin/nologin -d /var/lib/<span class="v">app</span> <span class="v">appuser</span></td><td class="desc">Compte système sans shell (pour services)</td></tr>
+        <tr><td class="cmd">passwd <span class="v">jmartin</span></td><td class="desc">Définit ou change le mot de passe</td></tr>
+        <tr><td class="cmd">passwd -l <span class="v">jmartin</span></td><td class="desc">Verrouille le compte (ajoute ! devant le hash)</td></tr>
+        <tr><td class="cmd">passwd -u <span class="v">jmartin</span></td><td class="desc">Déverrouille le compte</td></tr>
+        <tr><td class="cmd">passwd -e <span class="v">jmartin</span></td><td class="desc">Force le changement de mdp à la prochaine connexion</td></tr>
+        <tr><td class="cmd">usermod -aG <span class="v">wheel jmartin</span></td><td class="desc">Ajoute au groupe wheel (sudo) — <code>-a</code> = append <em>sans -a efface les autres groupes</em></td></tr>
+        <tr><td class="cmd">usermod -aG <span class="v">docker,nginx jmartin</span></td><td class="desc">Ajoute à plusieurs groupes</td></tr>
+        <tr><td class="cmd">usermod -s /bin/bash <span class="v">jmartin</span></td><td class="desc">Change le shell d'un utilisateur</td></tr>
+        <tr><td class="cmd">usermod -L <span class="v">jmartin</span></td><td class="desc">Verrouille le compte (équiv. passwd -l)</td></tr>
+        <tr><td class="cmd">userdel <span class="v">jmartin</span></td><td class="desc">Supprime l'utilisateur (conserve le homedir)</td></tr>
+        <tr><td class="cmd">userdel -r <span class="v">jmartin</span></td><td class="desc">Supprime l'utilisateur ET son homedir ET son spool mail</td></tr>
+        <tr><td class="cmd">groupadd <span class="v">devops</span></td><td class="desc">Crée un nouveau groupe</td></tr>
+        <tr><td class="cmd">groupdel <span class="v">devops</span></td><td class="desc">Supprime un groupe</td></tr>
+        <tr><td class="cmd">id <span class="v">jmartin</span></td><td class="desc">UID, GID primaire, tous les groupes</td></tr>
+        <tr><td class="cmd">groups <span class="v">jmartin</span></td><td class="desc">Liste des groupes d'un utilisateur</td></tr>
+        <tr><td class="cmd">w</td><td class="desc">Utilisateurs connectés et ce qu'ils font</td></tr>
+        <tr><td class="cmd">last</td><td class="desc">Historique des connexions (de /var/log/wtmp)</td></tr>
+        <tr><td class="cmd">lastfail</td><td class="desc">Tentatives de connexion échouées</td></tr>
+        <tr><td class="cmd">chmod <span class="v">755</span> <span class="k">fichier</span></td><td class="desc">rwxr-xr-x : 7=rwx(user) 5=r-x(group) 5=r-x(others)</td></tr>
+        <tr><td class="cmd">chmod <span class="v">600</span> <span class="k">~/.ssh/id_rsa</span></td><td class="desc">rw------- : clé privée SSH (sécurité)</td></tr>
+        <tr><td class="cmd">chmod u+x,g-w,o-rwx <span class="k">script.sh</span></td><td class="desc">Notation symbolique</td></tr>
+        <tr><td class="cmd">chmod -R <span class="v">755</span> <span class="k">/var/www/html</span></td><td class="desc">Récursif sur un répertoire</td></tr>
+        <tr><td class="cmd">chown <span class="v">apache:apache</span> <span class="k">/var/www/html</span></td><td class="desc">Change propriétaire et groupe</td></tr>
+        <tr><td class="cmd">chown -R <span class="v">jmartin:</span> <span class="k">/home/jmartin</span></td><td class="desc">Récursif (groupe = groupe primaire de l'utilisateur)</td></tr>
+        <tr><td class="cmd">umask <span class="v">022</span></td><td class="desc">Masque de création (777-022=755 dirs, 666-022=644 files)</td></tr>
+        <tr><td class="cmd">visudo</td><td class="desc">Édite /etc/sudoers avec validation syntaxique (évite le lockout)</td></tr>
+        <tr><td class="cmd">sudo -l -U <span class="v">jmartin</span></td><td class="desc">Droits sudo d'un utilisateur</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- SSH + CRON + UTILITAIRES -->
+<div class="card">
+  <div class="card-head rocky"><span class="card-title rocky">SSH · Cron · Shell</span></div>
+  <div class="card-body">
+    <div class="sec">
+      <div class="sec-title">SSH — Client</div>
+      <table><tbody>
+        <tr><td class="cmd">ssh <span class="v">user@host</span></td><td class="desc">Connexion SSH basique (port 22)</td></tr>
+        <tr><td class="cmd">ssh -p <span class="v">2222</span> <span class="v">user@host</span></td><td class="desc">Port SSH alternatif</td></tr>
+        <tr><td class="cmd">ssh -i <span class="v">~/.ssh/id_ed25519</span> <span class="v">user@host</span></td><td class="desc">Clé privée spécifique</td></tr>
+        <tr><td class="cmd">ssh -J <span class="v">bastion</span> <span class="v">user@host-interne</span></td><td class="desc">Connexion via un bastion (ProxyJump)</td></tr>
+        <tr><td class="cmd">ssh -L <span class="v">8080:localhost:80</span> <span class="v">user@host</span></td><td class="desc">Tunnel local : localhost:8080 → host:80</td></tr>
+        <tr><td class="cmd">ssh -R <span class="v">2222:localhost:22</span> <span class="v">user@host</span></td><td class="desc">Tunnel inverse : host:2222 → localhost:22</td></tr>
+        <tr><td class="cmd">ssh -D <span class="v">1080</span> <span class="v">user@host</span></td><td class="desc">Proxy SOCKS5 dynamique (tout le trafic via SSH)</td></tr>
+        <tr><td class="cmd">ssh -N -f <span class="v">user@host</span> -L <span class="v">...</span></td><td class="desc">Tunnel en arrière-plan sans shell (<code>-N -f</code>)</td></tr>
+        <tr><td class="cmd">ssh -o StrictHostKeyChecking=no <span class="v">user@host</span></td><td class="desc">Désactive la vérification de clé hôte <em>⚠ automatisation</em></td></tr>
+        <tr><td class="cmd">scp <span class="v">fichier.txt user@host:/chemin/</span></td><td class="desc">Copie un fichier vers un hôte distant</td></tr>
+        <tr><td class="cmd">scp -r <span class="v">user@host:/remote/dir ./local</span></td><td class="desc">Copie récursive depuis un hôte distant</td></tr>
+        <tr><td class="cmd">rsync -avz <span class="v">src/ user@host:dst/</span></td><td class="desc">Synchronisation SSH : rapide, reprend les transferts</td></tr>
+        <tr><td class="cmd">rsync -avz --delete <span class="v">src/ user@host:dst/</span></td><td class="desc">Supprime les fichiers absents de la source</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">SSH — Clés & serveur</div>
+      <table><tbody>
+        <tr><td class="cmd">ssh-keygen -t ed25519 -C <span class="v">"jmartin@srv"</span></td><td class="desc">Génère une paire de clés ED25519 (recommandé, plus court que RSA)</td></tr>
+        <tr><td class="cmd">ssh-keygen -t rsa -b 4096</td><td class="desc">Paire RSA 4096 bits</td></tr>
+        <tr><td class="cmd">ssh-copy-id -i <span class="v">~/.ssh/id_ed25519.pub user@host</span></td><td class="desc">Copie la clé publique dans authorized_keys du serveur distant</td></tr>
+        <tr><td class="cmd">cat ~/.ssh/id_ed25519.pub >> <span class="v">~/.ssh/authorized_keys</span></td><td class="desc">Ajout manuel d'une clé publique</td></tr>
+        <tr><td class="cmd">chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys</td><td class="desc">Permissions SSH strictement requises</td></tr>
+        <tr><td class="cmd">vi /etc/ssh/sshd_config</td><td class="desc">Config du serveur SSH</td></tr>
+        <tr><td class="cmd">  PermitRootLogin <span class="k">no</span></td><td class="desc">Interdit la connexion directe root <em>recommandé</em></td></tr>
+        <tr><td class="cmd">  PasswordAuthentication <span class="k">no</span></td><td class="desc">Clés uniquement (après avoir déployé les clés)</td></tr>
+        <tr><td class="cmd">  Port <span class="v">2222</span></td><td class="desc">Change le port SSH (penser à ouvrir firewalld)</td></tr>
+        <tr><td class="cmd">  AllowUsers <span class="v">jmartin ops</span></td><td class="desc">Whitelist des utilisateurs autorisés</td></tr>
+        <tr><td class="cmd">  MaxAuthTries <span class="v">3</span></td><td class="desc">Tentatives max par connexion</td></tr>
+        <tr><td class="cmd">sshd -t</td><td class="desc">Vérifie la syntaxe de sshd_config sans redémarrer</td></tr>
+        <tr><td class="cmd">systemctl reload sshd</td><td class="desc">Applique la config sans couper les sessions actives</td></tr>
+      </tbody></table>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Crontab</div>
+      <table><tbody>
+        <tr><td class="cmd">crontab -e</td><td class="desc">Édite le crontab de l'utilisateur courant</td></tr>
+        <tr><td class="cmd">crontab -l</td><td class="desc">Affiche le crontab de l'utilisateur courant</td></tr>
+        <tr><td class="cmd">crontab -u <span class="v">jmartin</span> -e</td><td class="desc">Édite le crontab d'un autre utilisateur (root requis)</td></tr>
+        <tr><td class="cmd">crontab -r</td><td class="desc">Supprime le crontab <em>⚠ irréversible</em></td></tr>
+        <tr><td class="cmd">cat /etc/crontab</td><td class="desc">Crontab système (inclut un champ utilisateur)</td></tr>
+        <tr><td class="cmd">ls /etc/cron.{hourly,daily,weekly,monthly}/</td><td class="desc">Scripts systemd exécutés périodiquement</td></tr>
+      </tbody></table>
+      <div style="margin-top:7px;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--ink3);margin-bottom:4px;border-bottom:1px dashed var(--rule);padding-bottom:2px;">MIN  HEURE  JOUR  MOIS  JOURSET  commande</div>
+        <div class="cron-row"><span class="cron-field">*/5</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-desc">Toutes les 5 minutes</span></div>
+        <div class="cron-row"><span class="cron-field">0</span><span class="cron-field">*/2</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-desc">Toutes les 2 heures (pile)</span></div>
+        <div class="cron-row"><span class="cron-field">30</span><span class="cron-field">6</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-field">1-5</span><span class="cron-desc">Lun–Ven à 06h30</span></div>
+        <div class="cron-row"><span class="cron-field">0</span><span class="cron-field">2</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-desc">Chaque nuit à 02h00</span></div>
+        <div class="cron-row"><span class="cron-field">0</span><span class="cron-field">0</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-field">0</span><span class="cron-desc">Dimanche minuit</span></div>
+        <div class="cron-row"><span class="cron-field">0</span><span class="cron-field">0</span><span class="cron-field">1</span><span class="cron-field star">*</span><span class="cron-field star">*</span><span class="cron-desc">1er du mois à minuit</span></div>
+        <div class="cron-row"><span class="cron-field">0</span><span class="cron-field">0</span><span class="cron-field">1</span><span class="cron-field">1</span><span class="cron-field star">*</span><span class="cron-desc">1er janvier à minuit</span></div>
+        <div class="cron-row"><span class="cron-field">@reboot</span><span class="cron-field star" style="flex:1"></span><span class="cron-desc">Au démarrage du système</span></div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-title">Shell — Utilitaires incontournables</div>
+      <table><tbody>
+        <tr><td class="cmd">grep -r <span class="v">"Listen 80"</span> <span class="k">/etc/httpd/</span></td><td class="desc">Recherche récursive dans tous les fichiers d'un dossier</td></tr>
+        <tr><td class="cmd">grep -v <span class="v">"^#"</span> <span class="k">/etc/fstab</span> | grep -v <span class="v">"^$"</span></td><td class="desc">Filtre commentaires et lignes vides</td></tr>
+        <tr><td class="cmd">grep -n <span class="v">"error"</span> <span class="k">/var/log/httpd/error_log</span></td><td class="desc">Affiche le numéro de ligne des correspondances</td></tr>
+        <tr><td class="cmd">grep -c <span class="v">"Failed"</span> <span class="k">/var/log/secure</span></td><td class="desc">Compte le nombre de lignes correspondantes</td></tr>
+        <tr><td class="cmd">sed -i 's/<span class="v">ServerName.*</span>/<span class="k">ServerName srv01.lab.local</span>/g' <span class="k">/etc/httpd/conf/httpd.conf</span></td><td class="desc">Remplace une ligne dans un fichier (édition en place)</td></tr>
+        <tr><td class="cmd">sed -n '<span class="v">10,20</span>p' <span class="k">fichier</span></td><td class="desc">Affiche uniquement les lignes 10 à 20</td></tr>
+        <tr><td class="cmd">awk -F: '{print $1,$3}' /etc/passwd</td><td class="desc">Affiche login et UID séparés par ":"</td></tr>
+        <tr><td class="cmd">awk '{sum+=$1} END {print sum}' <span class="k">fichier</span></td><td class="desc">Somme d'une colonne</td></tr>
+        <tr><td class="cmd">sort -k2 -n <span class="k">fichier</span></td><td class="desc">Trie par colonne 2 numériquement</td></tr>
+        <tr><td class="cmd">sort | uniq -c | sort -rn</td><td class="desc">Compte les occurrences et trie par fréquence</td></tr>
+        <tr><td class="cmd">cut -d: -f1,7 /etc/passwd</td><td class="desc">Extrait les champs 1 et 7 (délimiteur ":")</td></tr>
+        <tr><td class="cmd">wc -l <span class="k">fichier</span></td><td class="desc">Compte les lignes d'un fichier</td></tr>
+        <tr><td class="cmd">tail -f <span class="v">/var/log/messages</span></td><td class="desc">Suivi de log en temps réel</td></tr>
+        <tr><td class="cmd">tail -f <span class="v">/var/log/secure</span></td><td class="desc">Logs d'authentification (SSH, sudo)</td></tr>
+        <tr><td class="cmd">find <span class="v">/</span> -name <span class="v">"*.conf"</span> -type f -mtime -<span class="v">7</span></td><td class="desc">Fichiers .conf modifiés dans les 7 derniers jours</td></tr>
+        <tr><td class="cmd">find <span class="v">/home</span> -size +<span class="v">100M</span></td><td class="desc">Fichiers de plus de 100 Mo</td></tr>
+        <tr><td class="cmd">find <span class="v">/</span> -perm <span class="v">-4000</span> -type f</td><td class="desc">Fichiers SUID (audit sécurité)</td></tr>
+        <tr><td class="cmd">tar -czf <span class="v">/backup/conf_$(date +%Y%m%d).tar.gz</span> <span class="k">/etc</span></td><td class="desc">Archive datée de /etc</td></tr>
+        <tr><td class="cmd">tar -xzf <span class="v">archive.tar.gz</span> -C <span class="v">/destination</span></td><td class="desc">Extraction dans un répertoire cible</td></tr>
+        <tr><td class="cmd">tar -tzf <span class="v">archive.tar.gz</span></td><td class="desc">Liste le contenu sans extraire</td></tr>
+        <tr><td class="cmd">timedatectl</td><td class="desc">Date, heure, fuseau horaire, NTP status</td></tr>
+        <tr><td class="cmd">timedatectl set-timezone <span class="v">Europe/Paris</span></td><td class="desc">Définit le fuseau horaire</td></tr>
+        <tr><td class="cmd">timedatectl set-ntp true</td><td class="desc">Active la synchronisation NTP</td></tr>
+        <tr><td class="cmd">hostnamectl set-hostname <span class="v">srv-web01.lab.local</span></td><td class="desc">Définit le FQDN (effective immédiatement)</td></tr>
+        <tr><td class="cmd">echo "<span class="v">192.168.1.5 srv-db01</span>" >> /etc/hosts</td><td class="desc">Entrée DNS locale statique</td></tr>
+        <tr><td class="cmd">cat /etc/os-release</td><td class="desc">Version et nom de la distribution (Rocky 9.x)</td></tr>
+        <tr><td class="cmd">uname -r</td><td class="desc">Version du kernel en cours</td></tr>
+        <tr><td class="cmd">uname -a</td><td class="desc">Architecture, hostname, version kernel complète</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+
+</div><!-- /grid rocky row 2 -->
+</div><!-- /page -->
+
+<div style="background:var(--ink);color:#555;text-align:center;padding:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1px;">
+  CATALYST 2960-S · CISCO 2921 · ROCKY LINUX EL9 — MÉMENTO TECHNIQUE DÉTAILLÉ 2026
+</div>
+
+<script>
+(function() {
+  const input = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('searchClear');
+  const countEl = document.getElementById('searchCount');
+  const noResults = document.getElementById('noResults');
+  const noResultsTerm = document.getElementById('noResultsTerm');
+
+  // Tag all data rows on init
+  document.querySelectorAll('table tbody tr').forEach(tr => {
+    tr.classList.add('cmd-row');
+    // Store original HTML for reset
+    tr.querySelectorAll('td').forEach(td => {
+      td.dataset.orig = td.innerHTML;
+    });
+  });
+
+  function escapeReg(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function highlight(html, re) {
+    // Only highlight text nodes, avoid inside tags
+    return html.replace(/>([^<]+)</g, (match, text) => {
+      return '>' + text.replace(re, m => `<mark class="hl">${m}</mark>`) + '<';
+    });
+  }
+
+  function search(query) {
+    const q = query.trim();
+
+    // Reset all
+    document.querySelectorAll('td[data-orig]').forEach(td => {
+      td.innerHTML = td.dataset.orig;
+    });
+    document.querySelectorAll('tr.cmd-row').forEach(tr => tr.classList.remove('hidden'));
+    document.querySelectorAll('.sec').forEach(sec => sec.classList.remove('all-hidden'));
+    document.querySelectorAll('.card').forEach(card => card.classList.remove('search-empty'));
+
+    if (!q) {
+      clearBtn.style.display = 'none';
+      countEl.textContent = '';
+      noResults.style.display = 'none';
+      document.querySelectorAll('.search-shortcut').forEach(b => {
+        if (b.dataset.q === q) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+      return;
+    }
+
+    clearBtn.style.display = 'block';
+
+    const re = new RegExp(escapeReg(q), 'gi');
+    let totalVisible = 0;
+
+    // Filter rows
+    document.querySelectorAll('tr.cmd-row').forEach(tr => {
+      const text = Array.from(tr.querySelectorAll('td')).map(td => td.textContent).join(' ');
+      if (re.test(text)) {
+        tr.classList.remove('hidden');
+        totalVisible++;
+        // Highlight
+        re.lastIndex = 0;
+        tr.querySelectorAll('td').forEach(td => {
+          if (td.dataset.orig) {
+            td.innerHTML = highlight(td.dataset.orig, re);
+          }
+        });
+      } else {
+        tr.classList.add('hidden');
+      }
+      re.lastIndex = 0;
+    });
+
+    // Hide empty sections
+    document.querySelectorAll('.sec').forEach(sec => {
+      const rows = sec.querySelectorAll('tr.cmd-row');
+      if (rows.length > 0) {
+        const allHidden = Array.from(rows).every(r => r.classList.contains('hidden'));
+        if (allHidden) sec.classList.add('all-hidden');
+      }
+    });
+
+    // Dim empty cards
+    document.querySelectorAll('.card').forEach(card => {
+      const rows = card.querySelectorAll('tr.cmd-row');
+      if (rows.length > 0) {
+        const allHidden = Array.from(rows).every(r => r.classList.contains('hidden'));
+        if (allHidden) card.classList.add('search-empty');
+      }
+    });
+
+    countEl.innerHTML = totalVisible > 0
+      ? `<span>${totalVisible}</span> résultat${totalVisible > 1 ? 's' : ''}`
+      : '';
+
+    noResults.style.display = totalVisible === 0 ? 'block' : 'none';
+    noResultsTerm.textContent = q;
+  }
+
+  input.addEventListener('input', () => {
+    search(input.value);
+    document.querySelectorAll('.search-shortcut').forEach(b => {
+      b.classList.toggle('active', b.dataset.q === input.value.trim().toLowerCase());
+    });
+  });
+
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    search('');
+    input.focus();
+    document.querySelectorAll('.search-shortcut').forEach(b => b.classList.remove('active'));
+  });
+
+  document.querySelectorAll('.search-shortcut').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.dataset.q;
+      const isActive = btn.classList.contains('active');
+      input.value = isActive ? '' : q;
+      search(input.value);
+      document.querySelectorAll('.search-shortcut').forEach(b => b.classList.remove('active'));
+      if (!isActive) btn.classList.add('active');
+      input.focus();
+    });
+  });
+
+  // Keyboard shortcut: / to focus search
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && document.activeElement !== input) {
+      e.preventDefault();
+      input.focus();
+      input.select();
+    }
+    if (e.key === 'Escape' && document.activeElement === input) {
+      input.value = '';
+      search('');
+      input.blur();
+    }
+  });
+})();
+</script>
+</body>
+</html>

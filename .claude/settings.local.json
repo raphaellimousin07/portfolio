@@ -1,7 +1,4 @@
 {
-  "enabledPlugins": {
-    "frontend-design@claude-code-marketplace": true
-  },
   "permissions": {
     "allow": [
       "Bash(git add:*)",
@@ -24,7 +21,16 @@
       "Bash(git rm:*)",
       "WebFetch(domain:claude.com)",
       "Skill(update-config)",
-      "Skill(update-config:*)"
+      "Skill(update-config:*)",
+      "Bash(python3 -c:*)",
+      "Bash(python -c \"print\\(''ok''\\)\")",
+      "Bash(py -3 -c \"print\\(''ok''\\)\")",
+      "Bash(node -e \"console.log\\(''ok''\\)\")",
+      "Bash(where python:*)",
+      "Bash(node c:/tmp/decode_test.js)"
     ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-code-marketplace": true
   }
 }
