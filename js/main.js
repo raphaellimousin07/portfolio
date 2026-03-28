@@ -350,3 +350,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// ─── EASTER EGG : TAPER "MEMENTO" ───
+let inputSequence = "";
+const targetWord = "memento";
+
+document.addEventListener('keydown', (e) => {
+    // On récupère la touche pressée (en minuscule pour éviter les soucis de Maj)
+    inputSequence += e.key.toLowerCase();
+
+    // On ne garde que les X derniers caractères pour correspondre à la longueur de "memento"
+    inputSequence = inputSequence.slice(-targetWord.length);
+
+    // Si la séquence correspond au mot cible
+    if (inputSequence === targetWord) {
+        // Optionnel : petit effet visuel avant de partir
+        document.body.style.transition = "filter 0.5s ease";
+        document.body.style.filter = "invert(1) hue-rotate(180deg)";
+        
+        setTimeout(() => {
+            // Redirection vers ton fichier memento
+            // Note : Vérifie bien le chemin (../html/memento.html ou html/memento.html selon ta structure)
+            window.location.href = "memento.html"; 
+        }, 500);
+    }
+});
