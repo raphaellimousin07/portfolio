@@ -35,7 +35,7 @@
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 55%, #34d399 100%);
+  background: linear-gradient(135deg, #4facfe 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -71,7 +71,7 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
   margin-bottom: 1.2rem;
-  background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 55%, #34d399 100%);
+  background: linear-gradient(135deg, #4facfe 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -85,18 +85,21 @@
 
 /* ─── UN ONGLET (accordion item) ─── */
 .acc-item {
-  background: rgba(17, 19, 24, 0.55);
+  background-image:
+    linear-gradient(rgba(17,19,24,0.96), rgba(17,19,24,0.96)),
+    var(--gradient);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.06);
+  border: 1.5px solid transparent;
   border-radius: 10px;
   overflow: hidden;
-  transition: border-color 0.25s, box-shadow 0.25s;
+  transition: box-shadow 0.25s;
 }
 
 .acc-item.open {
-  border-color: rgba(59,130,246,0.25);
-  box-shadow: 0 4px 20px rgba(59,130,246,0.08);
+  box-shadow: 0 4px 22px rgba(79,172,254,0.12);
 }
 
 /* Bouton trigger */
@@ -119,11 +122,14 @@
 .acc-num {
   font-family: 'DM Mono', monospace;
   font-size: 0.7rem;
-  color: var(--blue);
   letter-spacing: 0.1em;
-  background: var(--blue-dim);
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   padding: 0.25rem 0.55rem;
   border-radius: 4px;
+  border: 1px solid rgba(79,172,254,0.2);
   flex-shrink: 0;
 }
 
@@ -131,8 +137,11 @@
   font-family: 'Syne', sans-serif;
   font-size: 0.95rem;
   font-weight: 700;
-  color: var(--text);
   flex: 1;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .acc-arrow {
@@ -578,19 +587,19 @@
   flex-shrink: 0;
 }
 .synth-ctx.form {
-  background: rgba(59,130,246,0.12);
-  border: 1px solid rgba(59,130,246,0.22);
-  color: #60a5fa;
+  color: #4facfe;
+  background: rgba(79,172,254,0.1);
+  border: 1px solid rgba(79,172,254,0.25);
 }
 .synth-ctx.stage1 {
-  background: rgba(167,139,250,0.12);
-  border: 1px solid rgba(167,139,250,0.22);
-  color: #a78bfa;
+  color: #818cf8;
+  background: rgba(129,140,248,0.1);
+  border: 1px solid rgba(129,140,248,0.28);
 }
 .synth-ctx.stage2 {
-  background: rgba(52,211,153,0.12);
-  border: 1px solid rgba(52,211,153,0.22);
-  color: #34d399;
+  color: #c084fc;
+  background: rgba(192,132,252,0.1);
+  border: 1px solid rgba(192,132,252,0.28);
 }
 
 .synth-title {

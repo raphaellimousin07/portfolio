@@ -1,19 +1,68 @@
 // ─── CURSEUR PERSONNALISÉ (desktop only) ───
+let cursor = null;
 if (!window.matchMedia('(pointer: coarse)').matches) {
-  const cursor = document.createElement('div');
+  cursor = document.createElement('div');
   cursor.className = 'cursor';
   document.body.appendChild(cursor);
   document.body.classList.add('has-cursor');
+  document.documentElement.style.cursor = 'none';
 
   document.addEventListener('mousemove', e => {
     cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    cursor.style.top  = e.clientY + 'px';
   });
 
   document.querySelectorAll('a, button, .acc-trigger').forEach(el => {
     el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
     el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
   });
+}
+
+// ─── MIDDLE CLICK AUTO-SCROLL ───
+{
+  let active = false, originY = 0, curY = 0, originEl = null, raf = null;
+
+  // Capture phase : empêche le curseur natif du navigateur
+  window.addEventListener('mousedown', e => {
+    if (e.button === 1) e.preventDefault();
+  }, { passive: false, capture: true });
+
+  document.addEventListener('mousedown', e => {
+    if (e.button !== 1) { if (active) stop(); return; }
+    e.preventDefault();
+    active ? stop() : start(e);
+  }, { passive: false });
+
+  document.addEventListener('mousemove', e => { if (active) curY = e.clientY; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && active) stop(); });
+
+  function start(e) {
+    active = true;
+    originY = curY = e.clientY;
+    originEl = document.createElement('div');
+    originEl.className = 'mid-scroll-origin';
+    originEl.style.left = e.clientX + 'px';
+    originEl.style.top  = e.clientY + 'px';
+    document.body.appendChild(originEl);
+    document.body.style.cursor = 'none';
+    cursor?.classList.add('mid-scroll');
+    raf = requestAnimationFrame(loop);
+  }
+
+  function stop() {
+    active = false;
+    cancelAnimationFrame(raf);
+    originEl?.remove(); originEl = null;
+    document.body.style.cursor = '';
+    cursor?.classList.remove('mid-scroll');
+  }
+
+  function loop() {
+    if (!active) return;
+    const delta = (curY - originY) * 0.055;
+    if (Math.abs(delta) > 0.3) window.scrollBy({ top: delta, behavior: 'instant' });
+    raf = requestAnimationFrame(loop);
+  }
 }
 
 // ─── HAMBURGER NAV ───
