@@ -351,47 +351,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ─── EASTER EGG MULTI-PLATEFORME (PC & MOBILE) ───
-
-// 1. Version Clavier (PC)
-let inputSequence = "";
-const targetWord = "memento";
-
-document.addEventListener('keydown', (e) => {
-    inputSequence += e.key.toLowerCase();
-    inputSequence = inputSequence.slice(-targetWord.length);
-    if (inputSequence === targetWord) activateMemento();
-});
-
-// 2. Version Tactile (Mobile) : Triple tap sur le logo
-const navLogo = document.querySelector('.nav-logo');
-let tapCount = 0;
-let tapTimeout;
-
-if (navLogo) {
-    navLogo.style.userSelect = 'none';
-    navLogo.style.webkitUserSelect = 'none';
-    navLogo.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        tapCount++;
-        clearTimeout(tapTimeout);
-        tapTimeout = setTimeout(() => { tapCount = 0; }, 500);
-        if (tapCount === 3) { activateMemento(); tapCount = 0; }
-    }, { passive: false });
-    navLogo.addEventListener('click', (e) => {
-        e.preventDefault();
-        tapCount++;
-        clearTimeout(tapTimeout);
-        tapTimeout = setTimeout(() => { tapCount = 0; }, 500);
-        if (tapCount === 3) { activateMemento(); tapCount = 0; }
-    });
-}
-
-// 3. Fonction de redirection commune
-function activateMemento() {
-    document.body.style.transition = "all 0.5s ease";
-    document.body.style.filter = "invert(1) hue-rotate(180deg)";
-    setTimeout(() => {
-        window.location.href = "/html/Memento.html";
-    }, 600);
-}
+// Easter egg dans easter-egg.js (chargé séparément sur toutes les pages)
