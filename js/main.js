@@ -351,27 +351,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ─── EASTER EGG : TAPER "MEMENTO" ───
+// ─── EASTER EGG MULTI-PLATEFORME (PC & MOBILE) ───
+
+// 1. Version Clavier (PC)
 let inputSequence = "";
 const targetWord = "memento";
 
 document.addEventListener('keydown', (e) => {
-    // On récupère la touche pressée (en minuscule pour éviter les soucis de Maj)
     inputSequence += e.key.toLowerCase();
-
-    // On ne garde que les X derniers caractères pour correspondre à la longueur de "memento"
     inputSequence = inputSequence.slice(-targetWord.length);
-
-    // Si la séquence correspond au mot cible
-    if (inputSequence === targetWord) {
-        // Optionnel : petit effet visuel avant de partir
-        document.body.style.transition = "filter 0.5s ease";
-        document.body.style.filter = "invert(1) hue-rotate(180deg)";
-        
-        setTimeout(() => {
-            // Redirection vers ton fichier memento
-            // Note : Vérifie bien le chemin (../html/memento.html ou html/memento.html selon ta structure)
-            window.location.href = "html/memento.html"; 
-        }, 500);
-    }
+    if (inputSequence === targetWord) activateMemento();
 });
+
+// 2. Version Tactile (Mobile) : Triple tap sur le logo
+const navLogo = document.querySelector('.nav-logo');
+let tapCount = 0;
+let tapTimeout;
+
+if (navLogo) {
+    navLogo.style.userSelect = 'none';
+    navLogo.style.webkitUserSelect = 'none';
+    navLogo.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        tapCount++;
+        clearTimeout(tapTimeout);
+        tapTimeout = setTimeout(() => { tapCount = 0; }, 500);
+        if (tapCount === 3) {
+            activateMemento();
+            tapCount = 0;
+        }
+    }, { passive: false });
+}
+
+// 3. Fonction de redirection commune
+function activateMemento() {
+    // Effet visuel d'activation
+    document.body.style.transition = "all 0.5s ease";
+    document.body.style.filter = "invert(1) hue-rotate(180deg)";
+    
+    setTimeout(() => {
+        window.location.href = "Memento.html";
+    }, 600);
+}
