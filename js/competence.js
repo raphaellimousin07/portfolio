@@ -133,18 +133,6 @@ document.querySelectorAll('.sub-acc-trigger').forEach(trigger => {
   });
 });
 
-// Ouvre le premier par défaut
-document.addEventListener('DOMContentLoaded', () => {
-  const first = document.querySelector('.acc-item');
-  if (first) {
-    first.classList.add('open');
-    first.querySelector('.acc-body').style.maxHeight = '9999px';
-    first.querySelectorAll('.pdf-viewer-container[data-src]').forEach(container => {
-      loadPDF(container, container.dataset.src);
-      container.dataset.loaded = 'true';
-    });
-  }
-});
 
 // ─── PDF.JS VIEWER ───
 const PDFJS_CDN = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
