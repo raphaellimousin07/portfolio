@@ -138,9 +138,10 @@ td { padding:3px 4px; vertical-align:top; }
 /* ── SEARCH RESULTS ── */
 tr.cmd-row { transition:opacity .1s; }
 tr.cmd-row.hidden { display:none; }
+.sec.sec-hidden { display:none; }
 mark.hl { background:var(--code-txt); color:#1A1714; border-radius:2px; padding:0 1px; font-style:normal; font-weight:700; }
-.card.search-empty .card-body { opacity:.25; }
-.card.search-empty .card-head { opacity:.3; }
+.card.search-empty { display:none; }
+.cat-bar.cat-hidden { display:none; }
 .sec.all-hidden .sec-title { display:none; }
 #noResults { display:none; text-align:center; padding:48px; font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--text3); }
 #noResults span { color:var(--text); font-weight:700; }
@@ -1246,102 +1247,115 @@ mark.hl { background:var(--code-txt); color:#1A1714; border-radius:2px; padding:
 
 <script>
 (function() {
-  const input = document.getElementById('searchInput');
+  const input    = document.getElementById('searchInput');
   const clearBtn = document.getElementById('searchClear');
-  const countEl = document.getElementById('searchCount');
-  const noResults = document.getElementById('noResults');
+  const countEl  = document.getElementById('searchCount');
+  const noResults     = document.getElementById('noResults');
   const noResultsTerm = document.getElementById('noResultsTerm');
 
-  // Tag all data rows on init
+  // Init : sauvegarde le HTML original de chaque cellule
   document.querySelectorAll('table tbody tr').forEach(tr => {
     tr.classList.add('cmd-row');
-    // Store original HTML for reset
-    tr.querySelectorAll('td').forEach(td => {
-      td.dataset.orig = td.innerHTML;
-    });
+    tr.querySelectorAll('td').forEach(td => { td.dataset.orig = td.innerHTML; });
   });
 
-  function escapeReg(s) {
-    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  function escapeReg(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+  // Supprime les accents pour la comparaison (réseau → reseau)
+  function norm(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); }
+
+  // Surligne un token (regex) dans du HTML en évitant les balises
+  function highlight(html, re) {
+    return html.replace(/>([^<]+)</g, (_, text) =>
+      '>' + text.replace(re, m => `<mark class="hl">${m}</mark>`) + '<'
+    );
   }
 
-  function highlight(html, re) {
-    // Only highlight text nodes, avoid inside tags
-    return html.replace(/>([^<]+)</g, (match, text) => {
-      return '>' + text.replace(re, m => `<mark class="hl">${m}</mark>`) + '<';
-    });
+  function reset() {
+    document.querySelectorAll('td[data-orig]').forEach(td => { td.innerHTML = td.dataset.orig; });
+    document.querySelectorAll('tr.cmd-row').forEach(tr => { tr.classList.remove('hidden'); tr.style.opacity = ''; });
+    document.querySelectorAll('.sec').forEach(s => s.classList.remove('sec-hidden'));
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('search-empty'));
+    document.querySelectorAll('.cat-bar').forEach(b => b.classList.remove('cat-hidden'));
   }
 
   function search(query) {
-    const q = query.trim();
+    reset();
+    // Tokenise : "show vlan" → ["show","vlan"]
+    const tokens = query.trim().split(/\s+/).filter(Boolean);
 
-    // Reset all
-    document.querySelectorAll('td[data-orig]').forEach(td => {
-      td.innerHTML = td.dataset.orig;
-    });
-    document.querySelectorAll('tr.cmd-row').forEach(tr => tr.classList.remove('hidden'));
-    document.querySelectorAll('.sec').forEach(sec => sec.classList.remove('all-hidden'));
-    document.querySelectorAll('.card').forEach(card => card.classList.remove('search-empty'));
-
-    if (!q) {
+    if (!tokens.length) {
       clearBtn.style.display = 'none';
       countEl.textContent = '';
       noResults.style.display = 'none';
-      document.querySelectorAll('.search-shortcut').forEach(b => {
-        if (b.dataset.q === q) b.classList.add('active');
-        else b.classList.remove('active');
-      });
       return;
     }
 
     clearBtn.style.display = 'block';
+    const normTokens = tokens.map(norm);
+    let total = 0;
 
-    const re = new RegExp(escapeReg(q), 'gi');
-    let totalVisible = 0;
-
-    // Filter rows
     document.querySelectorAll('tr.cmd-row').forEach(tr => {
-      const text = Array.from(tr.querySelectorAll('td')).map(td => td.textContent).join(' ');
-      if (re.test(text)) {
-        tr.classList.remove('hidden');
-        totalVisible++;
-        // Highlight
-        re.lastIndex = 0;
-        tr.querySelectorAll('td').forEach(td => {
-          if (td.dataset.orig) {
-            td.innerHTML = highlight(td.dataset.orig, re);
-          }
-        });
-      } else {
+      const cmdText  = tr.querySelector('.cmd')?.textContent  || '';
+      const descText = tr.querySelector('.desc')?.textContent || '';
+      const fullNorm = norm(cmdText) + ' ' + norm(descText);
+
+      // Tous les tokens doivent matcher (ET logique)
+      if (!normTokens.every(t => fullNorm.includes(t))) {
         tr.classList.add('hidden');
+        return;
       }
-      re.lastIndex = 0;
+
+      total++;
+
+      // Scoring : si tous les tokens sont dans la commande → pleine opacité
+      // sinon (match uniquement dans la description) → légèrement atténué
+      const cmdNorm = norm(cmdText);
+      if (!normTokens.every(t => cmdNorm.includes(t))) tr.style.opacity = '0.55';
+
+      // Surlignage : on applique chaque token sur le HTML original
+      tr.querySelectorAll('td').forEach(td => {
+        if (!td.dataset.orig) return;
+        let html = td.dataset.orig;
+        tokens.forEach(t => {
+          const re = new RegExp(escapeReg(t), 'gi');
+          html = highlight(html, re);
+        });
+        td.innerHTML = html;
+      });
     });
 
-    // Hide empty sections
+    // Masque les sous-sections sans résultat
     document.querySelectorAll('.sec').forEach(sec => {
       const rows = sec.querySelectorAll('tr.cmd-row');
-      if (rows.length > 0) {
-        const allHidden = Array.from(rows).every(r => r.classList.contains('hidden'));
-        if (allHidden) sec.classList.add('all-hidden');
-      }
+      if (rows.length && Array.from(rows).every(r => r.classList.contains('hidden')))
+        sec.classList.add('sec-hidden');
     });
 
-    // Dim empty cards
+    // Atténue les cartes sans résultat
     document.querySelectorAll('.card').forEach(card => {
       const rows = card.querySelectorAll('tr.cmd-row');
-      if (rows.length > 0) {
-        const allHidden = Array.from(rows).every(r => r.classList.contains('hidden'));
-        if (allHidden) card.classList.add('search-empty');
-      }
+      if (rows.length && Array.from(rows).every(r => r.classList.contains('hidden')))
+        card.classList.add('search-empty');
     });
 
-    countEl.innerHTML = totalVisible > 0
-      ? `<span>${totalVisible}</span> résultat${totalVisible > 1 ? 's' : ''}`
-      : '';
+    // Cache les cat-bars dont toutes les cartes associées sont vides
+    document.querySelectorAll('.cat-bar').forEach(bar => {
+      const cards = [];
+      let el = bar.nextElementSibling;
+      while (el && !el.classList.contains('cat-bar')) {
+        if (el.classList.contains('card')) cards.push(el);
+        el = el.nextElementSibling;
+      }
+      if (cards.length && cards.every(c => c.classList.contains('search-empty')))
+        bar.classList.add('cat-hidden');
+    });
 
-    noResults.style.display = totalVisible === 0 ? 'block' : 'none';
-    noResultsTerm.textContent = q;
+    countEl.innerHTML = total > 0
+      ? `<span>${total}</span> résultat${total > 1 ? 's' : ''}`
+      : '';
+    noResults.style.display = total === 0 ? 'block' : 'none';
+    noResultsTerm.textContent = query.trim();
   }
 
   input.addEventListener('input', () => {
@@ -1352,10 +1366,9 @@ mark.hl { background:var(--code-txt); color:#1A1714; border-radius:2px; padding:
   });
 
   clearBtn.addEventListener('click', () => {
-    input.value = '';
-    search('');
-    input.focus();
+    input.value = ''; search('');
     document.querySelectorAll('.search-shortcut').forEach(b => b.classList.remove('active'));
+    input.focus();
   });
 
   document.querySelectorAll('.search-shortcut').forEach(btn => {
@@ -1370,18 +1383,9 @@ mark.hl { background:var(--code-txt); color:#1A1714; border-radius:2px; padding:
     });
   });
 
-  // Keyboard shortcut: / to focus search
   document.addEventListener('keydown', e => {
-    if (e.key === '/' && document.activeElement !== input) {
-      e.preventDefault();
-      input.focus();
-      input.select();
-    }
-    if (e.key === 'Escape' && document.activeElement === input) {
-      input.value = '';
-      search('');
-      input.blur();
-    }
+    if (e.key === '/' && document.activeElement !== input) { e.preventDefault(); input.focus(); input.select(); }
+    if (e.key === 'Escape' && document.activeElement === input) { input.value = ''; search(''); input.blur(); }
   });
 })();
 </script>
