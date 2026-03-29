@@ -378,7 +378,8 @@ if (navLogo) {
         tapTimeout = setTimeout(() => { tapCount = 0; }, 500);
         if (tapCount === 3) { activateMemento(); tapCount = 0; }
     }, { passive: false });
-    navLogo.addEventListener('click', () => {
+    navLogo.addEventListener('click', (e) => {
+        e.preventDefault();
         tapCount++;
         clearTimeout(tapTimeout);
         tapTimeout = setTimeout(() => { tapCount = 0; }, 500);
@@ -391,6 +392,6 @@ function activateMemento() {
     document.body.style.transition = "all 0.5s ease";
     document.body.style.filter = "invert(1) hue-rotate(180deg)";
     setTimeout(() => {
-        window.location.href = "Memento.html";
+        window.location.href = "/html/Memento.html";
     }, 600);
 }

@@ -57,6 +57,23 @@ nav {
   align-items: center;
 }
 
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-home {
+  display: flex;
+  align-items: center;
+  color: var(--text2);
+  transition: color .2s;
+}
+
+.nav-home:hover {
+  color: var(--text);
+}
+
 .nav-logo {
   font-weight: 700;
   font-size: 1.2rem;
