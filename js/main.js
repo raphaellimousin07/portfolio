@@ -385,10 +385,8 @@ if (navLogo) {
 
 // 3. Fonction de redirection commune
 function activateMemento() {
-    // Effet visuel d'activation
     document.body.style.transition = "all 0.5s ease";
     document.body.style.filter = "invert(1) hue-rotate(180deg)";
-    
     setTimeout(() => {
         window.location.href = "Memento.html";
     }, 600);
