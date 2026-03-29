@@ -376,11 +376,14 @@ if (navLogo) {
         tapCount++;
         clearTimeout(tapTimeout);
         tapTimeout = setTimeout(() => { tapCount = 0; }, 500);
-        if (tapCount === 3) {
-            activateMemento();
-            tapCount = 0;
-        }
+        if (tapCount === 3) { activateMemento(); tapCount = 0; }
     }, { passive: false });
+    navLogo.addEventListener('click', () => {
+        tapCount++;
+        clearTimeout(tapTimeout);
+        tapTimeout = setTimeout(() => { tapCount = 0; }, 500);
+        if (tapCount === 3) { activateMemento(); tapCount = 0; }
+    });
 }
 
 // 3. Fonction de redirection commune
