@@ -69,5 +69,11 @@
 
   <script src="/js/competence.js"></script>
   <script src="/js/easter-egg.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('cv-viewer');
+      if (container) loadPDF(container, container.dataset.src);
+    });
+  </script>
 </body>
 </html>
