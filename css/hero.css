@@ -1,15 +1,12 @@
 /* ─── HERO ─── */
 .hero {
   min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding-top: 5rem;
   padding-bottom: 3rem;
 }
-
-.hero-left { display: flex; flex-direction: column; }
 
 .hero-subtitle {
   background: var(--gradient);
