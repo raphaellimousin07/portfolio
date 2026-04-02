@@ -53,15 +53,35 @@
 
     <!-- ─── HERO ─── -->
     <section class="hero" id="about">
-      <div class="reveal">
+      <div class="hero-left reveal">
         <p class="hero-subtitle mono">// BTS SIO — SISR — 2ème année</p>
         <h1 class="hero-title">Raphaël<br><em>Limousin</em></h1>
         <p class="hero-desc">
-          Étudiant spécialisé en infrastructure, systèmes et réseaux.<br />Étudiant en 2eme année de BTS SIO en option SISR au lycée Gaston Berger.
+          Étudiant spécialisé en infrastructure, systèmes et réseaux.<br/>
+          2ème année de BTS SIO option SISR au lycée Gaston Berger.
         </p>
         <div class="hero-ctas">
           <a href="#contact" class="btn btn-primary">Me contacter</a>
           <a href="#skills" class="btn btn-ghost">Mon profil</a>
+        </div>
+      </div>
+      <div class="hero-right reveal">
+        <div class="hero-terminal">
+          <div class="hero-terminal-bar">
+            <span class="ht-dot"></span><span class="ht-dot"></span><span class="ht-dot"></span>
+            <span class="ht-filename">whoami.conf</span>
+          </div>
+          <div class="hero-terminal-body">
+            <p><span class="ht-key">user</span><span class="ht-sep"> : </span><span class="ht-val">Raphaël Limousin</span></p>
+            <p><span class="ht-key">formation</span><span class="ht-sep"> : </span><span class="ht-val">BTS SIO · SISR</span></p>
+            <p><span class="ht-key">année</span><span class="ht-sep"> : </span><span class="ht-val">2 / 2</span></p>
+            <p class="ht-divider"></p>
+            <p><span class="ht-key">stack</span><span class="ht-sep"> : </span><span class="ht-val">Cisco · Linux · Windows</span></p>
+            <p><span class="ht-key">réseau</span><span class="ht-sep"> : </span><span class="ht-val">VLAN · DHCP · Routage</span></p>
+            <p><span class="ht-key">virt</span><span class="ht-sep"> : </span><span class="ht-val">VMware · Proxmox</span></p>
+            <p class="ht-divider"></p>
+            <p><span class="ht-key">status</span><span class="ht-sep"> : </span><span class="ht-green">● disponible 2026</span></p>
+          </div>
         </div>
       </div>
     </section>
@@ -73,37 +93,43 @@
 
         <div class="skill-card reveal">
           <span class="my-icon">🖥️</span>
-          <p class="skill-cat">Administration</p>
-          <h3 class="skill-name">Systèmes</h3>
-          <div class="skill-tags">
-            <span class="tag">Windows Server</span>
-            <span class="tag">Active Directory</span>
-            <span class="tag">Linux (Rocky 9-10)</span>
-            <span class="tag">GPO</span>
+          <div class="skill-card-body">
+            <p class="skill-cat">Administration</p>
+            <h3 class="skill-name">Systèmes</h3>
+            <div class="skill-tags">
+              <span class="tag">Windows Server</span>
+              <span class="tag">Active Directory</span>
+              <span class="tag">Linux (Rocky 9-10)</span>
+              <span class="tag">GPO</span>
+            </div>
           </div>
         </div>
 
         <div class="skill-card reveal">
           <span class="my-icon">🌐</span>
-          <p class="skill-cat">Infrastructure</p>
-          <h3 class="skill-name">Réseaux</h3>
-          <div class="skill-tags">
-            <span class="tag">Cisco IOS</span>
-            <span class="tag">VLAN</span>
-            <span class="tag">DHCP / DNS</span>
-            <span class="tag">Routage / Switching</span>
+          <div class="skill-card-body">
+            <p class="skill-cat">Infrastructure</p>
+            <h3 class="skill-name">Réseaux</h3>
+            <div class="skill-tags">
+              <span class="tag">Cisco IOS</span>
+              <span class="tag">VLAN</span>
+              <span class="tag">DHCP / DNS</span>
+              <span class="tag">Routage / Switching</span>
+            </div>
           </div>
         </div>
 
         <div class="skill-card reveal">
           <span class="my-icon">☁️</span>
-          <p class="skill-cat">Virtualisation</p>
-          <h3 class="skill-name">Cloud & Hyperviseurs</h3>
-          <div class="skill-tags">
-            <span class="tag">VMware ESXi</span>
-            <span class="tag">VMware Workstation</span>
-            <span class="tag">Docker</span>
-            <span class="tag">Azure</span>
+          <div class="skill-card-body">
+            <p class="skill-cat">Virtualisation</p>
+            <h3 class="skill-name">Cloud & Hyperviseurs</h3>
+            <div class="skill-tags">
+              <span class="tag">VMware ESXi</span>
+              <span class="tag">VMware Workstation</span>
+              <span class="tag">Docker</span>
+              <span class="tag">Azure</span>
+            </div>
           </div>
         </div>
 
@@ -121,9 +147,11 @@
           <svg class="competence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
           </svg>
-          <h3 class="competence-title">Gérer le patrimoine informatique</h3>
-          <p class="competence-desc">Recenser et gérer les ressources numériques, appliquer les normes et standards, gérer les habilitations et assurer la continuité de service.</p>
-          <span class="competence-arrow">Voir la compétence →</span>
+          <div class="competence-body">
+            <h3 class="competence-title">Gérer le patrimoine informatique</h3>
+            <p class="competence-desc">Recenser et gérer les ressources numériques, appliquer les normes et standards, gérer les habilitations et assurer la continuité de service.</p>
+          </div>
+          <span class="competence-arrow">→</span>
         </a>
 
         <a href="competences/1-2.html" class="competence-card reveal">
@@ -131,9 +159,11 @@
           <svg class="competence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="2" y="7" width="6" height="10" rx="1"/><rect x="9" y="4" width="6" height="16" rx="1"/><rect x="16" y="2" width="6" height="18" rx="1"/>
           </svg>
-          <h3 class="competence-title">Répondre aux incidents et aux demandes d'assistance et d'évolution</h3>
-          <p class="competence-desc">Traiter et suivre les demandes d'assistance concernant les services réseau, système et applicatifs.</p>
-          <span class="competence-arrow">Voir la compétence →</span>
+          <div class="competence-body">
+            <h3 class="competence-title">Répondre aux incidents et aux demandes d'assistance et d'évolution</h3>
+            <p class="competence-desc">Traiter et suivre les demandes d'assistance concernant les services réseau, système et applicatifs.</p>
+          </div>
+          <span class="competence-arrow">→</span>
         </a>
 
         <a href="competences/1-3.html" class="competence-card reveal">
@@ -141,9 +171,11 @@
           <svg class="competence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><circle cx="17" cy="17" r="3"/><path d="M17 14v-2M17 20v2M14 17h-2M20 17h2"/>
           </svg>
-          <h3 class="competence-title">Développer la présence en ligne de l'organisation</h3>
-          <p class="competence-desc">Valoriser l'image numérique de l'organisation et participer à l'évolution des services en ligne.</p>
-          <span class="competence-arrow">Voir la compétence →</span>
+          <div class="competence-body">
+            <h3 class="competence-title">Développer la présence en ligne de l'organisation</h3>
+            <p class="competence-desc">Valoriser l'image numérique de l'organisation et participer à l'évolution des services en ligne.</p>
+          </div>
+          <span class="competence-arrow">→</span>
         </a>
 
         <a href="competences/1-4.html" class="competence-card reveal">
@@ -151,9 +183,11 @@
           <svg class="competence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
-          <h3 class="competence-title">Travailler en mode projet</h3>
-          <p class="competence-desc">Analyser les objectifs, planifier les activités et évaluer les indicateurs de suivi des projets.</p>
-          <span class="competence-arrow">Voir la compétence →</span>
+          <div class="competence-body">
+            <h3 class="competence-title">Travailler en mode projet</h3>
+            <p class="competence-desc">Analyser les objectifs, planifier les activités et évaluer les indicateurs de suivi des projets.</p>
+          </div>
+          <span class="competence-arrow">→</span>
         </a>
 
         <a href="competences/1-5.html" class="competence-card reveal">
@@ -161,9 +195,11 @@
           <svg class="competence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/><rect x="2" y="13" width="9" height="9" rx="1"/><path d="M13 17h3m3 0h1M16 13v3m0 3v1"/>
           </svg>
-          <h3 class="competence-title">Mettre à disposition des utilisateurs un service informatique</h3>
-          <p class="competence-desc">Déployer et intégrer un service, puis accompagner les utilisateurs lors de sa mise en place.</p>
-          <span class="competence-arrow">Voir la compétence →</span>
+          <div class="competence-body">
+            <h3 class="competence-title">Mettre à disposition des utilisateurs un service informatique</h3>
+            <p class="competence-desc">Déployer et intégrer un service, puis accompagner les utilisateurs lors de sa mise en place.</p>
+          </div>
+          <span class="competence-arrow">→</span>
         </a>
 
         <a href="competences/1-6.html" class="competence-card reveal">
@@ -171,9 +207,11 @@
           <svg class="competence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
           </svg>
-          <h3 class="competence-title">Organiser son développement professionnel</h3>
-          <p class="competence-desc">Gérer sa veille technologique, son identité professionnelle et développer ses compétences.</p>
-          <span class="competence-arrow">Voir la compétence →</span>
+          <div class="competence-body">
+            <h3 class="competence-title">Organiser son développement professionnel</h3>
+            <p class="competence-desc">Gérer sa veille technologique, son identité professionnelle et développer ses compétences.</p>
+          </div>
+          <span class="competence-arrow">→</span>
         </a>
 
       </div>

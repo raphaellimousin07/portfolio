@@ -12,7 +12,7 @@
   .skill-card:nth-child(3) { grid-column: span 1; }
 }
 
-/* ─── GLASSMORPHISM RAFFINÉ ─── */
+/* ─── CARTE ─── */
 .skill-card {
   background-image:
     linear-gradient(rgba(14,17,26,0.6), rgba(14,17,26,0.6)),
@@ -24,49 +24,57 @@
   border: 1px solid rgba(255,255,255,0.07);
   border-left: 2px solid transparent;
   border-radius: var(--radius);
-  padding: 2.5rem 2rem;
+  padding: 2rem 2rem;
   box-shadow: 0 4px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   position: relative;
   overflow: hidden;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
 
 .skill-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
   border-color: rgba(79,172,254,0.28);
   box-shadow: 0 14px 44px rgba(79,172,254,0.1), inset 0 1px 0 rgba(255,255,255,0.08);
 }
 
 /* ─── ICÔNE ─── */
 .my-icon {
-  font-size: 3rem;
+  font-size: 2rem;
   display: inline-block;
-  margin-bottom: 1rem;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
   transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .skill-card:hover .my-icon {
-  transform: scale(1.25) rotate(4deg);
+  transform: scale(1.2) rotate(4deg);
+}
+
+.skill-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
 }
 
 .skill-cat {
   color: var(--muted);
-  margin-bottom: 0.45rem;
-  font-size: 0.78rem;
+  margin-bottom: 0.2rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-family: 'DM Mono', monospace;
 }
 
 .skill-name {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.1rem;
   color: var(--text);
 }
 
@@ -75,7 +83,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
-  justify-content: center;
 }
 
 .tag {
@@ -85,7 +92,7 @@
   background-clip: text;
   padding: 0.28rem 0.7rem;
   border-radius: 20px;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   border: 1px solid rgba(79,172,254,0.18);
   font-family: 'DM Mono', monospace;
   letter-spacing: 0.03em;
@@ -98,7 +105,7 @@
   inset: 0;
   background: radial-gradient(
     circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(79,172,254,0.08) 0%,
+    rgba(79,172,254,0.07) 0%,
     transparent 62%
   );
   border-radius: inherit;
@@ -108,4 +115,3 @@
 }
 
 .skill-card:hover::after { opacity: 1; }
-
