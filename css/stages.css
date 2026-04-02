@@ -1,108 +1,112 @@
-/* ─── STAGES ─── */
+/* ─── STAGES — TIMELINE ─── */
 .stages-grid {
-  display: grid;
-  gap: 2rem;
-  grid-template-columns: 1fr;
-}
-
-@media (min-width: 640px) {
-  .stages-grid { grid-template-columns: repeat(2, 1fr); }
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--border);
+  margin-left: 0.5rem;
 }
 
 .stage-card {
-  background-image:
-    linear-gradient(rgba(14,17,26,0.6), rgba(14,17,26,0.6)),
-    linear-gradient(to bottom, #4facfe, #8b5cf6);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-left: 2px solid transparent;
-  border-radius: var(--radius);
-  padding: 2rem;
-  box-shadow: 0 4px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  position: relative;
+  padding: 0 0 3rem 2.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
   text-decoration: none;
   display: block;
   cursor: pointer;
-  position: relative;
-  overflow: hidden;
+  transition: none;
 }
 
-.stage-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 50px rgba(79,172,254,0.12), inset 0 1px 0 rgba(255,255,255,0.08);
-}
+.stage-card:last-child { padding-bottom: 0; }
 
-/* Spotlight */
-.stage-card::after {
+/* Dot sur la ligne */
+.stage-card::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(79,172,254,0.07) 0%,
-    transparent 62%
-  );
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s;
+  left: -0.45rem;
+  top: 0.35rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-bright);
+  border: 2px solid var(--bg);
+  transition: background 0.22s;
 }
 
-.stage-card:hover::after { opacity: 1; }
+.stage-card:hover::before {
+  background: var(--blue);
+}
+
+/* Supprime le spotlight */
+.stage-card::after { display: none; }
 
 .stage-year {
   font-family: 'DM Mono', monospace;
-  font-size: 0.82rem;
-  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.6rem;
   background: var(--gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: 0.06em;
 }
 
 .stage-title {
   font-family: 'DM Serif Display', serif;
   font-weight: 400;
-  font-size: 1.4rem;
-  letter-spacing: 0;
-  margin-bottom: 0.25rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.2rem;
   color: var(--text);
+  transition: color 0.22s;
 }
+
+.stage-card:hover .stage-title { color: var(--accent); }
 
 .stage-company {
   color: var(--muted);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   margin-bottom: 1rem;
-  font-weight: 600;
+  font-family: 'DM Mono', monospace;
 }
 
 .stage-tasks {
-  list-style-position: inside;
-  color: #8a96b0;
-  margin-top: 1rem;
+  list-style: none;
+  color: var(--muted);
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .stage-tasks li {
-  font-size: 0.88rem;
+  font-size: 0.87rem;
   line-height: 1.65;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.stage-tasks li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--border-bright);
 }
 
 .stage-arrow {
   display: inline-block;
-  margin-top: 1.2rem;
+  margin-top: 1rem;
   font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--accent);
+  font-size: 0.74rem;
+  color: var(--muted);
   letter-spacing: 0.04em;
-  transition: letter-spacing 0.22s;
+  transition: color 0.22s, letter-spacing 0.22s;
 }
 
 .stage-card:hover .stage-arrow {
-  letter-spacing: 0.12em;
+  color: var(--accent);
+  letter-spacing: 0.1em;
 }
