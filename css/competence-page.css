@@ -640,6 +640,60 @@
   border-radius: 8px;
 }
 
+/* ─── SUB-ACCORDION (imbriqué) ─── */
+.sub-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.sub-acc-item {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  overflow: hidden;
+}
+
+.sub-acc-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255,255,255,0.02);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+.sub-acc-trigger:hover { background: rgba(255,255,255,0.04); }
+.sub-acc-item.open .sub-acc-trigger { background: rgba(255,255,255,0.04); }
+
+.sub-acc-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex: 1;
+  color: var(--text);
+}
+
+.sub-acc-item.open > .sub-acc-trigger .acc-arrow {
+  transform: rotate(180deg);
+  stroke: var(--accent);
+}
+
+.sub-acc-body {
+  display: none;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+.sub-acc-item.open .sub-acc-body {
+  display: block;
+}
+
+.sub-acc-inner {
+  padding: 1.2rem;
+}
+
 /* ─── TABLEAU DE SYNTHÈSE (réalisations professionnelles) ─── */
 .synth-list {
   display: flex;
