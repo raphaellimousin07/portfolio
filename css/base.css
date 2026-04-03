@@ -2,16 +2,16 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:            #08090f;
-  --surface:       #0e1018;
-  --surface-hover: #141822;
-  --border:        #1c2136;
-  --border-bright: #2b3450;
+  --bg:            #071526;
+  --surface:       #1a3560;
+  --surface-hover: #224272;
+  --border:        #2e5490;
+  --border-bright: #3f6fbb;
   --blue:          #4f9cf9;
-  --blue-dim:      #1a2d4f;
+  --blue-dim:      #122244;
   --blue-glow:     rgba(79,156,249,.18);
-  --text:          #dce3f0;
-  --muted:         #5c6a88;
+  --text:          #ffffff;
+  --muted:         #9ab8d8;
   --accent:        #7eb4ff;
   --radius:        12px;
   --gradient:      linear-gradient(135deg, #4facfe 0%, #8b5cf6 100%);
@@ -25,6 +25,7 @@ body {
   background-size: 32px 32px;
   color: var(--text);
   font-family: 'Syne', sans-serif;
+  font-size: 18px;
   overflow-x: hidden;
   line-height: 1.65;
   position: relative;
@@ -46,7 +47,7 @@ a:hover { color: #fff; }
 }
 
 section {
-  padding: 6.5rem 0;
+  padding: 8rem 0;
   border-bottom: 1px solid var(--border);
   position: relative;
 }
@@ -55,7 +56,7 @@ section {
 section[data-num]::before { content: none; }
 
 .section-title {
-  font-size: clamp(2rem, 3.2vw, 2.6rem);
+  font-size: clamp(2.2rem, 3.5vw, 3rem);
   margin-bottom: 3rem;
   color: var(--text);
   display: flex;
