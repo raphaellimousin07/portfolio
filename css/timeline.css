@@ -1,0 +1,116 @@
+.timeline {
+  position: relative;
+  padding-left: 3rem;
+  margin-top: 1rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.45rem;
+  top: 0.5rem;
+  bottom: 1rem;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--blue), transparent);
+}
+
+.tl-item {
+  position: relative;
+  margin-bottom: 2.4rem;
+}
+
+.tl-item:last-child {
+  margin-bottom: 0;
+}
+
+.tl-dot {
+  position: absolute;
+  left: -3rem;
+  top: 0.45rem;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--blue);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px var(--blue);
+  translate: 0.15rem 0;
+}
+
+.tl-item.tl-current .tl-dot {
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), 0 0 12px 3px rgba(79, 156, 249, 0.4);
+  animation: tl-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tl-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--accent), 0 0 12px 3px rgba(79,156,249,.4); }
+  50%       { box-shadow: 0 0 0 4px var(--accent), 0 0 20px 6px rgba(79,156,249,.2); }
+}
+
+.tl-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--blue);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.tl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.8rem;
+  transition: border-color 0.2s;
+}
+
+.tl-item.tl-current .tl-card {
+  border-color: var(--border-bright);
+}
+
+.tl-card:hover {
+  border-color: var(--border-bright);
+}
+
+.tl-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.25rem;
+}
+
+.tl-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+}
+
+.tl-desc {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.tl-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.tl-badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 99px;
+  background: var(--blue-dim);
+  color: var(--blue);
+  border: 1px solid var(--border);
+}
+
+.tl-badge.badge-accent {
+  background: rgba(79, 156, 249, 0.15);
+  color: var(--accent);
+  border-color: var(--border-bright);
+}
