@@ -27,7 +27,18 @@
       "Bash(py -3 -c \"print\\(''ok''\\)\")",
       "Bash(node -e \"console.log\\(''ok''\\)\")",
       "Bash(where python:*)",
-      "Bash(node c:/tmp/decode_test.js)"
+      "Bash(node c:/tmp/decode_test.js)",
+      "Bash(node --check c:/Users/raphy/portfolio/js/main.js)",
+      "WebSearch",
+      "WebFetch(domain:ay-belbachir.github.io)",
+      "WebFetch(domain:coursbtssio.fr)",
+      "WebFetch(domain:jccolinbtssio.wordpress.com)",
+      "Bash(sed 's/.*id=\"//')",
+      "Bash(sed 's/\".*//')",
+      "Bash(grep -r 'href=\"/' c:/Users/raphy/portfolio/html/*.html)",
+      "WebFetch(domain:bts-sio-informatique.fr)",
+      "Bash(read f:*)",
+      "Bash(grep -v \"^$\")"
     ]
   },
   "enabledPlugins": {
