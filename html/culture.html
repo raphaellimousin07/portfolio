@@ -7,7 +7,7 @@
 @media(prefers-color-scheme:dark){:root{--bg:#141420;--bg2:#1c1c2c;--bg3:#242438;--t:#e2e2f0;--t2:#8080a0;--t3:#505068;--bd:rgba(255,255,255,.08);--co:#1e1e30;--wb:#2c1800;--wc:#ffcc70;--tb:#001a10;--tc:#70d4a0}}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--t);font-size:15px;line-height:1.65}
 header{background:#534AB7;color:#fff;padding:1rem;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-header h1{font-size:1.1rem;font-weight:600}header small{font-size:.75rem;opacity:.75}
+header h1{font-size:1.05rem;font-weight:600;line-height:1.3}header small{font-size:.75rem;opacity:.75}
 .toc{background:var(--bg2);border-bottom:.5px solid var(--bd);padding:.5rem .75rem;overflow-x:auto;white-space:nowrap}
 .toc a{color:#534AB7;text-decoration:none;font-size:.8rem;margin-right:.75rem;font-weight:500}
 main{padding:.75rem;max-width:800px;margin:0 auto}
@@ -31,12 +31,13 @@ td{padding:.35rem .5rem;border:.5px solid var(--bd);vertical-align:top}
 .ok{color:#27500a;font-weight:500}.no{color:#993c1d;font-weight:500}.k{color:#534AB7;font-weight:500}
 .step{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:.88rem}
 .nb{min-width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #534AB7;color:#534AB7}
+.theme-badge{display:inline-block;background:#534AB7;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:10px;font-weight:600;margin-bottom:.4rem}
 footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 @media(max-width:500px){.g2{grid-template-columns:1fr}}</style></head>
 <body>
-<header><h1>Culture générale et expression</h1><small>BTS SIO SISR &middot; E1 — Épreuve écrite</small></header>
-<div class="toc"><a href="#synthese">Synthèse de documents — méthode</a><a href="#ecriture">Écriture personnelle — méthode</a><a href="#connecteurs">Connecteurs logiques — tous les registres</a><a href="#themes">Thèmes fréquents — arguments & exemples</a></div>
-<main><details id="synthese" open><summary>Synthèse de documents — méthode<span class="arr">&#8250;</span></summary><div class="db">
+<header><h1>Culture générale et expression</h1><small>BTS SIO SISR &middot; E1 — Thème 2026 : Les animaux et nous</small></header>
+<div class="toc"><a href="#methode_synthese">Méthode — Synthèse de documents</a><a href="#methode_ep">Méthode — Écriture personnelle</a><a href="#connecteurs">Connecteurs logiques — tous les registres</a><a href="#theme_imaginer">Thème — AXE 1 : Imaginer l'animal (représentations culturelles & artistiques)</a><a href="#theme_connaitre">Thème — AXE 2 : Connaître l'animal (sciences, philosophie, éthologie)</a><a href="#theme_comprendre">Thème — AXE 3 : Comprendre nos relations aux animaux (éthique, droits, cohabitation)</a><a href="#mots_cles">Mots-clés officiels & problématiques d'examen</a></div>
+<main><details id="methode_synthese" open><summary>Méthode — Synthèse de documents<span class="arr">&#8250;</span></summary><div class="db">
 <h4>Avant de lire</h4>
 <ul>
 <li>Lire les <strong>questions d'abord</strong> pour cibler la lecture</li>
@@ -49,17 +50,17 @@ footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 </ul>
 <h4>Rédaction</h4>
 <ul>
-<li><strong>Introduction</strong> : présenter le corpus + problématique + annonce du plan</li>
-<li><strong>Corps</strong> : reformuler + citer (doc. 1) + connecteurs logiques</li>
+<li><strong>Intro</strong> : présenter le corpus + problématique + annonce du plan</li>
+<li><strong>Corps</strong> : reformuler + citer <strong>(doc. 1)</strong> + connecteurs logiques</li>
 <li><strong>Conclusion</strong> : bilan synthétique &mdash; <span class="no">pas de nouvel argument</span></li>
 </ul>
-<div class="warn">⚠ Ne jamais copier/coller des phrases des documents !</div>
-<div class="tip">⏱ Temps conseillé : 2h sur les 4h pour la synthèse. Réserver 15 min pour la relecture.</div>
+<div class="warn">&bull; Ne jamais copier/coller des phrases des documents<br>&bull; Toujours identifier la nature du document (photo, article, statistique, extrait littéraire...)</div>
+<div class="tip">Temps conseillé : 2h sur les 4h pour la synthèse. Réserver 15 min pour la relecture.</div>
 </div></details>
-<details id="ecriture" ><summary>Écriture personnelle — méthode<span class="arr">&#8250;</span></summary><div class="db">
+<details id="methode_ep" ><summary>Méthode — Écriture personnelle<span class="arr">&#8250;</span></summary><div class="db">
 <h4>Analyser la question</h4>
 <ul>
-<li>Dégager une <strong>problématique</strong> claire (question à laquelle on répond)</li>
+<li>Dégager une <strong>problématique</strong> claire — question à laquelle on répond</li>
 <li>Définir les termes importants du sujet</li>
 </ul>
 <h4>Plan dialectique (le plus courant)</h4>
@@ -69,36 +70,145 @@ footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 <li><strong>Synthèse</strong> : position nuancée, dépassement du conflit</li>
 </ul>
 <h4>Structure de chaque partie</h4>
-<ul><li>1 argument + 1 <strong>exemple concret</strong> + transition vers la partie suivante</li></ul>
-<h4>Introduction (obligatoire)</h4>
-<ul><li>Accroche &rarr; définition des termes &rarr; problématique &rarr; annonce du plan</li></ul>
-<h4>Conclusion (obligatoire)</h4>
-<ul><li>Réponse à la problématique + ouverture vers un autre angle</li></ul>
-<div class="tip">Longueur visée : 400-500 mots. Garder 15 min pour la relecture orthographe.</div>
+<ul><li>1 argument + 1 <strong>exemple concret issu du thème</strong> + transition</li></ul>
+<h4>Introduction</h4>
+<ul><li>Accroche (en lien avec le thème) &rarr; définition &rarr; problématique &rarr; annonce du plan</li></ul>
+<h4>Conclusion</h4>
+<ul><li>Réponse à la problématique + ouverture (ex : biodiversité, IA et animaux, transhumanisme...)</li></ul>
+<div class="tip">Longueur : ~400-500 mots. Toujours ancrer les exemples dans le thème "Les animaux et nous".</div>
 </div></details>
 <details id="connecteurs" ><summary>Connecteurs logiques — tous les registres<span class="arr">&#8250;</span></summary><div class="db">
-<h4>Addition</h4><p style="font-size:.9rem;color:var(--t2);margin:.2rem 0">de plus &middot; en outre &middot; par ailleurs &middot; de surcroît &middot; qui plus est &middot; également</p>
-<h4>Opposition / Restriction</h4><p style="font-size:.9rem;color:var(--t2);margin:.2rem 0">cependant &middot; néanmoins &middot; or &middot; en revanche &middot; toutefois &middot; pourtant &middot; mais</p>
-<h4>Cause</h4><p style="font-size:.9rem;color:var(--t2);margin:.2rem 0">en effet &middot; car &middot; puisque &middot; étant donné que &middot; du fait que &middot; vu que</p>
-<h4>Conséquence</h4><p style="font-size:.9rem;color:var(--t2);margin:.2rem 0">ainsi &middot; donc &middot; c'est pourquoi &middot; dès lors &middot; de ce fait &middot; si bien que</p>
-<h4>Illustration</h4><p style="font-size:.9rem;color:var(--t2);margin:.2rem 0">par exemple &middot; c'est le cas de &middot; notamment &middot; à l'image de &middot; tel est le cas</p>
-<h4>Concession</h4><p style="font-size:.9rem;color:var(--t2);margin:.2rem 0">certes &middot; il est vrai que &middot; bien que (+ subj.) &middot; même si &middot; quoique</p>
-<h4>Conclusion / Bilan</h4><p style="font-size:.9rem;color:var(--t2);margin:.2rem 0">en définitive &middot; en somme &middot; pour conclure &middot; au total &middot; finalement &middot; ainsi</p>
+<h4>Addition</h4><p style="font-size:.9rem;color:var(--t2);line-height:1.9;margin:.2rem 0">de plus &middot; en outre &middot; par ailleurs &middot; de surcroît &middot; qui plus est &middot; également</p>
+<h4>Opposition / Restriction</h4><p style="font-size:.9rem;color:var(--t2);line-height:1.9;margin:.2rem 0">cependant &middot; néanmoins &middot; or &middot; en revanche &middot; toutefois &middot; pourtant &middot; mais</p>
+<h4>Cause</h4><p style="font-size:.9rem;color:var(--t2);line-height:1.9;margin:.2rem 0">en effet &middot; car &middot; puisque &middot; étant donné que &middot; du fait que &middot; vu que</p>
+<h4>Conséquence</h4><p style="font-size:.9rem;color:var(--t2);line-height:1.9;margin:.2rem 0">ainsi &middot; donc &middot; c'est pourquoi &middot; dès lors &middot; de ce fait &middot; si bien que</p>
+<h4>Illustration</h4><p style="font-size:.9rem;color:var(--t2);line-height:1.9;margin:.2rem 0">par exemple &middot; c'est le cas de &middot; notamment &middot; à l'image de &middot; tel est le cas</p>
+<h4>Concession</h4><p style="font-size:.9rem;color:var(--t2);line-height:1.9;margin:.2rem 0">certes &middot; il est vrai que &middot; bien que (+ subj.) &middot; même si &middot; quoique</p>
+<h4>Conclusion / Bilan</h4><p style="font-size:.9rem;color:var(--t2);line-height:1.9;margin:.2rem 0">en définitive &middot; en somme &middot; pour conclure &middot; au total &middot; finalement &middot; ainsi</p>
 </div></details>
-<details id="themes" ><summary>Thèmes fréquents — arguments & exemples<span class="arr">&#8250;</span></summary><div class="db">
-<h4>Intelligence artificielle & emploi</h4>
-<ul><li>Automatisation, ChatGPT, déqualification vs nouveaux métiers, requalification, emploi de service</li></ul>
-<h4>Données personnelles & vie privée</h4>
-<ul><li>RGPD, GAFAM, Cambridge Analytica, surveillance de masse, consentement éclairé</li></ul>
-<h4>Réseaux sociaux</h4>
-<ul><li>Fake news, bulle de filtre, addiction, cyberharcèlement, influence politique, désinformation</li></ul>
-<h4>Fracture numérique</h4>
-<ul><li>Accès inégal, déserts numériques, seniors, handicap, alphabétisation numérique</li></ul>
-<h4>Écologie du numérique</h4>
-<ul><li>Empreinte carbone des data centers, obsolescence programmée, e-déchets, sobriété numérique</li></ul>
-<h4>Cybersécurité & société</h4>
-<ul><li>Ransomware (hôpitaux), souveraineté numérique, dépendance aux GAFAM, confiance numérique</li></ul>
-<div class="tip">Avoir 1-2 exemples chiffrés ou d'actualité par thème. Montrer que vous connaissez l'actualité.</div>
+<details id="theme_imaginer" ><summary>Thème — AXE 1 : Imaginer l'animal (représentations culturelles & artistiques)<span class="arr">&#8250;</span></summary><div class="db">
+<div class="theme-badge">Les animaux et nous &mdash; Session 2026</div>
+<h4>L'animal dans les mythes et les religions</h4>
+<ul>
+<li>Animaux sacrés : le bœuf Apis (Égypte), l'aigle de Zeus (Grèce), la vache sacrée (hindouisme)</li>
+<li>Chamanisme : l'animal totem comme intermédiaire entre monde humain et monde spirituel</li>
+<li>Divinités zoomorphes : Anubis (chacal), Ganesh (éléphant), Loup de Romulus</li>
+</ul>
+<h4>L'animal dans la littérature</h4>
+<ul>
+<li><strong>Fables de La Fontaine</strong> : animaux moralisateurs &mdash; le lion roi, le renard rusé, l'agneau innocent &mdash; l'animal comme miroir des vices humains</li>
+<li><strong>Ésope</strong> : fables antiques fondatrices du genre</li>
+<li><strong>Kafka &mdash; La Métamorphose</strong> : Gregor Samsa se transforme en insecte &rarr; la métamorphose comme déshumanisation, aliénation</li>
+<li><strong>Orwell &mdash; La Ferme des animaux</strong> : allégorie politique, les animaux représentent des classes sociales</li>
+<li><strong>Bestiaires médiévaux</strong> : licorne (pureté), dragon (mal), pélican (sacrifice)</li>
+</ul>
+<h4>Le motif de la métamorphose</h4>
+<ul>
+<li><strong>Ovide &mdash; Les Métamorphoses</strong> : transformations humain &harr; animal, porosité des frontières</li>
+<li>La métamorphose révèle une <strong>ambivalence des hiérarchies</strong> humain/animal</li>
+<li><strong>Anthropomorphisme</strong> : prêter des caractéristiques humaines aux animaux (Bambi, Dumbo, Ratatouille)</li>
+</ul>
+<h4>L'animal dans les arts visuels</h4>
+<ul>
+<li>Peintures rupestres de Lascaux : premières représentations animales, 17 000 ans</li>
+<li>Miyazaki : l'animal comme force de la nature (Princesse Mononoké, Mon Voisin Totoro)</li>
+<li>L'animal comme symbole : le loup (sauvagerie, liberté), l'agneau (innocence, sacrifice)</li>
+</ul>
+<div class="warn">Expression-clé : "L'homme n'a cessé de rêver les animaux comme autant de miroirs, d'emblèmes ou de repoussoirs de lui-même."</div>
+</div></details>
+<details id="theme_connaitre" ><summary>Thème — AXE 2 : Connaître l'animal (sciences, philosophie, éthologie)<span class="arr">&#8250;</span></summary><div class="db">
+<div class="theme-badge">Les animaux et nous &mdash; Session 2026</div>
+<h4>Descartes et la conception de l'animal-machine (à réfuter)</h4>
+<ul>
+<li><strong>Descartes</strong> : l'animal est une machine biologique, dépourvu de raison, de conscience et de langage</li>
+<li>Cette conception justifiait l'exploitation sans limite des animaux pendant des siècles</li>
+<li>Contre-courant : Épicuriens et Gassendistes postulent dès le XVII<sup>e</sup> s. une <strong>continuité du monde naturel</strong></li>
+</ul>
+<h4>L'éthologie : science du comportement animal</h4>
+<ul>
+<li><strong>Éthologie</strong> : étude scientifique du comportement animal en milieu naturel</li>
+<li>Pionniers : Konrad Lorenz (empreinte), Jane Goodall (chimpanzés), Frans de Waal (empathie animale)</li>
+<li><strong>Intelligence animale</strong> : les dauphins, corbeaux, poulpes et primates montrent des capacités cognitives complexes</li>
+<li><strong>Communication animale</strong> : danses des abeilles, chants des baleines, appels des grands singes</li>
+</ul>
+<h4>L'animal : conscience, émotions, vie sociale</h4>
+<ul>
+<li>Les animaux peuvent <strong>apprendre, mémoriser, résoudre des problèmes</strong></li>
+<li>Vie affective : deuil chez les éléphants, jeu chez les dauphins, attachement maternel</li>
+<li>Comportements moraux : altruisme, coopération, sens de l'injustice chez les singes (Frans de Waal)</li>
+<li><strong>Théorie de l'évolution</strong> (Darwin) : continuité entre espèces, pas de rupture absolue humain/animal</li>
+</ul>
+<h4>La question de la conscience et du langage animal</h4>
+<ul>
+<li>La conscience animale : sujet de débat en neurosciences et en philosophie</li>
+<li>Wittgenstein : "Si un lion pouvait parler, nous ne pourrions pas le comprendre"</li>
+<li>Certaines espèces maîtrisent des langues des signes (Koko, gorille)</li>
+</ul>
+<div class="tip">Concept-clé : remettre en cause la frontière stricte humain/animal grâce aux sciences contemporaines.</div>
+</div></details>
+<details id="theme_comprendre" ><summary>Thème — AXE 3 : Comprendre nos relations aux animaux (éthique, droits, cohabitation)<span class="arr">&#8250;</span></summary><div class="db">
+<div class="theme-badge">Les animaux et nous &mdash; Session 2026</div>
+<h4>Les formes de cohabitation</h4>
+<div class="g2">
+<div class="card"><b>Animal domestique</b>Chien, chat, animal de compagnie : relation affective, anthropomorphisation, "humanisation"</div>
+<div class="card"><b>Animal d'élevage</b>Exploitation économique : viande, lait, œufs. Débat sur les conditions d'élevage.</div>
+<div class="card"><b>Animal sauvage</b>Zoo, cirque, réserves naturelles : tension entre protection et captivité.</div>
+<div class="card"><b>Animal de laboratoire</b>Recherche médicale : nécessité scientifique vs souffrance animale, alternatives 3R (Remplacer, Réduire, Raffiner)</div>
+</div>
+<h4>L'exploitation animale et les critiques</h4>
+<ul>
+<li>Élevage intensif : conditions de vie dénoncées par artistes, philosophes, ONG (L214)</li>
+<li>Chasse, pêche intensive : prédation humaine et surexploitation des ressources</li>
+<li>Abattoir : Peter Singer, Brigitte Bardot, les philosophes antispécistes dénoncent la mise à mort</li>
+</ul>
+<h4>Spécisme, antispécisme et droits des animaux</h4>
+<ul>
+<li><strong>Spécisme</strong> : discrimination fondée sur l'espèce (traiter les animaux comme inférieurs aux humains)</li>
+<li><strong>Antispécisme</strong> : refus de la hiérarchie entre espèces, défendu par <strong>Peter Singer</strong> (<em>La Libération animale</em>, 1975)</li>
+<li><strong>Véganisme</strong> : refus de toute exploitation animale (alimentation, vêtements, cosmétiques)</li>
+<li><strong>Droits des animaux</strong> : en France, l'animal est reconnu "être vivant doué de sensibilité" (Code civil, 2015)</li>
+<li>Débat : vers un statut juridique de sujet de droit pour certains animaux ?</li>
+</ul>
+<h4>Biodiversité et espèces menacées</h4>
+<ul>
+<li>6<sup>e</sup> extinction de masse en cours : 1 million d'espèces menacées (rapport IPBES 2019)</li>
+<li>Causes : déforestation, changement climatique, pollution, espèces invasives</li>
+<li>Effondrement de la biodiversité = menace pour les écosystèmes dont dépend l'humanité</li>
+<li>COP sur la biodiversité (COP15 Montréal 2022) : objectif 30x30 (30% des terres protégées d'ici 2030)</li>
+</ul>
+<div class="tip">Question centrale : comment concilier exploitation et respect du vivant ? Quelle place accorder aux animaux dans nos sociétés ?</div>
+</div></details>
+<details id="mots_cles" ><summary>Mots-clés officiels & problématiques d'examen<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Mots-clés du Bulletin Officiel (à maîtriser)</h4>
+<div class="g2">
+<ul>
+<li>Animal domestique, sauvage, de compagnie, de laboratoire, sacré, nuisible</li>
+<li>Bête, bestialité, bestiaire, chimère, bêtise</li>
+<li>Anthropocentrisme, anthropomorphisme</li>
+<li>Animalisation, déshumanisation</li>
+</ul>
+<ul>
+<li>Domestication, élevage, dressage, abattoir, chasse</li>
+<li>Spécisme, antispécisme, zoo, cirque</li>
+<li>Biodiversité, espèces menacées, extinction</li>
+<li>Métamorphose, hybridation, chimère</li>
+</ul>
+</div>
+<h4>Problématiques type pour l'écriture personnelle</h4>
+<ul>
+<li>Que révèlent nos représentations de l'animal sur notre conception de l'humanité ?</li>
+<li>Peut-on encore considérer l'animal comme un simple outil au service de l'homme ?</li>
+<li>En quoi la science contemporaine renouvelle-t-elle notre rapport aux animaux ?</li>
+<li>Faut-il accorder des droits aux animaux ?</li>
+<li>L'exploitation animale est-elle compatible avec la reconnaissance de la sensibilité animale ?</li>
+</ul>
+<h4>Œuvres et références clés</h4>
+<ul>
+<li><strong>Littérature</strong> : La Fontaine (Fables) &middot; Kafka (La Métamorphose) &middot; Orwell (La Ferme des animaux) &middot; Ovide (Les Métamorphoses)</li>
+<li><strong>Philosophie</strong> : Descartes (animal-machine) &middot; Peter Singer (La Libération animale) &middot; Darwin (évolution)</li>
+<li><strong>Science</strong> : Jane Goodall (chimpanzés) &middot; Frans de Waal (empathie animale) &middot; Konrad Lorenz (éthologie)</li>
+<li><strong>Cinéma</strong> : Princesse Mononoké (Miyazaki) &middot; Okja &middot; La Panthère des neiges</li>
+</ul>
 </div></details>
 </main>
 <footer>BTS SIO SISR &middot; R&eacute;visions &middot; Culture générale et expression</footer>

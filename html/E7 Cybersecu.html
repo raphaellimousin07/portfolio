@@ -7,7 +7,7 @@
 @media(prefers-color-scheme:dark){:root{--bg:#141420;--bg2:#1c1c2c;--bg3:#242438;--t:#e2e2f0;--t2:#8080a0;--t3:#505068;--bd:rgba(255,255,255,.08);--co:#1e1e30;--wb:#2c1800;--wc:#ffcc70;--tb:#001a10;--tc:#70d4a0}}
 body{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--t);font-size:15px;line-height:1.65}
 header{background:#993C1D;color:#fff;padding:1rem;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-header h1{font-size:1.1rem;font-weight:600}header small{font-size:.75rem;opacity:.75}
+header h1{font-size:1.05rem;font-weight:600;line-height:1.3}header small{font-size:.75rem;opacity:.75}
 .toc{background:var(--bg2);border-bottom:.5px solid var(--bd);padding:.5rem .75rem;overflow-x:auto;white-space:nowrap}
 .toc a{color:#993C1D;text-decoration:none;font-size:.8rem;margin-right:.75rem;font-weight:500}
 main{padding:.75rem;max-width:800px;margin:0 auto}
@@ -31,11 +31,12 @@ td{padding:.35rem .5rem;border:.5px solid var(--bd);vertical-align:top}
 .ok{color:#27500a;font-weight:500}.no{color:#993c1d;font-weight:500}.k{color:#993C1D;font-weight:500}
 .step{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:.88rem}
 .nb{min-width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #993C1D;color:#993C1D}
+.theme-badge{display:inline-block;background:#993C1D;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:10px;font-weight:600;margin-bottom:.4rem}
 footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 @media(max-width:500px){.g2{grid-template-columns:1fr}}</style></head>
 <body>
-<header><h1>Cybersécurité des services informatiques</h1><small>BTS SIO SISR &middot; E7 — Option SISR</small></header>
-<div class="toc"><a href="#archi">Architecture réseau & zones de sécurité</a><a href="#filtrage">Règles de filtrage pare-feu</a><a href="#crypto">Cryptographie — du hachage à la signature</a><a href="#pki">PKI & Certificats X.509</a><a href="#tls">TLS — Handshake détaillé</a><a href="#ipsec">IPSec — modes & protocoles</a><a href="#radius">802.1X & RADIUS — authentification réseau</a><a href="#ad">Active Directory & Kerberos</a><a href="#ebios">Analyse de risques — EBIOS Risk Manager</a><a href="#hardening">Hardening — Linux & Windows</a><a href="#sauvegardes">Sauvegardes, PRA & PCA</a><a href="#siem">Logs, SIEM & détection d'attaques</a></div>
+<header><h1>Cybersécurité des services informatiques</h1><small>BTS SIO SISR &middot; E7 — Option SISR — 4h — Coef 4</small></header>
+<div class="toc"><a href="#archi">Architecture réseau & zones de sécurité</a><a href="#filtrage">Règles de filtrage pare-feu</a><a href="#crypto">Cryptographie — du hachage à la signature</a><a href="#pki">PKI & Certificats X.509</a><a href="#tls">TLS — Handshake détaillé</a><a href="#ipsec">IPSec — modes & protocoles</a><a href="#radius">802.1X & RADIUS — authentification réseau</a><a href="#ad">Active Directory & Kerberos</a><a href="#ebios">Analyse de risques — EBIOS Risk Manager</a><a href="#hardening">Hardening — Linux & Windows</a><a href="#ha_qos">Haute disponibilité, QoS & supervision (spécifique SISR)</a><a href="#sauvegardes">Sauvegardes, PRA & PCA</a><a href="#siem">Logs, SIEM, attaques & protocoles sécurisés</a></div>
 <main><details id="archi" open><summary>Architecture réseau & zones de sécurité<span class="arr">&#8250;</span></summary><div class="db">
 <div class="g2">
 <div class="card"><b>WAN / Internet</b>Zone non fiable. Tout trafic entrant doit être filtré.</div>
@@ -50,7 +51,7 @@ footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 </ul>
 </div></details>
 <details id="filtrage" ><summary>Règles de filtrage pare-feu<span class="arr">&#8250;</span></summary><div class="db">
-<div class="warn">⚠ Les règles sont lues dans l'ordre &mdash; 1ère règle qui correspond est appliquée. Dernière règle = REFUSER TOUT.</div>
+<div class="warn">&bull; Les règles sont lues dans l'ordre &mdash; 1ère règle qui correspond est appliquée. Dernière règle = REFUSER TOUT.</div>
 <table>
 <tr><th>N&deg;</th><th>Source</th><th>Destination</th><th>Port/Proto</th><th>Action</th><th>Commentaire</th></tr>
 <tr><td>1</td><td>LAN</td><td>ANY</td><td>80,443/TCP</td><td><span class="ok">AUTORISER</span></td><td>Navigation web</td></tr>
@@ -68,68 +69,65 @@ footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 <details id="crypto" ><summary>Cryptographie — du hachage à la signature<span class="arr">&#8250;</span></summary><div class="db">
 <h4>Chiffrement symétrique</h4>
 <ul>
-<li>Même clé pour chiffrer et déchiffrer &mdash; rapide, gros volumes</li>
-<li><span class="ok">AES-128 / AES-256</span> &nbsp;&middot;&nbsp; <span class="no">3DES</span> déprécié &nbsp;&middot;&nbsp; Problème : échange de la clé</li>
+<li>Même clé pour chiffrer et déchiffrer &mdash; rapide, gros volumes &nbsp;&middot;&nbsp; <span class="ok">AES-128/256</span> &nbsp;&middot;&nbsp; <span class="no">3DES</span> déprécié</li>
 </ul>
 <h4>Chiffrement asymétrique</h4>
 <ul>
-<li><strong>Clé publique</strong> (chiffre) / <strong>Clé privée</strong> (déchiffre) &mdash; lent, petits volumes</li>
-<li><span class="ok">RSA, ECC</span> &mdash; utilisé pour échanger une clé symétrique</li>
+<li><strong>Clé publique</strong> (chiffre) / <strong>Clé privée</strong> (déchiffre) &mdash; <span class="ok">RSA, ECC</span></li>
 </ul>
 <h4>Hachage (intégrité uniquement)</h4>
 <ul>
-<li>Empreinte à sens unique, longueur fixe, non réversible</li>
-<li><span class="ok">SHA-256 / SHA-3</span> &nbsp;&middot;&nbsp; <span class="no">MD5 / SHA-1</span> obsolètes (collisions possibles)</li>
+<li>Empreinte à sens unique &nbsp;&middot;&nbsp; <span class="ok">SHA-256/SHA-3</span> &nbsp;&middot;&nbsp; <span class="no">MD5/SHA-1</span> obsolètes</li>
 </ul>
 <h4>Signature numérique</h4>
 <ol style="padding-left:1.1rem;font-size:.9rem;line-height:1.8">
 <li>Calcul du hash du message</li>
 <li>Chiffrement du hash avec la <strong>clé privée</strong> de l'émetteur</li>
 <li>Réception : déchiffrer avec <strong>clé publique</strong>, recalculer hash, comparer</li>
-<li>Garantit : <strong>authenticité</strong> + <strong>intégrité</strong> + <strong>non-répudiation</strong></li>
+<li>Garantit : <strong>authenticité + intégrité + non-répudiation</strong></li>
 </ol>
-<div class="tip">Pour chiffrer : on utilise la clé publique du destinataire. Pour signer : on utilise sa propre clé privée.</div>
+<div class="tip">Pour chiffrer un message : on utilise la clé publique du destinataire. Pour signer : on utilise sa propre clé privée.</div>
 </div></details>
 <details id="pki" ><summary>PKI & Certificats X.509<span class="arr">&#8250;</span></summary><div class="db">
 <h4>Contenu d'un certificat X.509</h4>
 <ul>
 <li>Version, numéro de série, algorithme de signature</li>
 <li><strong>Émetteur</strong> : DN de l'Autorité de Certification (AC)</li>
-<li><strong>Validité</strong> : date de début + date d'expiration</li>
+<li><strong>Validité</strong> : date début + date d'expiration</li>
 <li><strong>Sujet</strong> : DN du titulaire (CN = nom commun)</li>
 <li><strong>Clé publique</strong> du sujet + extensions (SAN, usage de la clé)</li>
-<li><strong>Signature</strong> de l'AC (garantit l'intégrité du certificat)</li>
+<li><strong>Signature</strong> de l'AC</li>
 </ul>
 <h4>Chaîne de confiance</h4>
-<div class="f">AC Racine (auto-sign&eacute;e, dans le magasin de confiance du navigateur/OS)
-  &rarr; AC Interm&eacute;diaire (sign&eacute;e par la racine)
-       &rarr; Certificat serveur/utilisateur (sign&eacute; par l'AC interm&eacute;diaire)</div>
+<div class="f">AC Racine (auto-signée, dans le magasin de confiance du navigateur/OS)
+  &rarr; AC Intermédiaire (signée par la racine)
+       &rarr; Certificat serveur/utilisateur (signé par l'AC intermédiaire)</div>
 <h4>Révocation</h4>
 <div class="g2">
 <div class="card"><b>CRL</b>Liste périodique des certificats révoqués. Simple mais pas temps réel.</div>
 <div class="card"><b>OCSP</b>Vérification en temps réel du statut. Plus léger et immédiat.</div>
 </div>
-<div class="tip">Vérifier un certificat : 1) Signature valide ? 2) Pas expiré ? 3) Non révoqué (CRL/OCSP) ? 4) CN/SAN correspond au nom du serveur ?</div>
+<div class="tip">Vérifier un cert : 1) Signature valide ? 2) Pas expiré ? 3) Non révoqué ? 4) CN/SAN correspond au serveur ?</div>
 </div></details>
 <details id="tls" ><summary>TLS — Handshake détaillé<span class="arr">&#8250;</span></summary><div class="db">
 <div class="step"><div class="nb">1</div><span><strong>Client Hello</strong> : version TLS max, liste de cipher suites, random client</span></div>
 <div class="step"><div class="nb">2</div><span><strong>Server Hello</strong> : cipher suite retenue, random serveur, <strong>certificat serveur</strong></span></div>
-<div class="step"><div class="nb">3</div><span><strong>Vérification du certificat</strong> par le client (AC de confiance, validité, révocation, nom serveur)</span></div>
-<div class="step"><div class="nb">4</div><span><strong>Échange de clé</strong> : TLS 1.2 &rarr; pré-master secret chiffré avec clé pub serveur / TLS 1.3 &rarr; ECDHE (Perfect Forward Secrecy)</span></div>
+<div class="step"><div class="nb">3</div><span><strong>Vérification du certificat</strong> par le client (AC, validité, révocation, nom)</span></div>
+<div class="step"><div class="nb">4</div><span><strong>Échange de clé</strong> : TLS 1.2 &rarr; pré-master secret / TLS 1.3 &rarr; ECDHE (Perfect Forward Secrecy)</span></div>
 <div class="step"><div class="nb">5</div><span>Les deux parties <strong>dérivent la clé de session</strong> symétrique (AES)</span></div>
 <div class="step"><div class="nb">6</div><span><strong>Finished</strong> : premier message chiffré &rarr; session HTTPS établie</span></div>
-<div class="tip">TLS = asymétrique pour l'échange de clé &rarr; symétrique pour chiffrer le flux. Combine sécurité et performance.</div>
+<div class="tip">TLS = asymétrique pour l'échange de clé &rarr; symétrique pour le flux. Combine sécurité et performance.</div>
 </div></details>
 <details id="ipsec" ><summary>IPSec — modes & protocoles<span class="arr">&#8250;</span></summary><div class="db">
 <div class="g2">
-<div class="card"><b>AH &mdash; Authentication Header (proto 51)</b>Intégrité + authentification.<br><span class="no">Pas de confidentialité</span> (pas de chiffrement).</div>
-<div class="card"><b>ESP &mdash; Encapsulating Security Payload (proto 50)</b>Intégrité + authentification<br><span class="ok">+ Confidentialité</span>. &rarr; Toujours préférer ESP.</div>
+<div class="card"><b>AH (proto 51)</b>Intégrité + authentification.<br><span class="no">Pas de confidentialité</span> (pas de chiffrement).</div>
+<div class="card"><b>ESP (proto 50)</b>Intégrité + authentification<br><span class="ok">+ Confidentialité</span> &rarr; Toujours préférer ESP.</div>
 </div>
 <div class="g2" style="margin-top:6px">
-<div class="card"><b>Mode transport</b>Protège seulement la charge utile IP. En-tête conservé. Entre 2 hôtes finaux.</div>
-<div class="card"><b>Mode tunnel</b>Encapsule tout le paquet IP original. VPN site à site (gateway &harr; gateway).</div>
+<div class="card"><b>Mode transport</b>Protège seulement la charge utile IP. Entre 2 hôtes finaux.</div>
+<div class="card"><b>Mode tunnel</b>Encapsule tout le paquet IP original. VPN site à site.</div>
 </div>
-<h4>Négociation IKE (Internet Key Exchange)</h4>
+<h4>Négociation IKE</h4>
 <ul>
 <li><strong>Phase 1</strong> : canal sécurisé entre gateways (ISAKMP SA)</li>
 <li><strong>Phase 2</strong> : négociation des SA IPSec (algorithmes, clés, durée de vie)</li>
@@ -138,26 +136,24 @@ footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 <details id="radius" ><summary>802.1X & RADIUS — authentification réseau<span class="arr">&#8250;</span></summary><div class="db">
 <div class="g2">
 <div class="card"><b>Supplicant</b>Le poste / appareil qui demande l'accès au réseau.</div>
-<div class="card"><b>Authenticator (NAS)</b>Le switch ou l'AP Wi-Fi. Relaie les échanges EAP. Bloque le port jusqu'à auth réussie.</div>
-<div class="card"><b>Authentication Server</b>Serveur RADIUS. Vérifie les identifiants. Renvoie Accept ou Reject.</div>
+<div class="card"><b>Authenticator (NAS)</b>Switch ou AP Wi-Fi. Bloque le port jusqu'à auth réussie.</div>
+<div class="card"><b>Authentication Server</b>Serveur RADIUS. Renvoie Access-Accept ou Access-Reject.</div>
 </div>
-<h4>Processus d'authentification</h4>
-<div class="step"><div class="nb">1</div><span>Supplicant &rarr; Authenticator : <strong>EAPOL-Start</strong></span></div>
+<div class="step" style="margin-top:8px"><div class="nb">1</div><span>Supplicant &rarr; Authenticator : <strong>EAPOL-Start</strong></span></div>
 <div class="step"><div class="nb">2</div><span>Authenticator &rarr; Supplicant : EAP-Request/Identity</span></div>
-<div class="step"><div class="nb">3</div><span>Supplicant &rarr; RADIUS (via Authenticator) : identité + credentials</span></div>
+<div class="step"><div class="nb">3</div><span>Supplicant &rarr; RADIUS : identité + credentials</span></div>
 <div class="step"><div class="nb">4</div><span>RADIUS &rarr; Authenticator : <strong>Access-Accept</strong> ou Access-Reject</span></div>
 <div class="step"><div class="nb">5</div><span>Authenticator : <strong>ouvre ou bloque le port</strong> réseau</span></div>
 <div class="tip">Variantes EAP : EAP-TLS (certificat client), PEAP (tunnel TLS + MDP), EAP-TTLS.</div>
 </div></details>
 <details id="ad" ><summary>Active Directory & Kerberos<span class="arr">&#8250;</span></summary><div class="db">
-<h4>Structure Active Directory</h4>
-<div class="f">Forêt &gt; Domaine &gt; Unités d'Organisation (OU) &gt; Objets (users, computers, groupes)</div>
+<div class="f">Structure AD : Forêt &gt; Domaine &gt; OU &gt; Objets (users, computers, groupes)</div>
 <ul>
 <li><strong>GPO</strong> : stratégies appliquées aux OU &mdash; imposer configs, restreindre accès</li>
 <li><strong>LDAP</strong> port 389 / LDAPS 636 &nbsp;|&nbsp; <strong>KDC</strong> : gère l'authentification Kerberos</li>
 </ul>
 <h4>Kerberos — processus</h4>
-<div class="step"><div class="nb">1</div><span>Client &rarr; KDC/AS : demande de TGT (identifiant)</span></div>
+<div class="step"><div class="nb">1</div><span>Client &rarr; KDC/AS : demande de TGT</span></div>
 <div class="step"><div class="nb">2</div><span>KDC &rarr; Client : <strong>TGT</strong> chiffré avec la clé secrète du TGS</span></div>
 <div class="step"><div class="nb">3</div><span>Client &rarr; KDC/TGS : TGT + demande d'accès à un service</span></div>
 <div class="step"><div class="nb">4</div><span>KDC &rarr; Client : <strong>ticket de service</strong></span></div>
@@ -165,46 +161,79 @@ footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
 <div class="tip">Le mot de passe ne transite jamais sur le réseau. Tickets valides 10h par défaut.</div>
 </div></details>
 <details id="ebios" ><summary>Analyse de risques — EBIOS Risk Manager<span class="arr">&#8250;</span></summary><div class="db">
-<h4>Vocabulaire clé</h4>
 <ul>
-<li><strong>Bien support</strong> : élément du SI porteur d'une valeur métier (serveur, réseau, appli, données)</li>
+<li><strong>Bien support</strong> : élément du SI porteur d'une valeur métier (serveur, réseau, appli)</li>
 <li><strong>Source de risque</strong> : entité menaçante (cybercriminel, concurrent, initié malveillant)</li>
-<li><strong>Objectif visé</strong> : vol de données, sabotage, espionnage, extorsion</li>
 </ul>
-<h4>Niveaux de risque (Vraisemblance &times; Gravité)</h4>
+<h4>Niveaux de risque</h4>
 <table>
 <tr><th>Gravité &darr; / Vraisemblance &rarr;</th><th>1 Minime</th><th>2 Significative</th><th>3 Forte</th><th>4 Maximale</th></tr>
 <tr><td><strong>4 Critique</strong></td><td>Moyen</td><td style="background:var(--wb);color:var(--wc)">Élevé</td><td style="background:var(--wb);color:var(--wc)">Critique</td><td style="background:var(--wb);color:var(--wc)">Critique</td></tr>
 <tr><td><strong>3 Important</strong></td><td>Faible</td><td>Moyen</td><td style="background:var(--wb);color:var(--wc)">Élevé</td><td style="background:var(--wb);color:var(--wc)">Critique</td></tr>
-<tr><td><strong>2 Significatif</strong></td><td>Faible</td><td>Faible</td><td>Moyen</td><td style="background:var(--wb);color:var(--wc)">&Eacute;lev&eacute;</td></tr>
+<tr><td><strong>2 Significatif</strong></td><td>Faible</td><td>Faible</td><td>Moyen</td><td style="background:var(--wb);color:var(--wc)">Élevé</td></tr>
 <tr><td><strong>1 Faible</strong></td><td>Faible</td><td>Faible</td><td>Faible</td><td>Moyen</td></tr>
 </table>
 <h4>5 ateliers EBIOS RM</h4>
 <ol style="padding-left:1.1rem;font-size:.9rem;line-height:1.8">
 <li>Cadrage et socle de sécurité</li>
 <li>Sources de risques (attaquants potentiels)</li>
-<li>Scénarios stratégiques (objectifs des attaquants)</li>
+<li>Scénarios stratégiques (objectifs visés)</li>
 <li>Scénarios opérationnels (chemins d'attaque techniques)</li>
 <li>Traitement du risque : réduction / transfert / acceptation / refus</li>
 </ol>
 </div></details>
 <details id="hardening" ><summary>Hardening — Linux & Windows<span class="arr">&#8250;</span></summary><div class="db">
 <h4>Permissions Linux — chmod</h4>
-<div class="f">r=4  w=2  x=1   &rarr;   [propri&eacute;taire][groupe][autres]
-chmod 755 &rarr; rwxr-xr-x   (owner: tout / group+others: lire+ex&eacute;c)
-chmod 644 &rarr; rw-r--r--   (owner: lire+&eacute;crire / others: lire seul)
-chmod 600 &rarr; rw-------   (owner uniquement)
-chmod 777 &rarr; rwxrwxrwx   (d&eacute;conseill&eacute; !)
-chown user:group fichier     (changer propri&eacute;taire)</div>
-<h4>Politique de mots de passe (recommandations ANSSI)</h4>
+<div class="f">r=4  w=2  x=1   &rarr;   [propriétaire][groupe][autres]
+chmod 755 &rarr; rwxr-xr-x   (owner: tout / group+others: lire+exéc)
+chmod 644 &rarr; rw-r--r--   (owner: lire+écrire / others: lire seul)
+chmod 600 &rarr; rw-------   (owner uniquement &mdash; fichier privé)
+chmod 777 &rarr; rwxrwxrwx   (déconseillé !)
+chown user:group fichier     (changer propriétaire)</div>
+<h4>Politique de mots de passe (ANSSI)</h4>
 <ul>
-<li>Longueur minimale : <strong>12 caractères</strong> (14+ recommandé)</li>
-<li>Complexité : majuscule + minuscule + chiffre + caractère spécial</li>
-<li>Durée de vie max : 90 jours &nbsp;|&nbsp; Historique : 10 derniers MDP</li>
-<li>Verrouillage après 5 tentatives</li>
+<li>Longueur min : <strong>12 caractères</strong> (14+ recommandé) &middot; Complexité : maj+min+chiffre+spécial</li>
+<li>Durée max : 90 jours &middot; Historique : 10 MDP &middot; Verrouillage : 5 tentatives</li>
 </ul>
 <h4>GPO Windows courantes</h4>
-<p style="font-size:.9rem;color:var(--t2)">Désactiver ports USB &middot; Imposer BitLocker &middot; Verrouillage écran auto &middot; Bloquer panneau de configuration &middot; Restreindre l'installation de logiciels</p>
+<p style="font-size:.9rem;color:var(--t2)">Désactiver USB &middot; Imposer BitLocker &middot; Verrouillage écran auto &middot; Bloquer panneaux de config &middot; Restreindre les installations</p>
+</div></details>
+<details id="ha_qos" ><summary>Haute disponibilité, QoS & supervision (spécifique SISR)<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Haute disponibilité (HA) — continuité de service</h4>
+<div class="g2">
+<div class="card"><b>RAID (Redondance disques)</b>RAID 1 : miroir (copie exacte)<br>RAID 5 : parité distribuée (1 disque en panne toléré)<br>RAID 6 : 2 disques en panne tolérés<br>RAID 10 : RAID 1+0 (perf + redondance)</div>
+<div class="card"><b>Clustering</b>Active/Active : 2 nœuds actifs simultanément (charge partagée)<br>Active/Passive : 1 nœud en veille (bascule si panne)<br>VIP (Virtual IP) : IP flottante qui suit le nœud actif</div>
+</div>
+<ul>
+<li><strong>Load balancer</strong> : répartit la charge entre plusieurs serveurs (Round Robin, Least Connections)</li>
+<li><strong>Lien agrégé (LACP / 802.3ad)</strong> : agrégation de plusieurs interfaces réseau en une seule</li>
+<li><strong>VRRP / HSRP</strong> : protocoles de redondance de passerelle par défaut (routeur virtuel)</li>
+<li><strong>STP / RSTP</strong> : évite les boucles de commutation, redondance des liens switch</li>
+</ul>
+<div class="f">Taux de disponibilité :
+99%   &rarr; ~3,65 jours d'arrêt/an
+99,9% &rarr; ~8,76 heures/an
+99,99% &rarr; ~52 minutes/an  ("quatre 9")</div>
+<h4>QoS — Qualité de Service</h4>
+<ul>
+<li><strong>QoS</strong> : mécanisme de priorisation du trafic réseau selon le type de flux</li>
+<li>Classification des flux : VoIP (priorité haute) &gt; vidéoconférence &gt; données &gt; téléchargement</li>
+<li><strong>DSCP</strong> (Differentiated Services Code Point) : marquage dans l'en-tête IP</li>
+<li><strong>Shaping</strong> : limiter la bande passante d'un flux &nbsp;&nbsp;<strong>Policing</strong> : éliminer les paquets excédentaires</li>
+<li>Métriques QoS : <strong>latence</strong> (délai) &middot; <strong>gigue</strong> (variation de délai) &middot; <strong>perte de paquets</strong> &middot; <strong>bande passante</strong></li>
+</ul>
+<div class="tip">VoIP nécessite : latence &lt; 150 ms, gigue &lt; 30 ms, perte &lt; 1%. Sans QoS, la voix est dégradée par les transferts de données.</div>
+<h4>Supervision réseau</h4>
+<ul>
+<li><strong>SNMP v3</strong> (port 161 UDP) : protocole de supervision, collecte de métriques depuis les équipements</li>
+<li><strong>Agents SNMP</strong> : logiciel sur l'équipement supervisé qui répond aux requêtes</li>
+<li><strong>MIB</strong> (Management Information Base) : base de données des variables accessibles via SNMP</li>
+<li><strong>Trap SNMP</strong> : alerte envoyée proactivement par l'équipement (ex : interface down)</li>
+<li><strong>Nagios / Zabbix</strong> : outils de supervision open source &mdash; alertes par email/SMS</li>
+<li><strong>Grafana + Prometheus</strong> : stack moderne de supervision avec tableaux de bord temps réel</li>
+<li><strong>Syslog</strong> (port 514) : centralisation des journaux &mdash; niveaux 0 (Emergency) à 7 (Debug)</li>
+</ul>
+<div class="warn">&bull; SNMP v1/v2 = non chiffré, vulnérable. Toujours utiliser <strong>SNMP v3</strong> en production (auth + chiffrement).</div>
 </div></details>
 <details id="sauvegardes" ><summary>Sauvegardes, PRA & PCA<span class="arr">&#8250;</span></summary><div class="db">
 <table>
@@ -223,31 +252,30 @@ chown user:group fichier     (changer propri&eacute;taire)</div>
 </div>
 <div class="tip">Règle 3-2-1 : 3 copies des données, sur 2 supports différents, dont 1 hors site.</div>
 </div></details>
-<details id="siem" ><summary>Logs, SIEM & détection d'attaques<span class="arr">&#8250;</span></summary><div class="db">
+<details id="siem" ><summary>Logs, SIEM, attaques & protocoles sécurisés<span class="arr">&#8250;</span></summary><div class="db">
 <h4>Niveaux Syslog</h4>
 <p style="font-size:.9rem;color:var(--t2)">0-Emergency &middot; 1-Alert &middot; 2-Critical &middot; 3-Error &middot; 4-Warning &middot; 5-Notice &middot; 6-Info &middot; 7-Debug &nbsp;|&nbsp; Port 514 UDP</p>
 <h4>SIEM — rôle</h4>
 <ul>
-<li><strong>Collecte</strong> : agrège les logs de toutes les sources</li>
-<li><strong>Normalisation</strong> : format commun pour tous les logs</li>
-<li><strong>Corrélation</strong> : détecte des patterns suspects en croisant les événements</li>
-<li><strong>Alerte</strong> : notifie le SOC en cas d'anomalie</li>
+<li><strong>Collecte</strong> tous les logs &middot; <strong>Normalise</strong> en format commun &middot; <strong>Corrèle</strong> pour détecter des patterns</li>
+<li>Outils : Splunk &middot; Wazuh (open source) &middot; IBM QRadar &middot; Microsoft Sentinel</li>
 </ul>
 <h4>Indicateurs d'attaque dans les logs</h4>
 <ul>
 <li>Multiples échecs d'authentification &rarr; <strong>brute force</strong></li>
-<li>Connexions à des heures inhabituelles</li>
-<li>Transferts de données anormaux (volume, destination inconnue)</li>
-<li>Modifications de fichiers système (ex : /etc/passwd)</li>
-<li>Élévation de privilèges inattendue</li>
+<li>Connexions à des heures inhabituelles &middot; Transferts de données anormaux</li>
+<li>Modifications de fichiers système &middot; Élévation de privilèges inattendue</li>
 </ul>
 <h4>Protocoles réseau sécurisés (à connaître)</h4>
-<ul>
-<li><strong>SSH</strong> (22) : admin distante &middot; <strong>HTTPS</strong> (443) : HTTP+TLS</li>
-<li><strong>SFTP</strong> (22) : transfert sécurisé &middot; <strong>SNMPv3</strong> (161) : supervision</li>
-<li><strong>VLAN</strong> (802.1Q) : segmentation &middot; <strong>NAC/802.1X</strong> : auth avant accès réseau</li>
-<li><strong>STP</strong> : évite les boucles &middot; <strong>OSPF</strong> : routage dynamique interne</li>
-</ul>
+<table>
+<tr><th>Protocole</th><th>Port</th><th>Usage</th></tr>
+<tr><td><strong>SSH</strong></td><td>22/TCP</td><td>Administration distante sécurisée (remplace Telnet)</td></tr>
+<tr><td><strong>HTTPS</strong></td><td>443/TCP</td><td>HTTP + TLS</td></tr>
+<tr><td><strong>SFTP</strong></td><td>22/TCP</td><td>Transfert sécurisé (remplace FTP port 21)</td></tr>
+<tr><td><strong>SNMPv3</strong></td><td>161/UDP</td><td>Supervision avec authentification et chiffrement</td></tr>
+<tr><td><strong>LDAPS</strong></td><td>636/TCP</td><td>Annuaire LDAP chiffré (TLS)</td></tr>
+<tr><td><strong>RDP</strong></td><td>3389/TCP</td><td>Bureau distant Windows</td></tr>
+</table>
 </div></details>
 </main>
 <footer>BTS SIO SISR &middot; R&eacute;visions &middot; Cybersécurité des services informatiques</footer>
