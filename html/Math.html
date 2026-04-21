@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTS SIO SISR — Mathématiques</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fafaf7;--bg2:#f2f2ed;--bg3:#e8e8e2;--t:#18182c;--t2:#50506a;--t3:#909098;--bd:rgba(0,0,0,.09);--r:10px;--co:#f0f0f6;--mo:'Courier New',monospace;--wb:#fff8ec;--wc:#7a4000;--tb:#eaf5ee;--tc:#1a5c35}
+@media(prefers-color-scheme:dark){:root{--bg:#141420;--bg2:#1c1c2c;--bg3:#242438;--t:#e2e2f0;--t2:#8080a0;--t3:#505068;--bd:rgba(255,255,255,.08);--co:#1e1e30;--wb:#2c1800;--wc:#ffcc70;--tb:#001a10;--tc:#70d4a0}}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--t);font-size:15px;line-height:1.65}
+header{background:#185FA5;color:#fff;padding:1rem;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+header h1{font-size:1.1rem;font-weight:600}header small{font-size:.75rem;opacity:.75}
+.toc{background:var(--bg2);border-bottom:.5px solid var(--bd);padding:.5rem .75rem;overflow-x:auto;white-space:nowrap}
+.toc a{color:#185FA5;text-decoration:none;font-size:.8rem;margin-right:.75rem;font-weight:500}
+main{padding:.75rem;max-width:800px;margin:0 auto}
+details{border:.5px solid var(--bd);border-radius:var(--r);margin-bottom:.7rem;overflow:hidden}
+summary{padding:.7rem 1rem;font-weight:500;font-size:.9rem;background:var(--bg2);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;border-left:3px solid #185FA5;gap:8px}
+summary::-webkit-details-marker{display:none}
+.arr{color:var(--t3);font-size:1.1rem;transition:transform .2s;flex-shrink:0}
+details[open] .arr{transform:rotate(90deg)}
+.db{padding:.75rem 1rem}
+h4{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin:.7rem 0 .3rem}
+ul{padding-left:1.1rem;margin:.2rem 0}li{font-size:.9rem;line-height:1.85}li strong{font-weight:500}
+.f{font-family:var(--mo);font-size:.78rem;background:var(--co);padding:.4rem .75rem;border-left:3px solid #185FA5;border-radius:0 6px 6px 0;margin:.3rem 0;display:block;color:var(--t);white-space:pre-wrap}
+.warn{background:var(--wb);color:var(--wc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.tip{background:var(--tb);color:var(--tc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.4rem 0}
+.card{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;font-size:.88rem}
+.card b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:.2rem;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.4rem 0}
+th{background:var(--bg2);padding:.4rem .5rem;text-align:left;font-weight:500;border:.5px solid var(--bd)}
+td{padding:.35rem .5rem;border:.5px solid var(--bd);vertical-align:top}
+.ok{color:#27500a;font-weight:500}.no{color:#993c1d;font-weight:500}.k{color:#185FA5;font-weight:500}
+.step{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:.88rem}
+.nb{min-width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #185FA5;color:#185FA5}
+footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
+@media(max-width:500px){.g2{grid-template-columns:1fr}}</style></head>
+<body>
+<header><h1>Mathématiques</h1><small>BTS SIO SISR &middot; BTS SIO SISR</small></header>
+<div class="toc"><a href="#numeration">Numération — conversions entre bases</a><a href="#modulaire">Arithmétique modulaire</a><a href="#suites">Suites numériques — arithmétiques & géométriques</a><a href="#matrices">Calcul matriciel</a><a href="#logique">Logique — propositions, prédicats & ensembles</a><a href="#boole">Algèbres de Boole & Karnaugh</a><a href="#graphes">Graphes & Ordonnancement MPM</a></div>
+<main><details id="numeration" open><summary>Numération — conversions entre bases<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Décimal &rarr; Binaire</h4>
+<div class="f">Divisions successives par 2, lire les restes de bas en haut.
+25 &divide; 2 = 12 r1 / 12 &divide; 2 = 6 r0 / 6 &divide; 2 = 3 r0 / 3 &divide; 2 = 1 r1 / 1 &divide; 2 = 0 r1
+&rarr; 25&#x2081;&#x2080; = 11001&#x2082;</div>
+<h4>Binaire &rarr; Décimal</h4>
+<div class="f">Multiplier chaque bit par 2&#x207F; (n=0 &agrave; droite, cro&icirc;t vers la gauche)
+11001&#x2082; = 1&times;2&#x2074; + 1&times;2&#xB3; + 0&times;2&#xB2; + 0&times;2&#xB9; + 1&times;2&#x2070; = 16+8+0+0+1 = 25&#x2081;&#x2080;</div>
+<h4>Hexadécimal (groupes de 4 bits)</h4>
+<div class="f">0=0000 1=0001 2=0010 3=0011 4=0100 5=0101 6=0110 7=0111
+8=1000 9=1001 A=1010 B=1011 C=1100 D=1101 E=1110 F=1111
+Exemple : 10111100&#x2082; = 1011|1100 = BC&#x2081;&#x2086; = 188&#x2081;&#x2080;</div>
+<h4>Octal (groupes de 3 bits) &nbsp;&mdash;&nbsp; chiffres 0 &agrave; 7</h4>
+<div class="f">Exemple : 110111&#x2082; = 110|111 = 67&#x2088;</div>
+<div class="tip">Puissances de 2 : 1&middot;2&middot;4&middot;8&middot;16&middot;32&middot;64&middot;128&middot;256&middot;512&middot;1024&middot;2048&middot;4096</div>
+</div></details>
+<details id="modulaire" ><summary>Arithmétique modulaire<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Congruences</h4>
+<ul>
+<li><strong>a &equiv; b (mod n)</strong> si n divise (a &minus; b), c'est-à-dire a et b ont le même reste dans la division par n</li>
+</ul>
+<div class="f">17 &equiv; 2 (mod 5)  car  17 &minus; 2 = 15 = 3&times;5
+Propri&eacute;t&eacute;s : si a&equiv;b et c&equiv;d (mod n) &rarr; a+c &equiv; b+d  et  a&times;c &equiv; b&times;d</div>
+<h4>PGCD &mdash; algorithme d'Euclide</h4>
+<div class="f">Diviser le grand par le petit, recommencer avec le reste, jusqu'&agrave; r=0.
+PGCD(48, 18) :
+  48 = 2&times;18 + 12
+  18 = 1&times;12 + 6
+  12 = 2&times;6  + 0   &rarr;   PGCD = 6</div>
+<h4>Nombres premiers</h4>
+<ul>
+<li>Divisibles uniquement par 1 et eux-mêmes : 2, 3, 5, 7, 11, 13, 17, 19, 23&hellip;</li>
+<li><strong>Crible d'Ératosthène</strong> : barrer les multiples de chaque premier jusqu'à &radic;n</li>
+</ul>
+<h4>Application : cryptographie RSA</h4>
+<ul>
+<li>Choisir 2 grands nombres premiers p et q &rarr; n = p &times; q</li>
+<li>Chiffrement : <strong>c &equiv; m&#x1D452; (mod n)</strong> &nbsp;|&nbsp; Déchiffrement : <strong>m &equiv; c&#x1D451; (mod n)</strong></li>
+</ul>
+<div class="tip">L'arithmétique modulaire est le fondement mathématique de la cryptographie RSA !</div>
+</div></details>
+<details id="suites" ><summary>Suites numériques — arithmétiques & géométriques<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Suite arithmétique (raison r)</h4>
+<div class="f">Terme général : u&#x2099; = u&#x2081; + (n&minus;1) &times; r
+Somme n termes : S&#x2099; = n &times; (u&#x2081; + u&#x2099;) / 2
+Identifier : v&eacute;rifier que u&#x2099;&#x208A;&#x2081; &minus; u&#x2099; = r = constante
+Exemple : sal. u&#x2081;=1800&euro;, r=50 &rarr; u&#x2081;&#x2080; = 1800+9&times;50 = 2250&euro;</div>
+<h4>Suite géométrique (raison q)</h4>
+<div class="f">Terme général : u&#x2099; = u&#x2081; &times; q^(n&minus;1)
+Somme (q&ne;1) : S&#x2099; = u&#x2081; &times; (1&minus;q&#x207F;) / (1&minus;q)
+Identifier : v&eacute;rifier que u&#x2099;&#x208A;&#x2081; / u&#x2099; = q = constante</div>
+<h4>Comportement asymptotique (n &rarr; +&infin;)</h4>
+<ul>
+<li>|q| &lt; 1 &rarr; q&#x207F; &rarr; <strong>0</strong> (converge)</li>
+<li>q &gt; 1 &rarr; q&#x207F; &rarr; <strong>+&infin;</strong> (diverge)</li>
+<li>q = 1 : constante &nbsp;|&nbsp; q = &minus;1 : oscille entre u&#x2081; et &minus;u&#x2081;</li>
+</ul>
+<div class="f">Exemple capital : 1000&euro; &agrave; 5%/an &rarr; u&#x2099; = 1000 &times; 1,05^(n&minus;1)  (croissance exponentielle)</div>
+</div></details>
+<details id="matrices" ><summary>Calcul matriciel<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Opérations élémentaires</h4>
+<ul>
+<li><strong>Addition</strong> : même dimension obligatoire &mdash; terme à terme : (A+B)&#x1D62;&#x2C7C; = a&#x1D62;&#x2C7C; + b&#x1D62;&#x2C7C;</li>
+<li><strong>Multiplication</strong> A(m&times;n) &times; B(n&times;p) = C(m&times;p) &mdash; c&#x1D62;&#x2C7C; = &sum;&#x1D58; a&#x1D62;&#x1D58; &times; b&#x1D58;&#x2C7C;</li>
+</ul>
+<div class="warn">⚠ Non commutative : AB &ne; BA en général !</div>
+<h4>Matrice identité et inverse</h4>
+<div class="f">Identit&eacute; I : diagonale=1, reste=0   &rarr;   A&times;I = I&times;A = A
+Inverse de A 2&times;2 : A=[[a,b],[c,d]]
+A&#x207B;&#xB9; = 1/(ad&minus;bc) &times; [[d, &minus;b], [&minus;c, a]]   (condition : ad&minus;bc &ne; 0)
+Si A inversible : solution unique X = A&#x207B;&#xB9; &times; B</div>
+<h4>Résolution de système linéaire &mdash; pivot de Gauss</h4>
+<ul>
+<li>Écrire sous forme A&middot;X = B</li>
+<li>Opérations sur les lignes : échanger, multiplier, ajouter un multiple</li>
+<li>Objectif : matrice triangulaire supérieure, puis remontée</li>
+</ul>
+<div class="f">Exemple :  x + 2y = 5  /  2x + y = 4
+&rarr; x = 5&minus;2y  dans  2ème &eacute;q.
+&rarr; 2(5&minus;2y)+y = 4  &rarr; y = 2, x = 1</div>
+</div></details>
+<details id="logique" ><summary>Logique — propositions, prédicats & ensembles<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Connecteurs logiques</h4>
+<table>
+<tr><th>Connecteur</th><th>Notation</th><th>Vrai si&hellip;</th></tr>
+<tr><td>Négation</td><td>&not;P</td><td>P est faux</td></tr>
+<tr><td>ET (conjonction)</td><td>P &and; Q</td><td>P et Q sont tous les deux vrais</td></tr>
+<tr><td>OU (disjonction)</td><td>P &or; Q</td><td>Au moins l'un est vrai</td></tr>
+<tr><td>Implication</td><td>P &rArr; Q</td><td>Faux seulement si P vrai et Q faux</td></tr>
+<tr><td>Équivalence</td><td>P &hArr; Q</td><td>P et Q ont la même valeur de vérité</td></tr>
+</table>
+<div class="f">Tautologies : P &or; &not;P = Vrai  /  P &and; &not;P = Faux
+De Morgan : &not;(P&and;Q) = &not;P&or;&not;Q  /  &not;(P&or;Q) = &not;P&and;&not;Q</div>
+<h4>Quantificateurs (prédicats)</h4>
+<ul>
+<li><strong>&forall;x P(x)</strong> : "pour tout x, P(x) est vrai" &nbsp;|&nbsp; <strong>&exist;x P(x)</strong> : "il existe un x tel que P(x)"</li>
+<li>Négation : &not;(&forall;x P(x)) = &exist;x &not;P(x) &nbsp;|&nbsp; &not;(&exist;x P(x)) = &forall;x &not;P(x)</li>
+</ul>
+<h4>Ensembles</h4>
+<ul>
+<li><strong>A &cup; B</strong> : union &nbsp;|&nbsp; <strong>A &cap; B</strong> : intersection &nbsp;|&nbsp; <strong>&Acirc;</strong> : complémentaire &nbsp;|&nbsp; <strong>A \ B</strong> : différence</li>
+<li><strong>A &times; B</strong> : produit cartésien &mdash; toutes les paires (a,b) avec |A&times;B| = |A|&times;|B|</li>
+</ul>
+<h4>Relations sur un ensemble</h4>
+<ul>
+<li>Réflexive + Symétrique + Transitive = <strong>relation d'équivalence</strong></li>
+<li>Réflexive + Antisymétrique + Transitive = <strong>relation d'ordre</strong></li>
+<li>Bijective = injective (f(a)=f(b)&rArr;a=b) + surjective (tout élément a un antécédent)</li>
+</ul>
+</div></details>
+<details id="boole" ><summary>Algèbres de Boole & Karnaugh<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Opérateurs booléens</h4>
+<table>
+<tr><th>Op.</th><th>Sym.</th><th>Règle</th></tr>
+<tr><td>ET</td><td>&and;</td><td>1 seulement si toutes les entrées = 1</td></tr>
+<tr><td>OU</td><td>&or;</td><td>1 si au moins une entrée = 1</td></tr>
+<tr><td>NON</td><td>&not;</td><td>Inverse l'entrée (&not;0=1, &not;1=0)</td></tr>
+<tr><td>XOR</td><td>&oplus;</td><td>1 si les entrées sont différentes</td></tr>
+</table>
+<div class="f">Priorit&eacute; : &not; &gt; &and; &gt; &or;
+Tautologie = toujours vraie  /  Contradiction = toujours fausse
+Table de v&eacute;rit&eacute; : 2&#x207F; lignes pour n variables</div>
+<h4>Propriétés fondamentales</h4>
+<div class="f">a + 0 = a   /   a &times; 1 = a         (neutres)
+a + &acirc; = 1   /   a &times; &acirc; = 0         (compl&eacute;mentation)
+a + a = a   /   a &times; a = a         (idempotence)
+&not;(A &and; B) = &not;A &or; &not;B   /   &not;(A &or; B) = &not;A &and; &not;B   (De Morgan)</div>
+<h4>Table de Karnaugh (simplification de fonctions booléennes)</h4>
+<ul>
+<li>Tableau à 2&#x207F; cases pour simplifier une expression booléenne</li>
+<li>Regrouper les 1 par groupes de <strong>2, 4 ou 8</strong> (puissances de 2)</li>
+<li>Chaque groupe &rarr; éliminer les variables qui changent dans le groupe</li>
+<li>Application : simplification de circuits logiques et de conditions</li>
+</ul>
+<h4>Treillis</h4>
+<ul>
+<li>Ensemble ordonné où toute paire a une borne sup (join &or;) et inf (meet &and;)</li>
+<li>Treillis distributif complémenté = algèbre de Boole</li>
+</ul>
+</div></details>
+<details id="graphes" ><summary>Graphes & Ordonnancement MPM<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Vocabulaire</h4>
+<ul>
+<li>Sommet / Arête (non orienté) / Arc (orienté) &nbsp;|&nbsp; <strong>Degré</strong> : nb d'arêtes adjacentes</li>
+<li><strong>Connexe</strong> : chemin entre toute paire de sommets</li>
+<li><strong>Euler</strong> (arêtes 1&times;) : 0 ou 2 sommets de degré impair</li>
+<li><strong>Hamilton</strong> (sommets 1&times;) : pas de condition simple</li>
+</ul>
+<h4>Algorithme de Dijkstra — plus court chemin</h4>
+<div class="f">1. Init : source = 0, tous autres = &infin;
+2. Choisir le sommet non visit&eacute; &agrave; distance minimale
+3. Relaxer ses voisins : si d(u)+poids(u,v) &lt; d(v) &rarr; maj d(v)
+4. Marquer visit&eacute; &rarr; r&eacute;p&eacute;ter
+&rarr; Uniquement avec des poids positifs !</div>
+<h4>Méthode MPM — ordonnancement</h4>
+<div class="f">Date au plus t&ocirc;t D+(B) = max{ D+(A) + dur&eacute;e(A) }  pour tous pr&eacute;d&eacute;cesseurs A
+Date au plus tard D&minus;(A) = min{ D&minus;(B) &minus; dur&eacute;e(A) }  pour tous successeurs B
+Marge = D&minus;(A) &minus; D+(A)
+Chemin critique = tâches avec marge = 0</div>
+<div class="warn">⚠ Retarder une tâche critique = retarder tout le projet !</div>
+<h4>Diagramme de Gantt</h4>
+<ul>
+<li>Tâches en lignes, temps en colonnes &mdash; chaque barre = durée de la tâche</li>
+<li>Placer une tâche dès que tous ses prédécesseurs sont terminés</li>
+<li>Date de fin = fin de la dernière barre = durée minimale du projet</li>
+</ul>
+<div class="tip">En exam : toujours faire MPM en premier pour trouver le chemin critique, puis Gantt pour visualiser.</div>
+</div></details>
+</main>
+<footer>BTS SIO SISR &middot; R&eacute;visions &middot; Mathématiques</footer>
+<script>document.querySelectorAll('.toc a').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const el=document.querySelector(a.getAttribute('href'));if(el){el.open=true;setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);}});});</script>
+</body></html>

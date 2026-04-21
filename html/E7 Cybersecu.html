@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTS SIO SISR — Cybersécurité des services informatiques</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fafaf7;--bg2:#f2f2ed;--bg3:#e8e8e2;--t:#18182c;--t2:#50506a;--t3:#909098;--bd:rgba(0,0,0,.09);--r:10px;--co:#f0f0f6;--mo:'Courier New',monospace;--wb:#fff8ec;--wc:#7a4000;--tb:#eaf5ee;--tc:#1a5c35}
+@media(prefers-color-scheme:dark){:root{--bg:#141420;--bg2:#1c1c2c;--bg3:#242438;--t:#e2e2f0;--t2:#8080a0;--t3:#505068;--bd:rgba(255,255,255,.08);--co:#1e1e30;--wb:#2c1800;--wc:#ffcc70;--tb:#001a10;--tc:#70d4a0}}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--t);font-size:15px;line-height:1.65}
+header{background:#993C1D;color:#fff;padding:1rem;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+header h1{font-size:1.1rem;font-weight:600}header small{font-size:.75rem;opacity:.75}
+.toc{background:var(--bg2);border-bottom:.5px solid var(--bd);padding:.5rem .75rem;overflow-x:auto;white-space:nowrap}
+.toc a{color:#993C1D;text-decoration:none;font-size:.8rem;margin-right:.75rem;font-weight:500}
+main{padding:.75rem;max-width:800px;margin:0 auto}
+details{border:.5px solid var(--bd);border-radius:var(--r);margin-bottom:.7rem;overflow:hidden}
+summary{padding:.7rem 1rem;font-weight:500;font-size:.9rem;background:var(--bg2);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;border-left:3px solid #993C1D;gap:8px}
+summary::-webkit-details-marker{display:none}
+.arr{color:var(--t3);font-size:1.1rem;transition:transform .2s;flex-shrink:0}
+details[open] .arr{transform:rotate(90deg)}
+.db{padding:.75rem 1rem}
+h4{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin:.7rem 0 .3rem}
+ul{padding-left:1.1rem;margin:.2rem 0}li{font-size:.9rem;line-height:1.85}li strong{font-weight:500}
+.f{font-family:var(--mo);font-size:.78rem;background:var(--co);padding:.4rem .75rem;border-left:3px solid #993C1D;border-radius:0 6px 6px 0;margin:.3rem 0;display:block;color:var(--t);white-space:pre-wrap}
+.warn{background:var(--wb);color:var(--wc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.tip{background:var(--tb);color:var(--tc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.4rem 0}
+.card{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;font-size:.88rem}
+.card b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:.2rem;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:.8rem;margin:.4rem 0}
+th{background:var(--bg2);padding:.4rem .5rem;text-align:left;font-weight:500;border:.5px solid var(--bd)}
+td{padding:.35rem .5rem;border:.5px solid var(--bd);vertical-align:top}
+.ok{color:#27500a;font-weight:500}.no{color:#993c1d;font-weight:500}.k{color:#993C1D;font-weight:500}
+.step{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:.88rem}
+.nb{min-width:20px;height:20px;border-radius:50%;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1.5px solid #993C1D;color:#993C1D}
+footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
+@media(max-width:500px){.g2{grid-template-columns:1fr}}</style></head>
+<body>
+<header><h1>Cybersécurité des services informatiques</h1><small>BTS SIO SISR &middot; E7 — Option SISR</small></header>
+<div class="toc"><a href="#archi">Architecture réseau & zones de sécurité</a><a href="#filtrage">Règles de filtrage pare-feu</a><a href="#crypto">Cryptographie — du hachage à la signature</a><a href="#pki">PKI & Certificats X.509</a><a href="#tls">TLS — Handshake détaillé</a><a href="#ipsec">IPSec — modes & protocoles</a><a href="#radius">802.1X & RADIUS — authentification réseau</a><a href="#ad">Active Directory & Kerberos</a><a href="#ebios">Analyse de risques — EBIOS Risk Manager</a><a href="#hardening">Hardening — Linux & Windows</a><a href="#sauvegardes">Sauvegardes, PRA & PCA</a><a href="#siem">Logs, SIEM & détection d'attaques</a></div>
+<main><details id="archi" open><summary>Architecture réseau & zones de sécurité<span class="arr">&#8250;</span></summary><div class="db">
+<div class="g2">
+<div class="card"><b>WAN / Internet</b>Zone non fiable. Tout trafic entrant doit être filtré.</div>
+<div class="card"><b>DMZ</b>Zone isolée. Serveurs accessibles depuis Internet : web, mail, DNS.</div>
+<div class="card"><b>LAN</b>Réseau interne de confiance. Postes, serveurs internes.</div>
+</div>
+<ul style="margin-top:6px">
+<li><strong>Pare-feu externe</strong> : entre WAN et DMZ &nbsp;|&nbsp; <strong>Pare-feu interne</strong> : entre DMZ et LAN</li>
+<li>Serveur web public &rarr; <span class="ok">DMZ obligatoire</span>, <span class="no">jamais en LAN</span></li>
+<li>Les serveurs DMZ ne doivent <strong>jamais initier</strong> de connexion vers le LAN</li>
+<li>VLAN : segmenter le LAN (Postes / Serveurs / VoIP / Admin)</li>
+</ul>
+</div></details>
+<details id="filtrage" ><summary>Règles de filtrage pare-feu<span class="arr">&#8250;</span></summary><div class="db">
+<div class="warn">⚠ Les règles sont lues dans l'ordre &mdash; 1ère règle qui correspond est appliquée. Dernière règle = REFUSER TOUT.</div>
+<table>
+<tr><th>N&deg;</th><th>Source</th><th>Destination</th><th>Port/Proto</th><th>Action</th><th>Commentaire</th></tr>
+<tr><td>1</td><td>LAN</td><td>ANY</td><td>80,443/TCP</td><td><span class="ok">AUTORISER</span></td><td>Navigation web</td></tr>
+<tr><td>2</td><td>LAN</td><td>DNS_SERV</td><td>53/UDP</td><td><span class="ok">AUTORISER</span></td><td>Résolution DNS</td></tr>
+<tr><td>3</td><td>ANY</td><td>SRV_WEB</td><td>80,443/TCP</td><td><span class="ok">AUTORISER</span></td><td>Site web public</td></tr>
+<tr><td>4</td><td>DMZ</td><td>LAN</td><td>ANY</td><td><span class="no">REFUSER</span></td><td>DMZ n'accède pas au LAN</td></tr>
+<tr><td>5</td><td>ANY</td><td>ANY</td><td>ANY</td><td><span class="no">REFUSER</span></td><td>Tout le reste bloqué</td></tr>
+</table>
+<ul>
+<li>Identifier <strong>qui initie</strong> la connexion (client &rarr; serveur)</li>
+<li>Pare-feu stateful : règle de retour automatique &mdash; ne pas l'écrire</li>
+<li>Port source = éphémère (&gt;1024) vs port destination = service</li>
+</ul>
+</div></details>
+<details id="crypto" ><summary>Cryptographie — du hachage à la signature<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Chiffrement symétrique</h4>
+<ul>
+<li>Même clé pour chiffrer et déchiffrer &mdash; rapide, gros volumes</li>
+<li><span class="ok">AES-128 / AES-256</span> &nbsp;&middot;&nbsp; <span class="no">3DES</span> déprécié &nbsp;&middot;&nbsp; Problème : échange de la clé</li>
+</ul>
+<h4>Chiffrement asymétrique</h4>
+<ul>
+<li><strong>Clé publique</strong> (chiffre) / <strong>Clé privée</strong> (déchiffre) &mdash; lent, petits volumes</li>
+<li><span class="ok">RSA, ECC</span> &mdash; utilisé pour échanger une clé symétrique</li>
+</ul>
+<h4>Hachage (intégrité uniquement)</h4>
+<ul>
+<li>Empreinte à sens unique, longueur fixe, non réversible</li>
+<li><span class="ok">SHA-256 / SHA-3</span> &nbsp;&middot;&nbsp; <span class="no">MD5 / SHA-1</span> obsolètes (collisions possibles)</li>
+</ul>
+<h4>Signature numérique</h4>
+<ol style="padding-left:1.1rem;font-size:.9rem;line-height:1.8">
+<li>Calcul du hash du message</li>
+<li>Chiffrement du hash avec la <strong>clé privée</strong> de l'émetteur</li>
+<li>Réception : déchiffrer avec <strong>clé publique</strong>, recalculer hash, comparer</li>
+<li>Garantit : <strong>authenticité</strong> + <strong>intégrité</strong> + <strong>non-répudiation</strong></li>
+</ol>
+<div class="tip">Pour chiffrer : on utilise la clé publique du destinataire. Pour signer : on utilise sa propre clé privée.</div>
+</div></details>
+<details id="pki" ><summary>PKI & Certificats X.509<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Contenu d'un certificat X.509</h4>
+<ul>
+<li>Version, numéro de série, algorithme de signature</li>
+<li><strong>Émetteur</strong> : DN de l'Autorité de Certification (AC)</li>
+<li><strong>Validité</strong> : date de début + date d'expiration</li>
+<li><strong>Sujet</strong> : DN du titulaire (CN = nom commun)</li>
+<li><strong>Clé publique</strong> du sujet + extensions (SAN, usage de la clé)</li>
+<li><strong>Signature</strong> de l'AC (garantit l'intégrité du certificat)</li>
+</ul>
+<h4>Chaîne de confiance</h4>
+<div class="f">AC Racine (auto-sign&eacute;e, dans le magasin de confiance du navigateur/OS)
+  &rarr; AC Interm&eacute;diaire (sign&eacute;e par la racine)
+       &rarr; Certificat serveur/utilisateur (sign&eacute; par l'AC interm&eacute;diaire)</div>
+<h4>Révocation</h4>
+<div class="g2">
+<div class="card"><b>CRL</b>Liste périodique des certificats révoqués. Simple mais pas temps réel.</div>
+<div class="card"><b>OCSP</b>Vérification en temps réel du statut. Plus léger et immédiat.</div>
+</div>
+<div class="tip">Vérifier un certificat : 1) Signature valide ? 2) Pas expiré ? 3) Non révoqué (CRL/OCSP) ? 4) CN/SAN correspond au nom du serveur ?</div>
+</div></details>
+<details id="tls" ><summary>TLS — Handshake détaillé<span class="arr">&#8250;</span></summary><div class="db">
+<div class="step"><div class="nb">1</div><span><strong>Client Hello</strong> : version TLS max, liste de cipher suites, random client</span></div>
+<div class="step"><div class="nb">2</div><span><strong>Server Hello</strong> : cipher suite retenue, random serveur, <strong>certificat serveur</strong></span></div>
+<div class="step"><div class="nb">3</div><span><strong>Vérification du certificat</strong> par le client (AC de confiance, validité, révocation, nom serveur)</span></div>
+<div class="step"><div class="nb">4</div><span><strong>Échange de clé</strong> : TLS 1.2 &rarr; pré-master secret chiffré avec clé pub serveur / TLS 1.3 &rarr; ECDHE (Perfect Forward Secrecy)</span></div>
+<div class="step"><div class="nb">5</div><span>Les deux parties <strong>dérivent la clé de session</strong> symétrique (AES)</span></div>
+<div class="step"><div class="nb">6</div><span><strong>Finished</strong> : premier message chiffré &rarr; session HTTPS établie</span></div>
+<div class="tip">TLS = asymétrique pour l'échange de clé &rarr; symétrique pour chiffrer le flux. Combine sécurité et performance.</div>
+</div></details>
+<details id="ipsec" ><summary>IPSec — modes & protocoles<span class="arr">&#8250;</span></summary><div class="db">
+<div class="g2">
+<div class="card"><b>AH &mdash; Authentication Header (proto 51)</b>Intégrité + authentification.<br><span class="no">Pas de confidentialité</span> (pas de chiffrement).</div>
+<div class="card"><b>ESP &mdash; Encapsulating Security Payload (proto 50)</b>Intégrité + authentification<br><span class="ok">+ Confidentialité</span>. &rarr; Toujours préférer ESP.</div>
+</div>
+<div class="g2" style="margin-top:6px">
+<div class="card"><b>Mode transport</b>Protège seulement la charge utile IP. En-tête conservé. Entre 2 hôtes finaux.</div>
+<div class="card"><b>Mode tunnel</b>Encapsule tout le paquet IP original. VPN site à site (gateway &harr; gateway).</div>
+</div>
+<h4>Négociation IKE (Internet Key Exchange)</h4>
+<ul>
+<li><strong>Phase 1</strong> : canal sécurisé entre gateways (ISAKMP SA)</li>
+<li><strong>Phase 2</strong> : négociation des SA IPSec (algorithmes, clés, durée de vie)</li>
+</ul>
+</div></details>
+<details id="radius" ><summary>802.1X & RADIUS — authentification réseau<span class="arr">&#8250;</span></summary><div class="db">
+<div class="g2">
+<div class="card"><b>Supplicant</b>Le poste / appareil qui demande l'accès au réseau.</div>
+<div class="card"><b>Authenticator (NAS)</b>Le switch ou l'AP Wi-Fi. Relaie les échanges EAP. Bloque le port jusqu'à auth réussie.</div>
+<div class="card"><b>Authentication Server</b>Serveur RADIUS. Vérifie les identifiants. Renvoie Accept ou Reject.</div>
+</div>
+<h4>Processus d'authentification</h4>
+<div class="step"><div class="nb">1</div><span>Supplicant &rarr; Authenticator : <strong>EAPOL-Start</strong></span></div>
+<div class="step"><div class="nb">2</div><span>Authenticator &rarr; Supplicant : EAP-Request/Identity</span></div>
+<div class="step"><div class="nb">3</div><span>Supplicant &rarr; RADIUS (via Authenticator) : identité + credentials</span></div>
+<div class="step"><div class="nb">4</div><span>RADIUS &rarr; Authenticator : <strong>Access-Accept</strong> ou Access-Reject</span></div>
+<div class="step"><div class="nb">5</div><span>Authenticator : <strong>ouvre ou bloque le port</strong> réseau</span></div>
+<div class="tip">Variantes EAP : EAP-TLS (certificat client), PEAP (tunnel TLS + MDP), EAP-TTLS.</div>
+</div></details>
+<details id="ad" ><summary>Active Directory & Kerberos<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Structure Active Directory</h4>
+<div class="f">Forêt &gt; Domaine &gt; Unités d'Organisation (OU) &gt; Objets (users, computers, groupes)</div>
+<ul>
+<li><strong>GPO</strong> : stratégies appliquées aux OU &mdash; imposer configs, restreindre accès</li>
+<li><strong>LDAP</strong> port 389 / LDAPS 636 &nbsp;|&nbsp; <strong>KDC</strong> : gère l'authentification Kerberos</li>
+</ul>
+<h4>Kerberos — processus</h4>
+<div class="step"><div class="nb">1</div><span>Client &rarr; KDC/AS : demande de TGT (identifiant)</span></div>
+<div class="step"><div class="nb">2</div><span>KDC &rarr; Client : <strong>TGT</strong> chiffré avec la clé secrète du TGS</span></div>
+<div class="step"><div class="nb">3</div><span>Client &rarr; KDC/TGS : TGT + demande d'accès à un service</span></div>
+<div class="step"><div class="nb">4</div><span>KDC &rarr; Client : <strong>ticket de service</strong></span></div>
+<div class="step"><div class="nb">5</div><span>Client &rarr; Serveur : ticket de service &rarr; accès accordé</span></div>
+<div class="tip">Le mot de passe ne transite jamais sur le réseau. Tickets valides 10h par défaut.</div>
+</div></details>
+<details id="ebios" ><summary>Analyse de risques — EBIOS Risk Manager<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Vocabulaire clé</h4>
+<ul>
+<li><strong>Bien support</strong> : élément du SI porteur d'une valeur métier (serveur, réseau, appli, données)</li>
+<li><strong>Source de risque</strong> : entité menaçante (cybercriminel, concurrent, initié malveillant)</li>
+<li><strong>Objectif visé</strong> : vol de données, sabotage, espionnage, extorsion</li>
+</ul>
+<h4>Niveaux de risque (Vraisemblance &times; Gravité)</h4>
+<table>
+<tr><th>Gravité &darr; / Vraisemblance &rarr;</th><th>1 Minime</th><th>2 Significative</th><th>3 Forte</th><th>4 Maximale</th></tr>
+<tr><td><strong>4 Critique</strong></td><td>Moyen</td><td style="background:var(--wb);color:var(--wc)">Élevé</td><td style="background:var(--wb);color:var(--wc)">Critique</td><td style="background:var(--wb);color:var(--wc)">Critique</td></tr>
+<tr><td><strong>3 Important</strong></td><td>Faible</td><td>Moyen</td><td style="background:var(--wb);color:var(--wc)">Élevé</td><td style="background:var(--wb);color:var(--wc)">Critique</td></tr>
+<tr><td><strong>2 Significatif</strong></td><td>Faible</td><td>Faible</td><td>Moyen</td><td style="background:var(--wb);color:var(--wc)">&Eacute;lev&eacute;</td></tr>
+<tr><td><strong>1 Faible</strong></td><td>Faible</td><td>Faible</td><td>Faible</td><td>Moyen</td></tr>
+</table>
+<h4>5 ateliers EBIOS RM</h4>
+<ol style="padding-left:1.1rem;font-size:.9rem;line-height:1.8">
+<li>Cadrage et socle de sécurité</li>
+<li>Sources de risques (attaquants potentiels)</li>
+<li>Scénarios stratégiques (objectifs des attaquants)</li>
+<li>Scénarios opérationnels (chemins d'attaque techniques)</li>
+<li>Traitement du risque : réduction / transfert / acceptation / refus</li>
+</ol>
+</div></details>
+<details id="hardening" ><summary>Hardening — Linux & Windows<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Permissions Linux — chmod</h4>
+<div class="f">r=4  w=2  x=1   &rarr;   [propri&eacute;taire][groupe][autres]
+chmod 755 &rarr; rwxr-xr-x   (owner: tout / group+others: lire+ex&eacute;c)
+chmod 644 &rarr; rw-r--r--   (owner: lire+&eacute;crire / others: lire seul)
+chmod 600 &rarr; rw-------   (owner uniquement)
+chmod 777 &rarr; rwxrwxrwx   (d&eacute;conseill&eacute; !)
+chown user:group fichier     (changer propri&eacute;taire)</div>
+<h4>Politique de mots de passe (recommandations ANSSI)</h4>
+<ul>
+<li>Longueur minimale : <strong>12 caractères</strong> (14+ recommandé)</li>
+<li>Complexité : majuscule + minuscule + chiffre + caractère spécial</li>
+<li>Durée de vie max : 90 jours &nbsp;|&nbsp; Historique : 10 derniers MDP</li>
+<li>Verrouillage après 5 tentatives</li>
+</ul>
+<h4>GPO Windows courantes</h4>
+<p style="font-size:.9rem;color:var(--t2)">Désactiver ports USB &middot; Imposer BitLocker &middot; Verrouillage écran auto &middot; Bloquer panneau de configuration &middot; Restreindre l'installation de logiciels</p>
+</div></details>
+<details id="sauvegardes" ><summary>Sauvegardes, PRA & PCA<span class="arr">&#8250;</span></summary><div class="db">
+<table>
+<tr><th>Type</th><th>Ce qui est sauvegardé</th><th>Restauration</th></tr>
+<tr><td><strong>Complète</strong></td><td>Tout le système</td><td>1 sauvegarde seulement</td></tr>
+<tr><td><strong>Différentielle</strong></td><td>Depuis la dernière <em>complète</em></td><td>Complète + 1 différentielle</td></tr>
+<tr><td><strong>Incrémentale</strong></td><td>Depuis la dernière <em>sauvegarde</em></td><td>Complète + TOUTES les incrémentales</td></tr>
+</table>
+<div class="g2" style="margin-top:8px">
+<div class="card"><b>RTO — Recovery Time Objective</b>Durée max d'interruption acceptable.<br><em>Ex : RTO=4h &rarr; SI rétabli en max 4h</em></div>
+<div class="card"><b>RPO — Recovery Point Objective</b>Perte de données max acceptable.<br><em>Ex : RPO=1h &rarr; max 1h de données perdues</em></div>
+</div>
+<div class="g2">
+<div class="card"><b>PCA</b>Maintenir l'activité <em>pendant</em> l'incident. Redondance, basculement.</div>
+<div class="card"><b>PRA</b>Reprendre l'activité <em>après</em> l'incident. Restauration, reconstruction.</div>
+</div>
+<div class="tip">Règle 3-2-1 : 3 copies des données, sur 2 supports différents, dont 1 hors site.</div>
+</div></details>
+<details id="siem" ><summary>Logs, SIEM & détection d'attaques<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Niveaux Syslog</h4>
+<p style="font-size:.9rem;color:var(--t2)">0-Emergency &middot; 1-Alert &middot; 2-Critical &middot; 3-Error &middot; 4-Warning &middot; 5-Notice &middot; 6-Info &middot; 7-Debug &nbsp;|&nbsp; Port 514 UDP</p>
+<h4>SIEM — rôle</h4>
+<ul>
+<li><strong>Collecte</strong> : agrège les logs de toutes les sources</li>
+<li><strong>Normalisation</strong> : format commun pour tous les logs</li>
+<li><strong>Corrélation</strong> : détecte des patterns suspects en croisant les événements</li>
+<li><strong>Alerte</strong> : notifie le SOC en cas d'anomalie</li>
+</ul>
+<h4>Indicateurs d'attaque dans les logs</h4>
+<ul>
+<li>Multiples échecs d'authentification &rarr; <strong>brute force</strong></li>
+<li>Connexions à des heures inhabituelles</li>
+<li>Transferts de données anormaux (volume, destination inconnue)</li>
+<li>Modifications de fichiers système (ex : /etc/passwd)</li>
+<li>Élévation de privilèges inattendue</li>
+</ul>
+<h4>Protocoles réseau sécurisés (à connaître)</h4>
+<ul>
+<li><strong>SSH</strong> (22) : admin distante &middot; <strong>HTTPS</strong> (443) : HTTP+TLS</li>
+<li><strong>SFTP</strong> (22) : transfert sécurisé &middot; <strong>SNMPv3</strong> (161) : supervision</li>
+<li><strong>VLAN</strong> (802.1Q) : segmentation &middot; <strong>NAC/802.1X</strong> : auth avant accès réseau</li>
+<li><strong>STP</strong> : évite les boucles &middot; <strong>OSPF</strong> : routage dynamique interne</li>
+</ul>
+</div></details>
+</main>
+<footer>BTS SIO SISR &middot; R&eacute;visions &middot; Cybersécurité des services informatiques</footer>
+<script>document.querySelectorAll('.toc a').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const el=document.querySelector(a.getAttribute('href'));if(el){el.open=true;setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);}});});</script>
+</body></html>
