@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTS SIO SISR — HAProxy & Rocky Linux 9 — Configuration complète</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fafaf7;--bg2:#f2f2ed;--bg3:#e8e8e2;--t:#18182c;--t2:#50506a;--t3:#909098;--bd:rgba(0,0,0,.09);--r:10px;--co:#1a1a2e;--ct:#c8d0e8;--mo:'Courier New',monospace;--wb:#fff8ec;--wc:#7a4000;--tb:#eaf5ee;--tc:#1a5c35;--cmd-bg:#0d1117;--cmd-t:#c9d1d9;--cmd-kw:#ff7b72;--cmd-str:#a5d6ff;--cmd-cmt:#8b949e;--cmd-ok:#56d364}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--t:#e6edf3;--t2:#8b949e;--t3:#484f58;--bd:rgba(255,255,255,.08);--co:#161b22;--ct:#c9d1d9;--cmd-bg:#161b22}}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--t);font-size:15px;line-height:1.65}
+header{background:#27500a;color:#fff;padding:1rem;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+header h1{font-size:1.05rem;font-weight:600;line-height:1.3}header small{font-size:.75rem;opacity:.8}
+.toc{background:var(--bg2);border-bottom:.5px solid var(--bd);padding:.5rem .75rem;overflow-x:auto;white-space:nowrap}
+.toc a{color:#27500a;text-decoration:none;font-size:.8rem;margin-right:.75rem;font-weight:500}
+main{padding:.75rem;max-width:860px;margin:0 auto}
+details{border:.5px solid var(--bd);border-radius:var(--r);margin-bottom:.7rem;overflow:hidden}
+summary{padding:.7rem 1rem;font-weight:500;font-size:.9rem;background:var(--bg2);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;border-left:3px solid #27500a;gap:8px}
+summary::-webkit-details-marker{display:none}
+.arr{color:var(--t3);font-size:1.1rem;transition:transform .2s;flex-shrink:0}
+details[open] .arr{transform:rotate(90deg)}
+.db{padding:.75rem 1rem}
+h4{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin:.8rem 0 .3rem}
+ul{padding-left:1.1rem;margin:.2rem 0}li{font-size:.9rem;line-height:1.85}li strong{font-weight:500}
+pre{background:var(--cmd-bg);color:var(--cmd-t);padding:.6rem .85rem;border-radius:8px;margin:.35rem 0;overflow-x:auto;font-family:var(--mo);font-size:.8rem;line-height:1.65;border:.5px solid rgba(255,255,255,.08)}
+.cmd{background:var(--cmd-bg);color:var(--cmd-t);padding:.4rem .85rem;border-radius:8px;margin:.3rem 0;display:block;font-family:var(--mo);font-size:.8rem;border-left:3px solid #27500a;white-space:pre-wrap}
+.step-num{display:inline-flex;min-width:22px;height:22px;border-radius:50%;font-size:.7rem;font-weight:700;align-items:center;justify-content:center;border:1.5px solid #27500a;color:#27500a;margin-right:6px;flex-shrink:0;vertical-align:middle}
+.step{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:.9rem}
+.warn{background:var(--wb);color:var(--wc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.tip{background:var(--tb);color:var(--tc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.ok{color:#56d364;font-weight:500}.no{color:#ff7b72;font-weight:500}.k{color:#27500a;font-weight:500}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.4rem 0}
+.card{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;font-size:.88rem}
+.card b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:.2rem;font-weight:600}
+.mode{display:inline-block;background:var(--bg3);border:.5px solid var(--bd);border-radius:6px;padding:1px 7px;font-family:var(--mo);font-size:.78rem;color:var(--t2)}
+table{width:100%;border-collapse:collapse;font-size:.82rem;margin:.4rem 0}
+th{background:var(--bg2);padding:.4rem .5rem;text-align:left;font-weight:500;border:.5px solid var(--bd)}
+td{padding:.35rem .5rem;border:.5px solid var(--bd);vertical-align:top;font-family:var(--mo);font-size:.78rem}
+td.desc{font-family:inherit;font-size:.85rem}
+footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
+@media(max-width:500px){.g2{grid-template-columns:1fr}pre{font-size:.72rem}}</style></head>
+<body>
+<header><h1>HAProxy & Rocky Linux 9 — Configuration complète</h1><small>BTS SIO SISR &middot; Atelier de professionnalisation — Épreuves pratiques</small></header>
+<div class="toc"><a href="#rocky_base">Rocky Linux 9 — commandes de base</a><a href="#firewall_selinux">Rocky Linux 9 — Firewall & SELinux</a><a href="#haproxy_install">HAProxy — installation & structure</a><a href="#haproxy_global">HAProxy — section global & defaults</a><a href="#haproxy_frontend">HAProxy — frontends (points d'entrée)</a><a href="#haproxy_backend">HAProxy — backends & algorithmes d'équilibrage</a><a href="#haproxy_stats">HAProxy — page de statistiques & socket admin</a><a href="#haproxy_ha">Haute disponibilité HAProxy + Keepalived (VRRP)</a><a href="#haproxy_config_complete">HAProxy — exemple de config complète</a><a href="#haproxy_debug">Dépannage & vérification HAProxy</a></div>
+<main><details id="rocky_base" open><summary>Rocky Linux 9 — commandes de base<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Gestion des paquets (DNF)</h4>
+<pre>dnf install haproxy keepalived -y    # Installer des paquets
+dnf update -y                         # Mettre à jour le système
+dnf list installed | grep haproxy    # Vérifier l'installation
+dnf info haproxy                      # Informations sur un paquet</pre>
+<h4>Gestion des services (systemctl)</h4>
+<pre>systemctl start haproxy              # Démarrer
+systemctl stop haproxy               # Arrêter
+systemctl restart haproxy            # Redémarrer (coupure brève)
+systemctl reload haproxy             # Recharger la config SANS coupure
+systemctl enable haproxy             # Démarrer au boot
+systemctl disable haproxy            # Ne plus démarrer au boot
+systemctl status haproxy             # Statut et dernières lignes de log
+systemctl is-active haproxy          # active / inactive</pre>
+<h4>Réseau (Rocky Linux 9 / NetworkManager)</h4>
+<pre>ip addr show                         # Interfaces et adresses IP
+ip route show                         # Table de routage
+nmcli connection show                 # Connexions réseau
+nmcli device status                   # État des interfaces
+nmcli con mod ens192 ipv4.addresses 192.168.1.10/24
+nmcli con mod ens192 ipv4.gateway 192.168.1.1
+nmcli con mod ens192 ipv4.dns "8.8.8.8 1.1.1.1"
+nmcli con mod ens192 ipv4.method manual
+nmcli con up ens192</pre>
+<h4>Logs</h4>
+<pre>journalctl -u haproxy -f             # Logs HAProxy en temps réel
+journalctl -u haproxy --since today  # Logs du jour
+journalctl -xe                        # Dernières erreurs système
+tail -f /var/log/haproxy.log         # Log HAProxy (si configuré)</pre>
+</div></details>
+<details id="firewall_selinux" ><summary>Rocky Linux 9 — Firewall & SELinux<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Firewalld (pare-feu par défaut)</h4>
+<pre>firewall-cmd --state                 # Statut du pare-feu
+firewall-cmd --list-all              # Règles actives
+
+# Ouvrir des ports/services
+firewall-cmd --permanent --add-service=http
+firewall-cmd --permanent --add-service=https
+firewall-cmd --permanent --add-port=8080/tcp    # Stats HAProxy
+firewall-cmd --permanent --add-port=8404/tcp    # Prometheus metrics
+firewall-cmd --permanent --add-port=112/tcp     # VRRP Keepalived
+
+# Supprimer une règle
+firewall-cmd --permanent --remove-port=8080/tcp
+
+# IMPORTANT : appliquer les changements permanents
+firewall-cmd --reload
+
+firewall-cmd --list-ports            # Ports ouverts
+firewall-cmd --list-services         # Services autorisés</pre>
+<h4>SELinux (Security-Enhanced Linux)</h4>
+<pre>getenforce                           # Enforcing / Permissive / Disabled
+sestatus                             # Statut détaillé SELinux
+
+# Autoriser HAProxy à se connecter aux backends
+setsebool -P haproxy_connect_any 1
+
+# Vérifier les booléens HAProxy
+getsebool -a | grep haproxy
+
+# Si HAProxy écoute sur un port non standard
+semanage port -a -t http_port_t -p tcp 8080
+semanage port -l | grep http
+
+# Voir les refus SELinux récents
+ausearch -m avc -ts recent
+# Ou :
+cat /var/log/audit/audit.log | grep denied | grep haproxy</pre>
+<div class="warn">Ne jamais désactiver SELinux ! Utiliser les booléens et les contextes appropriés.</div>
+</div></details>
+<details id="haproxy_install" ><summary>HAProxy — installation & structure<span class="arr">&#8250;</span></summary><div class="db">
+<pre># Installation
+dnf install haproxy -y
+systemctl enable haproxy
+
+# Fichier de configuration principal
+/etc/haproxy/haproxy.cfg
+
+# Tester la configuration avant de recharger (INDISPENSABLE)
+haproxy -c -f /etc/haproxy/haproxy.cfg
+
+# Recharger sans coupure de service
+systemctl reload haproxy</pre>
+<h4>Structure du fichier haproxy.cfg</h4>
+<pre>global      # Paramètres globaux du processus HAProxy
+defaults    # Valeurs par défaut pour les frontends/backends
+frontend    # Point d'entrée (écoute les connexions clients)
+backend     # Groupe de serveurs qui traite les requêtes
+listen      # Combinaison frontend + backend (ex: stats)</pre>
+</div></details>
+<details id="haproxy_global" ><summary>HAProxy — section global & defaults<span class="arr">&#8250;</span></summary><div class="db">
+<pre>global
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+
+    # Performances
+    maxconn 50000
+    nbthread 4                       # Nombre de threads (= nb de CPUs)
+
+    # Sécurité SSL/TLS
+    ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256
+    ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+
+defaults
+    log     global
+    mode    http                     # http ou tcp
+    option  httplog                  # Format de log HTTP détaillé
+    option  dontlognull              # Ne pas loguer les connexions vides
+    option  http-server-close        # Fermer la connexion côté serveur
+    option  forwardfor               # Ajouter X-Forwarded-For (IP client)
+    option  redispatch               # Redistribuer si serveur indisponible
+
+    timeout connect  5s
+    timeout client   30s
+    timeout server   30s
+    timeout http-request 10s
+    timeout http-keep-alive 2s
+    timeout queue   30s
+
+    retries 3
+    maxconn 10000</pre>
+</div></details>
+<details id="haproxy_frontend" ><summary>HAProxy — frontends (points d'entrée)<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Frontend HTTP simple</h4>
+<pre>frontend http_in
+    bind *:80
+    default_backend web_servers      # Backend par défaut</pre>
+<h4>Frontend HTTPS avec terminaison SSL</h4>
+<pre>frontend https_in
+    bind *:443 ssl crt /etc/haproxy/certs/monsite.pem
+    # Le fichier PEM doit contenir : clé privée + certificat + chaîne CA
+    # Créer le PEM : cat monsite.key monsite.crt ca-bundle.crt > monsite.pem
+
+    default_backend web_servers</pre>
+<h4>Frontend avec redirection HTTP → HTTPS</h4>
+<pre>frontend http_in
+    bind *:80
+    redirect scheme https code 301 if !{ ssl_fc }
+    # ssl_fc = la connexion est déjà en SSL/TLS</pre>
+<h4>Frontend avec ACL (routage conditionnel)</h4>
+<pre>frontend http_in
+    bind *:80
+
+    # Définir des ACL
+    acl is_api        path_beg /api/
+    acl is_admin      path_beg /admin
+    acl internal_net  src 192.168.0.0/16
+    acl host_www      hdr(host) -i www.monsite.fr
+    acl host_api      hdr(host) -i api.monsite.fr
+
+    # Bloquer l'accès admin depuis l'extérieur
+    http-request deny if is_admin !internal_net
+
+    # Routage selon les conditions
+    use_backend api_servers  if is_api
+    use_backend api_servers  if host_api
+    default_backend          web_servers</pre>
+</div></details>
+<details id="haproxy_backend" ><summary>HAProxy — backends & algorithmes d'équilibrage<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Backend avec Round Robin (défaut)</h4>
+<pre>backend web_servers
+    balance roundrobin               # Chaque serveur à tour de rôle
+
+    # Vérification de santé HTTP
+    option httpchk GET /health HTTP/1.1
+Host:\ localhost
+
+    server web1 192.168.1.10:80 check
+    server web2 192.168.1.11:80 check
+    server web3 192.168.1.12:80 check
+    server web4 192.168.1.13:80 check backup  # Utilisé seulement si les autres sont DOWN</pre>
+<h4>Algorithmes d'équilibrage</h4>
+<pre>balance roundrobin    # Tour à tour (défaut, stateless)
+balance leastconn     # Vers le serveur avec le moins de connexions actives
+balance source        # Hachage de l'IP source (sessions persistantes)
+balance uri           # Hachage de l'URI (utile pour cache)
+balance random        # Aléatoire
+balance first         # 1er serveur disponible jusqu'à maxconn</pre>
+<h4>Options des serveurs backend</h4>
+<pre>server web1 192.168.1.10:80 check inter 2s rise 2 fall 3 weight 2 maxconn 500
+#                                   |          |    |     |        |       |
+#                                   vérifier   |    |     |        |       connexions max
+#                                   fréquence  |    |     |        poids (RR pondéré)
+#                                              |    |     checs avant DOWN
+#                                              |    succès avant UP
+#                                              intervalle de check</pre>
+<h4>Sessions persistantes (sticky sessions)</h4>
+<pre>backend web_servers
+    balance roundrobin
+    cookie SERVERID insert indirect nocache  # Insérer un cookie de session
+    server web1 192.168.1.10:80 check cookie web1
+    server web2 192.168.1.11:80 check cookie web2
+    # Ou avec source IP :
+    # balance source</pre>
+<h4>Backend TCP (mode layer 4)</h4>
+<pre>backend mysql_servers
+    mode tcp
+    balance leastconn
+    server db1 192.168.1.20:3306 check
+    server db2 192.168.1.21:3306 check</pre>
+</div></details>
+<details id="haproxy_stats" ><summary>HAProxy — page de statistiques & socket admin<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Page de statistiques web</h4>
+<pre>listen stats
+    bind *:8404
+    stats enable
+    stats uri /stats                 # URL : http://IP:8404/stats
+    stats realm HAProxy\ Statistics
+    stats auth admin:MotDePasse123   # Authentification HTTP Basic
+    stats refresh 10s               # Rafraîchissement automatique
+    stats show-legends              # Légendes sur les graphiques
+    stats show-node                 # Nom du nœud HAProxy
+    stats admin if TRUE             # Activer les boutons admin (enable/disable)</pre>
+<div class="tip">Ouvrir <code>http://192.168.1.10:8404/stats</code> dans le navigateur après avoir ouvert le port dans le firewall.</div>
+<h4>Socket admin (gestion en ligne de commande)</h4>
+<pre># Voir le statut général
+echo "show info" | socat stdio /run/haproxy/admin.sock
+
+# Voir les statistiques de tous les backends
+echo "show stat" | socat stdio /run/haproxy/admin.sock
+
+# Désactiver un serveur backend (maintenance)
+echo "disable server web_servers/web1" | socat stdio /run/haproxy/admin.sock
+
+# Réactiver un serveur
+echo "enable server web_servers/web1" | socat stdio /run/haproxy/admin.sock
+
+# Voir les sessions actives
+echo "show sess" | socat stdio /run/haproxy/admin.sock</pre>
+</div></details>
+<details id="haproxy_ha" ><summary>Haute disponibilité HAProxy + Keepalived (VRRP)<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Architecture</h4>
+<pre>CLIENT
+  |
+  v
+[VIP : 192.168.1.100]  &lt;-- IP virtuelle flottante
+  |
+  +-- HAProxy MASTER (192.168.1.10)   PRIO 101
+  +-- HAProxy BACKUP (192.168.1.11)   PRIO 100
+
+Si le MASTER tombe, Keepalived bascule la VIP sur le BACKUP automatiquement.</pre>
+<h4>Installation de Keepalived</h4>
+<pre>dnf install keepalived -y
+systemctl enable keepalived</pre>
+<h4>Configuration Keepalived — MASTER (/etc/keepalived/keepalived.conf)</h4>
+<pre>vrrp_script chk_haproxy {
+    script "systemctl is-active haproxy"   # Vérifier que HAProxy tourne
+    interval 2                              # Toutes les 2 secondes
+    weight   -10                           # Baisser la priorité de 10 si KO
+}
+
+vrrp_instance VI_1 {
+    state MASTER                           # MASTER sur ce nœud
+    interface ens192                        # Interface réseau à surveiller
+    virtual_router_id 51                   # Identifiant VRRP (0-255, unique par groupe)
+    priority 101                           # Priorité (plus élevé = MASTER)
+    advert_int 1                           # Envoi de VRRP advertisement toutes les 1s
+    preempt                                # Reprend le rôle MASTER quand dispo
+
+    authentication {
+        auth_type PASS
+        auth_pass KeepSecret2024           # Mot de passe partagé
+    }
+
+    virtual_ipaddress {
+        192.168.1.100/24                   # VIP (adresse virtuelle flottante)
+    }
+
+    track_script {
+        chk_haproxy                        # Suivre l'état de HAProxy
+    }
+}</pre>
+<h4>Configuration Keepalived — BACKUP</h4>
+<pre># Même fichier mais modifier :
+state BACKUP                               # BACKUP sur ce nœud
+priority 100                               # Priorité inférieure au MASTER</pre>
+<h4>Vérification</h4>
+<pre>systemctl start keepalived
+systemctl status keepalived
+
+# Sur le MASTER : la VIP doit être présente
+ip addr show ens192 | grep 192.168.1.100
+
+# Tester le basculement
+systemctl stop haproxy                     # Sur le MASTER
+# La VIP doit basculer sur le BACKUP
+ip addr show ens192                        # Sur le BACKUP : la VIP doit apparaître
+
+journalctl -u keepalived -f               # Logs Keepalived</pre>
+<div class="tip">S'assurer que le port 112 (VRRP) est ouvert dans firewalld sur les deux nœuds !</div>
+</div></details>
+<details id="haproxy_config_complete" ><summary>HAProxy — exemple de config complète<span class="arr">&#8250;</span></summary><div class="db">
+<pre>#---------------------------------------------------------
+# /etc/haproxy/haproxy.cfg  — Exemple complet
+#---------------------------------------------------------
+
+global
+    log /dev/log local0
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    maxconn 50000
+    user haproxy
+    group haproxy
+    daemon
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    option  forwardfor
+    option  http-server-close
+    timeout connect 5s
+    timeout client  30s
+    timeout server  30s
+    retries 3
+
+#--- Frontend HTTP : redirection vers HTTPS
+frontend http_in
+    bind *:80
+    redirect scheme https code 301
+
+#--- Frontend HTTPS : terminaison SSL
+frontend https_in
+    bind *:443 ssl crt /etc/haproxy/certs/monsite.pem
+
+    # ACL basée sur l'hostname
+    acl host_api hdr(host) -i api.monsite.fr
+    acl is_admin path_beg /admin
+    acl internal  src 192.168.0.0/16
+
+    # Bloquer /admin depuis l'extérieur
+    http-request deny if is_admin !internal
+
+    use_backend api_back if host_api
+    default_backend web_back
+
+#--- Backend serveurs web
+backend web_back
+    balance roundrobin
+    option httpchk GET /health
+    server web1 192.168.1.10:80 check inter 2s rise 2 fall 3
+    server web2 192.168.1.11:80 check inter 2s rise 2 fall 3
+    server web3 192.168.1.12:80 check inter 2s rise 2 fall 3 backup
+
+#--- Backend API
+backend api_back
+    balance leastconn
+    option httpchk GET /api/health
+    server api1 192.168.1.20:8080 check
+    server api2 192.168.1.21:8080 check
+
+#--- Page de statistiques
+listen stats
+    bind *:8404
+    stats enable
+    stats uri /stats
+    stats auth admin:MonMDP2024
+    stats refresh 10s
+    stats admin if TRUE</pre>
+<pre># Toujours tester avant de recharger !
+haproxy -c -f /etc/haproxy/haproxy.cfg && systemctl reload haproxy</pre>
+</div></details>
+<details id="haproxy_debug" ><summary>Dépannage & vérification HAProxy<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Checklist en cas de problème</h4>
+<pre># 1. Tester la syntaxe du fichier de config
+haproxy -c -f /etc/haproxy/haproxy.cfg
+
+# 2. Vérifier que HAProxy écoute bien
+ss -tlnp | grep haproxy              # Ports en écoute
+netstat -tlnp | grep haproxy         # Alternative
+
+# 3. Voir les logs en temps réel
+journalctl -u haproxy -f
+
+# 4. Vérifier l'état des backends via le socket
+echo "show stat" | socat stdio /run/haproxy/admin.sock | cut -d',' -f1,2,18
+
+# 5. Vérifier SELinux
+ausearch -m avc -ts recent | grep haproxy
+
+# 6. Vérifier le pare-feu
+firewall-cmd --list-all</pre>
+<h4>Codes d'état des serveurs (show stat)</h4>
+<pre>UP      = Serveur opérationnel
+DOWN    = Serveur hors service (health check échoué)
+NOLB    = Maintenance manuelle (désactivé via socket/interface)
+MAINT   = En maintenance
+DRAIN   = Accepte plus de nouvelles connexions (vidage progressif)</pre>
+<h4>Erreurs fréquentes</h4>
+<table>
+<tr><th>Erreur</th><th class="desc">Cause probable</th><th class="desc">Solution</th></tr>
+<tr><td>no servers</td><td class="desc">Tous les backends DOWN</td><td class="desc">Vérifier health checks, connectivité</td></tr>
+<tr><td>502 Bad Gateway</td><td class="desc">Backend ne répond pas</td><td class="desc">Vérifier que le service tourne sur le backend</td></tr>
+<tr><td>503 Service Unavailable</td><td class="desc">Plus de serveur disponible</td><td class="desc">Vérifier les serveurs backend</td></tr>
+<tr><td>Permission denied (socket)</td><td class="desc">SELinux ou droits socket</td><td class="desc">setsebool -P haproxy_connect_any 1</td></tr>
+<tr><td>Port déjà utilisé</td><td class="desc">Autre service sur le port</td><td class="desc">ss -tlnp | grep :80</td></tr>
+</table>
+</div></details>
+</main>
+<footer>BTS SIO SISR &middot; Atelier de professionnalisation &middot; HAProxy & Rocky Linux 9 — Configuration complète</footer>
+<script>document.querySelectorAll('.toc a').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const el=document.querySelector(a.getAttribute('href'));if(el){el.open=true;setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);}});});</script>
+</body></html>

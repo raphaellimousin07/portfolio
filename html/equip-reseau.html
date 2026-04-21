@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTS SIO SISR — Cisco 2921 & Catalyst 2960-S — Configuration complète</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fafaf7;--bg2:#f2f2ed;--bg3:#e8e8e2;--t:#18182c;--t2:#50506a;--t3:#909098;--bd:rgba(0,0,0,.09);--r:10px;--co:#1a1a2e;--ct:#c8d0e8;--mo:'Courier New',monospace;--wb:#fff8ec;--wc:#7a4000;--tb:#eaf5ee;--tc:#1a5c35;--cmd-bg:#0d1117;--cmd-t:#c9d1d9;--cmd-kw:#ff7b72;--cmd-str:#a5d6ff;--cmd-cmt:#8b949e;--cmd-ok:#56d364}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--t:#e6edf3;--t2:#8b949e;--t3:#484f58;--bd:rgba(255,255,255,.08);--co:#161b22;--ct:#c9d1d9;--cmd-bg:#161b22}}
+body{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--t);font-size:15px;line-height:1.65}
+header{background:#185FA5;color:#fff;padding:1rem;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+header h1{font-size:1.05rem;font-weight:600;line-height:1.3}header small{font-size:.75rem;opacity:.8}
+.toc{background:var(--bg2);border-bottom:.5px solid var(--bd);padding:.5rem .75rem;overflow-x:auto;white-space:nowrap}
+.toc a{color:#185FA5;text-decoration:none;font-size:.8rem;margin-right:.75rem;font-weight:500}
+main{padding:.75rem;max-width:860px;margin:0 auto}
+details{border:.5px solid var(--bd);border-radius:var(--r);margin-bottom:.7rem;overflow:hidden}
+summary{padding:.7rem 1rem;font-weight:500;font-size:.9rem;background:var(--bg2);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;border-left:3px solid #185FA5;gap:8px}
+summary::-webkit-details-marker{display:none}
+.arr{color:var(--t3);font-size:1.1rem;transition:transform .2s;flex-shrink:0}
+details[open] .arr{transform:rotate(90deg)}
+.db{padding:.75rem 1rem}
+h4{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);margin:.8rem 0 .3rem}
+ul{padding-left:1.1rem;margin:.2rem 0}li{font-size:.9rem;line-height:1.85}li strong{font-weight:500}
+pre{background:var(--cmd-bg);color:var(--cmd-t);padding:.6rem .85rem;border-radius:8px;margin:.35rem 0;overflow-x:auto;font-family:var(--mo);font-size:.8rem;line-height:1.65;border:.5px solid rgba(255,255,255,.08)}
+.cmd{background:var(--cmd-bg);color:var(--cmd-t);padding:.4rem .85rem;border-radius:8px;margin:.3rem 0;display:block;font-family:var(--mo);font-size:.8rem;border-left:3px solid #185FA5;white-space:pre-wrap}
+.step-num{display:inline-flex;min-width:22px;height:22px;border-radius:50%;font-size:.7rem;font-weight:700;align-items:center;justify-content:center;border:1.5px solid #185FA5;color:#185FA5;margin-right:6px;flex-shrink:0;vertical-align:middle}
+.step{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:.9rem}
+.warn{background:var(--wb);color:var(--wc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.tip{background:var(--tb);color:var(--tc);padding:.4rem .75rem;border-radius:8px;font-size:.85rem;margin:.35rem 0}
+.ok{color:#56d364;font-weight:500}.no{color:#ff7b72;font-weight:500}.k{color:#185FA5;font-weight:500}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:.4rem 0}
+.card{background:var(--bg2);border-radius:8px;padding:.6rem .75rem;font-size:.88rem}
+.card b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:.2rem;font-weight:600}
+.mode{display:inline-block;background:var(--bg3);border:.5px solid var(--bd);border-radius:6px;padding:1px 7px;font-family:var(--mo);font-size:.78rem;color:var(--t2)}
+table{width:100%;border-collapse:collapse;font-size:.82rem;margin:.4rem 0}
+th{background:var(--bg2);padding:.4rem .5rem;text-align:left;font-weight:500;border:.5px solid var(--bd)}
+td{padding:.35rem .5rem;border:.5px solid var(--bd);vertical-align:top;font-family:var(--mo);font-size:.78rem}
+td.desc{font-family:inherit;font-size:.85rem}
+footer{text-align:center;padding:1.5rem;font-size:.75rem;color:var(--t3)}
+@media(max-width:500px){.g2{grid-template-columns:1fr}pre{font-size:.72rem}}</style></head>
+<body>
+<header><h1>Cisco 2921 & Catalyst 2960-S — Configuration complète</h1><small>BTS SIO SISR &middot; Atelier de professionnalisation — Épreuves pratiques</small></header>
+<div class="toc"><a href="#modes">Modes IOS — navigation & raccourcis</a><a href="#base_router">Routeur 2921 — configuration de base</a><a href="#interfaces_router">Routeur 2921 — interfaces & sous-interfaces</a><a href="#routing">Routeur 2921 — routage statique & OSPF</a><a href="#dhcp_nat">Routeur 2921 — DHCP & NAT/PAT</a><a href="#acl">Routeur 2921 — ACL (listes de contrôle d'accès)</a><a href="#ssh_router">Routeur 2921 — SSH</a><a href="#switch_base">Switch Catalyst 2960-S — configuration de base</a><a href="#vlan">Switch Catalyst 2960-S — VLANs</a><a href="#port_security">Switch Catalyst 2960-S — sécurité des ports</a><a href="#stp_etherchannel">Switch Catalyst 2960-S — STP & EtherChannel</a><a href="#verif_cisco">Commandes de vérification & dépannage Cisco</a></div>
+<main><details id="modes" open><summary>Modes IOS — navigation & raccourcis<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Hiérarchie des modes</h4>
+<table>
+<tr><th>Prompt</th><th>Mode</th><th>Accès</th></tr>
+<tr><td>Router&gt;</td><td class="desc">Mode utilisateur</td><td>Démarrage</td></tr>
+<tr><td>Router#</td><td class="desc">Mode privilégié (Enable)</td><td><code>enable</code></td></tr>
+<tr><td>Router(config)#</td><td class="desc">Configuration globale</td><td><code>configure terminal</code></td></tr>
+<tr><td>Router(config-if)#</td><td class="desc">Configuration interface</td><td><code>interface Gi0/0</code></td></tr>
+<tr><td>Router(config-router)#</td><td class="desc">Configuration routage</td><td><code>router ospf 1</code></td></tr>
+<tr><td>Router(config-line)#</td><td class="desc">Configuration ligne</td><td><code>line vty 0 4</code></td></tr>
+</table>
+<h4>Raccourcis et commandes de navigation</h4>
+<pre>exit            ! Remonter d'un niveau
+end  (ou Ctrl+Z) ! Retour direct au mode privilégié
+do show ...     ! Exécuter une commande show depuis n'importe quel mode
+?               ! Aide contextuelle
+Tab             ! Auto-complétion
+Ctrl+C          ! Interrompre une commande
+no commande     ! Annuler une commande</pre>
+<h4>Sauvegarder la configuration</h4>
+<pre>copy running-config startup-config    ! Sauvegarde permanente
+write memory                           ! Alias équivalent
+show running-config                    ! Config active
+show startup-config                    ! Config au démarrage</pre>
+</div></details>
+<details id="base_router" ><summary>Routeur 2921 — configuration de base<span class="arr">&#8250;</span></summary><div class="db">
+<pre>enable
+configure terminal
+
+! Nom et mots de passe
+hostname R1
+enable secret Cisco@2921            ! MDP mode privilégié (chiffré)
+service password-encryption          ! Chiffre tous les MDP en clair
+
+! Console
+line console 0
+ password Cisco123
+ login
+ logging synchronous                 ! Évite que les logs coupent la saisie
+ exec-timeout 10 0                   ! Déconnexion après 10 min
+
+! VTY (Telnet/SSH)
+line vty 0 4
+ password Cisco123
+ login local                         ! Utilise la base locale (username)
+ transport input ssh                 ! SSH uniquement, pas Telnet
+ exec-timeout 10 0
+
+! Utilisateur local
+username admin privilege 15 secret Admin@2921
+
+! Bannière d'avertissement
+banner motd #
+ !! Accès réservé au personnel autorisé !!
+ !! Toute connexion non autorisée est interdite !!
+#
+
+! Désactiver la résolution DNS (évite les longs timeouts)
+no ip domain-lookup
+
+end
+copy running-config startup-config</pre>
+</div></details>
+<details id="interfaces_router" ><summary>Routeur 2921 — interfaces & sous-interfaces<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Interface physique</h4>
+<pre>interface GigabitEthernet0/0
+ description LAN_Vers_Switch
+ ip address 192.168.1.1 255.255.255.0
+ no shutdown                          ! Activer l'interface (désactivée par défaut)
+ duplex auto
+ speed auto
+
+interface GigabitEthernet0/1
+ description WAN_Vers_Internet
+ ip address 10.0.0.1 255.255.255.252
+ no shutdown</pre>
+<h4>Sous-interfaces (Router-on-a-Stick pour inter-VLAN)</h4>
+<pre>interface GigabitEthernet0/0
+ no ip address
+ no shutdown
+
+interface GigabitEthernet0/0.10
+ encapsulation dot1Q 10              ! VLAN 10
+ ip address 192.168.10.1 255.255.255.0
+ description VLAN10_SERVERS
+
+interface GigabitEthernet0/0.20
+ encapsulation dot1Q 20              ! VLAN 20
+ ip address 192.168.20.1 255.255.255.0
+ description VLAN20_USERS
+
+interface GigabitEthernet0/0.99
+ encapsulation dot1Q 99 native       ! VLAN natif
+ description VLAN_MANAGEMENT</pre>
+<h4>Vérification</h4>
+<pre>show ip interface brief              ! Statut résumé de toutes les interfaces
+show interfaces GigabitEthernet0/0  ! Détails d'une interface
+show interfaces status               ! Statut physique</pre>
+</div></details>
+<details id="routing" ><summary>Routeur 2921 — routage statique & OSPF<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Routes statiques</h4>
+<pre>! Route par défaut (vers Internet)
+ip route 0.0.0.0 0.0.0.0 10.0.0.2
+
+! Route statique classique
+ip route 192.168.2.0 255.255.255.0 10.0.0.2
+
+! Route flottante (backup, AD=150 > AD OSPF=110)
+ip route 192.168.2.0 255.255.255.0 10.0.0.6 150
+
+show ip route                        ! Table de routage complète
+show ip route static                 ! Routes statiques uniquement</pre>
+<h4>OSPF (protocole de routage dynamique)</h4>
+<pre>router ospf 1
+ router-id 1.1.1.1                   ! ID unique par routeur
+ network 192.168.1.0 0.0.0.255 area 0
+ network 192.168.10.0 0.0.0.255 area 0
+ network 10.0.0.0 0.0.0.3 area 0
+ passive-interface GigabitEthernet0/0  ! Pas d'annonces OSPF vers les hôtes
+ default-information originate       ! Redistribuer la route par défaut
+
+! Priorité OSPF sur une interface (pour élire le DR)
+interface GigabitEthernet0/1
+ ip ospf priority 100                ! 0 = jamais DR/BDR
+
+show ip ospf neighbor                ! Voisins OSPF
+show ip ospf                         ! Informations OSPF
+show ip route ospf                   ! Routes apprises par OSPF</pre>
+</div></details>
+<details id="dhcp_nat" ><summary>Routeur 2921 — DHCP & NAT/PAT<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Serveur DHCP</h4>
+<pre>! Exclure les adresses statiques
+ip dhcp excluded-address 192.168.1.1 192.168.1.20
+
+! Pool DHCP
+ip dhcp pool LAN_POOL
+ network 192.168.1.0 255.255.255.0
+ default-router 192.168.1.1
+ dns-server 8.8.8.8 1.1.1.1
+ lease 7                             ! Durée du bail : 7 jours
+ domain-name monentreprise.local
+
+ip dhcp pool VLAN10
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 192.168.1.53
+ lease 1
+
+show ip dhcp binding                 ! Baux actifs
+show ip dhcp pool                    ! Statistiques des pools</pre>
+<h4>NAT/PAT (overload)</h4>
+<pre>! Définir les interfaces inside/outside
+interface GigabitEthernet0/0
+ ip nat inside
+interface GigabitEthernet0/1
+ ip nat outside
+
+! ACL qui définit les adresses à translater
+access-list 1 permit 192.168.0.0 0.0.255.255
+
+! Activer PAT (overload = plusieurs IPs privées &rarr; 1 IP publique)
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
+
+! NAT statique (pour exposer un serveur)
+ip nat inside source static 192.168.1.100 203.0.113.100
+
+show ip nat translations             ! Table NAT active
+show ip nat statistics               ! Statistiques NAT
+clear ip nat translation *           ! Vider la table NAT</pre>
+</div></details>
+<details id="acl" ><summary>Routeur 2921 — ACL (listes de contrôle d'accès)<span class="arr">&#8250;</span></summary><div class="db">
+<h4>ACL standard (filtre sur IP source uniquement)</h4>
+<pre>access-list 10 permit 192.168.1.0 0.0.0.255   ! Autoriser subnet
+access-list 10 deny   any                       ! Refuser le reste (implicite)
+
+interface GigabitEthernet0/1
+ ip access-group 10 out              ! Appliquer en sortie
+! Règle : Standard ACL = proche de la DESTINATION</pre>
+<h4>ACL étendue (filtre sur source, destination, port, protocole)</h4>
+<pre>! ACL numérotée étendue
+access-list 100 remark Autoriser HTTP et HTTPS depuis LAN
+access-list 100 permit tcp 192.168.1.0 0.0.0.255 any eq 80
+access-list 100 permit tcp 192.168.1.0 0.0.0.255 any eq 443
+access-list 100 permit tcp 192.168.1.0 0.0.0.255 any eq 53
+access-list 100 permit udp 192.168.1.0 0.0.0.255 any eq 53
+access-list 100 deny ip any any log  ! Refuser et logger
+
+interface GigabitEthernet0/0
+ ip access-group 100 in              ! Appliquer en entrée
+! Règle : Extended ACL = proche de la SOURCE</pre>
+<h4>ACL nommée étendue (recommandée)</h4>
+<pre>ip access-list extended BLOCK_TELNET
+ deny  tcp any any eq 23             ! Bloquer Telnet
+ permit ip any any                   ! Autoriser le reste
+
+interface GigabitEthernet0/1
+ ip access-group BLOCK_TELNET in
+
+show access-lists                    ! Voir toutes les ACL avec compteurs
+show ip interface GigabitEthernet0/0 ! Voir les ACL appliquées sur une interface</pre>
+<div class="warn">Toujours tester les ACL avant de les appliquer en prod ! Une règle mal placée peut couper l'accès SSH.</div>
+</div></details>
+<details id="ssh_router" ><summary>Routeur 2921 — SSH<span class="arr">&#8250;</span></summary><div class="db">
+<pre>! 1. Configurer le nom de domaine (obligatoire pour générer les clés)
+ip domain-name monentreprise.local
+
+! 2. Générer les clés RSA (2048 bits minimum)
+crypto key generate rsa modulus 2048
+
+! 3. Activer SSH v2 uniquement
+ip ssh version 2
+ip ssh time-out 60
+ip ssh authentication-retries 3
+
+! 4. Créer un utilisateur local
+username admin privilege 15 secret Admin@Secure123
+
+! 5. Configurer les lignes VTY pour SSH uniquement
+line vty 0 4
+ login local
+ transport input ssh
+ exec-timeout 5 0
+
+show ip ssh                          ! Version et statut SSH
+show ssh                             ! Sessions SSH actives</pre>
+<div class="tip">Depuis un PC : <code>ssh -l admin 192.168.1.1</code></div>
+</div></details>
+<details id="switch_base" ><summary>Switch Catalyst 2960-S — configuration de base<span class="arr">&#8250;</span></summary><div class="db">
+<pre>enable
+configure terminal
+hostname SW1
+enable secret Cisco@Switch
+
+! Désactiver les ports inutilisés (sécurité)
+interface range FastEthernet0/10 - 24
+ shutdown
+ description PORT_INUTILISE
+
+! Interface de management (SVI = Switched Virtual Interface)
+interface vlan 99
+ ip address 192.168.99.10 255.255.255.0
+ description MANAGEMENT
+ no shutdown
+
+! Passerelle par défaut (le switch n'est pas un routeur)
+ip default-gateway 192.168.99.1
+
+! SSH sur le switch (même procédure que le routeur)
+ip domain-name monentreprise.local
+crypto key generate rsa modulus 2048
+ip ssh version 2
+line vty 0 15
+ login local
+ transport input ssh
+username admin privilege 15 secret Admin@2960
+
+service password-encryption
+copy running-config startup-config</pre>
+</div></details>
+<details id="vlan" ><summary>Switch Catalyst 2960-S — VLANs<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Créer les VLANs</h4>
+<pre>vlan 10
+ name SERVERS
+vlan 20
+ name USERS
+vlan 30
+ name VOIP
+vlan 99
+ name MANAGEMENT
+
+show vlan brief                      ! Liste des VLANs et ports associés</pre>
+<h4>Port ACCESS (liaison hôte)</h4>
+<pre>interface FastEthernet0/1
+ description PC_Utilisateur
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast               ! Active immédiatement (pas d'attente STP)
+ spanning-tree bpduguard enable       ! Désactive le port si BPDU reçu (sécurité)
+ no shutdown
+
+! Pour plusieurs ports en même temps :
+interface range FastEthernet0/1 - 8
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown</pre>
+<h4>Port TRUNK (liaison switch/routeur)</h4>
+<pre>interface GigabitEthernet0/1
+ description TRUNK_Vers_Routeur
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99    ! Autoriser seulement ces VLANs
+ switchport trunk native vlan 99              ! VLAN natif (non tagué)
+ no shutdown
+
+show interfaces trunk                ! Ports trunk et VLANs autorisés
+show interfaces GigabitEthernet0/1 trunk</pre>
+</div></details>
+<details id="port_security" ><summary>Switch Catalyst 2960-S — sécurité des ports<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Port Security (limiter les adresses MAC)</h4>
+<pre>interface FastEthernet0/1
+ switchport mode access
+ switchport access vlan 20
+ switchport port-security                          ! Activer port-security
+ switchport port-security maximum 1               ! 1 seule MAC autorisée
+ switchport port-security mac-address sticky      ! Apprendre dynamiquement la MAC
+ switchport port-security violation shutdown      ! Action si violation : shutdown port
+ ! Autres violations : protect (drop silencieux), restrict (drop + log)
+
+show port-security interface FastEthernet0/1      ! Statut d'un port
+show port-security                                ! Résumé de tous les ports
+
+! Réactiver un port après violation
+interface FastEthernet0/1
+ shutdown
+ no shutdown</pre>
+<h4>DHCP Snooping (protège contre DHCP rogue)</h4>
+<pre>ip dhcp snooping
+ip dhcp snooping vlan 10,20,30
+
+! Port de confiance = vers le serveur DHCP légitime
+interface GigabitEthernet0/1
+ ip dhcp snooping trust
+
+show ip dhcp snooping binding        ! Table DHCP Snooping</pre>
+<h4>Dynamic ARP Inspection (protège contre ARP spoofing)</h4>
+<pre>ip arp inspection vlan 10,20,30
+
+interface GigabitEthernet0/1
+ ip arp inspection trust             ! Faire confiance au port trunk
+
+show ip arp inspection               ! Statut DAI</pre>
+</div></details>
+<details id="stp_etherchannel" ><summary>Switch Catalyst 2960-S — STP & EtherChannel<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Spanning Tree Protocol</h4>
+<pre>! Activer Rapid PVST+ (recommandé)
+spanning-tree mode rapid-pvst
+
+! Forcer un switch à être Root Bridge
+spanning-tree vlan 10 priority 4096     ! Plus faible = prioritaire (défaut 32768)
+spanning-tree vlan 20 priority 4096
+! Ou utiliser la commande automatique :
+spanning-tree vlan 10 root primary
+spanning-tree vlan 20 root secondary
+
+show spanning-tree vlan 10           ! STP pour le VLAN 10
+show spanning-tree summary           ! Résumé STP</pre>
+<h4>EtherChannel / LACP (agrégation de liens)</h4>
+<pre>! Sur les 2 switches : même configuration
+interface range GigabitEthernet0/1 - 2
+ channel-group 1 mode active         ! LACP active (négocie automatiquement)
+ ! mode on = force sans négociation
+ ! mode desirable = PAgP (protocole Cisco)
+ no shutdown
+
+! Configurer le port-channel créé automatiquement
+interface port-channel 1
+ description LACP_Vers_SW2
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+
+show etherchannel summary            ! Statut EtherChannel
+show etherchannel port-channel       ! Détails du port-channel</pre>
+<div class="tip">Les deux extrémités du EtherChannel doivent avoir la même configuration (vitesse, duplex, VLANs, mode trunk/access).</div>
+</div></details>
+<details id="verif_cisco" ><summary>Commandes de vérification & dépannage Cisco<span class="arr">&#8250;</span></summary><div class="db">
+<h4>Vérifications essentielles — Routeur</h4>
+<pre>show ip interface brief              ! Résumé interfaces : IP + état
+show interfaces GigabitEthernet0/0  ! Détails complets (erreurs, débit)
+show ip route                        ! Table de routage
+show ip route ospf                   ! Routes OSPF uniquement
+show ip ospf neighbor                ! Voisins OSPF (état FULL = OK)
+show ip nat translations             ! Table NAT active
+show ip dhcp binding                 ! Baux DHCP actifs
+show access-lists                    ! ACL avec compteurs de matches
+show ip ssh                          ! Statut SSH
+show version                         ! Version IOS, RAM, Flash, uptime</pre>
+<h4>Vérifications essentielles — Switch</h4>
+<pre>show vlan brief                      ! VLANs et ports associés
+show interfaces trunk                ! Ports trunk actifs
+show interfaces status               ! État de tous les ports
+show mac address-table               ! Table MAC
+show port-security                   ! Sécurité des ports
+show spanning-tree                   ! STP global
+show etherchannel summary            ! EtherChannel
+show cdp neighbors                   ! Équipements Cisco voisins
+show cdp neighbors detail            ! Avec adresses IP</pre>
+<h4>Dépannage réseau</h4>
+<pre>ping 192.168.1.1                     ! Test de connectivité basique
+ping 192.168.1.1 source Gi0/0        ! Ping depuis une interface spécifique
+traceroute 8.8.8.8                   ! Chemin vers la destination
+debug ip packet                      ! Debug (attention : charge le CPU !)
+undebug all                          ! Désactiver tous les debugs</pre>
+<div class="warn">Ne jamais lancer <code>debug all</code> sur un routeur en production — risque de surcharge CPU et de perte de connectivité.</div>
+</div></details>
+</main>
+<footer>BTS SIO SISR &middot; Atelier de professionnalisation &middot; Cisco 2921 & Catalyst 2960-S — Configuration complète</footer>
+<script>document.querySelectorAll('.toc a').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const el=document.querySelector(a.getAttribute('href'));if(el){el.open=true;setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),50);}});});</script>
+</body></html>
