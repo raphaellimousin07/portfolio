@@ -40,3 +40,15 @@ function activateMemento() {
     document.body.style.filter = "invert(1) hue-rotate(180deg)";
     setTimeout(() => { window.location.href = "/html/Memento.html"; }, 600);
 }
+
+// 4. Dropdown matières (mobile toggle)
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.querySelector('.nav-dropdown');
+    if (!dropdown) return;
+    const btn = dropdown.querySelector('.nav-dropdown-btn');
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', () => dropdown.classList.remove('open'));
+});
