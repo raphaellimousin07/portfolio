@@ -210,7 +210,7 @@ nav.open .nav-burger span:nth-child(3) { transform: translateY(-7px) rotate(-45d
 .nav-dropdown-menu {
   display: none;
   position: absolute;
-  top: calc(100% + 0.75rem);
+  top: 100%;
   right: 0;
   background: rgba(7, 21, 38, 0.97);
   border: 1px solid var(--border);
